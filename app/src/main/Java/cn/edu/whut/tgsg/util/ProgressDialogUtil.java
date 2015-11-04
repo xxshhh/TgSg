@@ -1,13 +1,14 @@
 package cn.edu.whut.tgsg.util;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+
+import cn.edu.whut.tgsg.widget.CustomProgressDialog;
 
 /**
  * Created by xwh on 2015/11/4.
  */
 public class ProgressDialogUtil {
-    private static ProgressDialog mProgressDialog;
+    private static CustomProgressDialog mProgressDialog;
 
     /**
      * 显示ProgressDialog
@@ -17,7 +18,7 @@ public class ProgressDialogUtil {
      */
     public static void showProgressDialog(Context context, CharSequence message) {
         if (mProgressDialog == null) {
-            mProgressDialog = ProgressDialog.show(context, "提示", message);
+            mProgressDialog = CustomProgressDialog.show(context, message, false, null);
         } else {
             mProgressDialog.show();
         }

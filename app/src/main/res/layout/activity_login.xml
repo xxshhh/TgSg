@@ -18,7 +18,8 @@
             android:layout_width="220dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:hint="输入账号"
+            android:hint="账号"
+            android:singleLine="true"
             app:bootstrapBrand="info"/>
 
         <com.beardedhen.androidbootstrap.BootstrapEditText
@@ -26,8 +27,9 @@
             android:layout_width="220dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:hint="输入密码"
+            android:hint="密码"
             android:password="true"
+            android:singleLine="true"
             app:bootstrapBrand="info"/>
 
         <RelativeLayout

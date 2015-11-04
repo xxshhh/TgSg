@@ -18,8 +18,9 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cn.edu.whut.tgsg.R;
-import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
+import cn.edu.whut.tgsg.widget.CustomProgressDialog;
+import cn.edu.whut.tgsg.util.OkHttpUtil;
 
 /**
  * Created by xwh on 2015/11/3.
@@ -84,7 +85,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.btn_login)
     void login() {
-        ProgressDialogUtil.showProgressDialog(LoginActivity.this, "加载中···");
+        ProgressDialogUtil.showProgressDialog(this, "登录中");
         String usernameStr = username.getText().toString();
         String passwordStr = password.getText().toString();
         if (usernameStr.equals("") || passwordStr.equals("")) {
