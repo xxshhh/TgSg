@@ -1,11 +1,23 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cn.edu.whut.tgsg">
+<manifest
+    package="cn.edu.whut.tgsg"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:allowBackup="true"
-                 android:label="@string/app_name"
-                 android:icon="@mipmap/ic_launcher"
-                 android:supportsRtl="true"
-                 android:theme="@style/AppTheme">
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".activity.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.MainActivity"/>
 
     </application>
 

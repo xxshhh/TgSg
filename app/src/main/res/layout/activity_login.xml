@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/edt_username"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:hint="输入账号"
+            app:bootstrapBrand="info"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapEditText
+            android:id="@+id/edt_password"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:hint="输入密码"
+            android:password="true"
+            app:bootstrapBrand="info"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="登录"
+                app:bootstrapBrand="success"
+                app:bootstrapSize="lg"
+                app:roundedCorners="true"/>
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/btn_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_toRightOf="@id/btn_login"
+                android:text="注册"
+                app:bootstrapBrand="danger"
+                app:bootstrapSize="lg"
+                app:roundedCorners="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.beardedhen.androidbootstrap.AwesomeTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/login_form"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:textSize="100dp"
+        app:bootstrapBrand="primary"
+        app:fontAwesomeIcon="fa_user">
+    </com.beardedhen.androidbootstrap.AwesomeTextView>
+</RelativeLayout>
