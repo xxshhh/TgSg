@@ -2,23 +2,22 @@ package cn.edu.whut.tgsg.util;
 
 import android.content.Context;
 
-import cn.edu.whut.tgsg.widget.CustomProgressDialog;
+import cn.edu.whut.tgsg.widget.MyProgressDialog;
 
 /**
  * Created by xwh on 2015/11/4.
  */
 public class ProgressDialogUtil {
-    private static CustomProgressDialog mProgressDialog;
+    private static MyProgressDialog mProgressDialog;
 
     /**
      * 显示ProgressDialog
      *
      * @param context
-     * @param message
      */
-    public static void showProgressDialog(Context context, CharSequence message) {
+    public static void showProgressDialog(Context context) {
         if (mProgressDialog == null) {
-            mProgressDialog = CustomProgressDialog.show(context, message, false, null);
+            mProgressDialog = MyProgressDialog.show(context, false, null);
         } else {
             mProgressDialog.show();
         }

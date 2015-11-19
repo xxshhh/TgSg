@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/window_background">
 
     <LinearLayout
         android:id="@+id/login_form"
@@ -13,60 +13,78 @@
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/edt_username"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:hint="账号"
-            android:singleLine="true"
-            app:bootstrapBrand="info"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
 
-        <com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/edt_password"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:hint="密码"
-            android:password="true"
-            android:singleLine="true"
-            app:bootstrapBrand="info"/>
+            <!-- 账号 -->
+            <EditText
+                android:id="@+id/edt_username"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:hint="账号"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <RelativeLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="登录"
-                app:bootstrapBrand="success"
-                app:bootstrapSize="lg"
-                app:roundedCorners="true"/>
+            <!-- 密码 -->
+            <EditText
+                android:id="@+id/edt_password"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:hint="密码"
+                android:password="true"
+                android:singleLine="true"/>
+        </android.support.design.widget.TextInputLayout>
 
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:id="@+id/btn_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_toRightOf="@id/btn_login"
-                android:text="注册"
-                app:bootstrapBrand="danger"
-                app:bootstrapSize="lg"
-                app:roundedCorners="true"/>
-        </RelativeLayout>
+        <!-- 登录 -->
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/primary"
+            android:text="登录"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
-    <com.beardedhen.androidbootstrap.AwesomeTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- Logo展示-->
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_above="@id/login_form"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:textSize="100dp"
-        app:bootstrapBrand="primary"
-        app:fontAwesomeIcon="fa_user">
-    </com.beardedhen.androidbootstrap.AwesomeTextView>
+        android:src="@drawable/logo"/>
+
+    <!-- 忘记密码 -->
+    <TextView
+        android:id="@+id/tv_forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="15dp"
+        android:clickable="true"
+        android:text="忘记密码？"
+        android:textColor="@color/primary"/>
+
+    <!-- 注册 -->
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="15dp"
+        android:clickable="true"
+        android:text="没有账号？注册"
+        android:textColor="@color/primary"/>
+
 </RelativeLayout>
