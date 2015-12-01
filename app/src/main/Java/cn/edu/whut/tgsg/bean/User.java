@@ -1,6 +1,8 @@
 package cn.edu.whut.tgsg.bean;
 
 /**
+ * 用户
+ * <p/>
  * Created by xwh on 2015/11/4.
  */
 public class User {

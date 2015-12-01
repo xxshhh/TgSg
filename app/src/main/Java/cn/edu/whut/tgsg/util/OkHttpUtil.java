@@ -5,6 +5,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 
 /**
+ * OkHttp框架使用工具类
+ * <p/>
  * Created by xwh on 2015/11/4.
  */
 public class OkHttpUtil {

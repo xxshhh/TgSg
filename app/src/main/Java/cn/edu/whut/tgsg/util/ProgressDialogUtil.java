@@ -5,6 +5,8 @@ import android.content.Context;
 import cn.edu.whut.tgsg.widget.MyProgressDialog;
 
 /**
+ * 进度条对话框工具类
+ * <p/>
  * Created by xwh on 2015/11/4.
  */
 public class ProgressDialogUtil {
@@ -15,7 +17,7 @@ public class ProgressDialogUtil {
      *
      * @param context
      */
-    public static void showProgressDialog(Context context) {
+    public static void show(Context context) {
         if (mProgressDialog == null) {
             mProgressDialog = MyProgressDialog.show(context, false, null);
         } else {
@@ -26,7 +28,7 @@ public class ProgressDialogUtil {
     /**
      * 关闭ProgressDialog
      */
-    public static void dismissProgressDialog() {
+    public static void dismiss() {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
             mProgressDialog = null;

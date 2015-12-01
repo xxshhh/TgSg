@@ -8,6 +8,8 @@ import android.view.WindowManager;
 import cn.edu.whut.tgsg.R;
 
 /**
+ * 自定义的进度条对话框
+ * <p/>
  * Created by xwh on 2015/11/4.
  */
 public class MyProgressDialog extends Dialog {

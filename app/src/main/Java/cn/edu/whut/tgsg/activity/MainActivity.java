@@ -1,5 +1,6 @@
 package cn.edu.whut.tgsg.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -13,10 +14,13 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cn.edu.whut.tgsg.R;
-import cn.edu.whut.tgsg.activity.fragment.EmptyFragment;
-import cn.edu.whut.tgsg.activity.fragment.HomeFragment;
+import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.fragment.EmptyFragment;
+import cn.edu.whut.tgsg.fragment.HomeFragment;
 
 /**
+ * 主界面
+ * <p/>
  * Created by xwh on 2015/11/4.
  */
 public class MainActivity extends BaseActivity {
@@ -36,17 +40,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected Context getContext() {
+        return MainActivity.this;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // toolbar替换actionbar
         setSupportActionBar(mToolbar);
-
         // 设置抽屉开关
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open,
                 R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         // 设置抽屉视图
         setupDrawerContent(mNavigationView);
 
@@ -102,7 +110,6 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-
                             case R.id.navigation_home:
                                 Toast.makeText(MainActivity.this, "home", Toast.LENGTH_SHORT).show();
                                 switchToHome();
@@ -144,16 +151,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar item_message clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         if (id == R.id.action_search) {
             Toast.makeText(MainActivity.this, "search", Toast.LENGTH_SHORT).show();
             return true;
