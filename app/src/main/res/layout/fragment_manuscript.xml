@@ -6,27 +6,26 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- 图片滑动展示栏-->
-    <com.daimajia.slider.library.SliderLayout
-        android:id="@+id/slider"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="5dp"
-        app:auto_cycle="true"
-        app:indicator_visibility="visible"
-        app:pager_animation="Accordion"
-        app:pager_animation_span="1100"/>
-
-    <!-- 消息列表 -->
+    <!-- 稿件列表 -->
     <ListView
-        android:id="@+id/list_message"
+        android:id="@+id/list_manuscript"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/slider"
         android:layout_margin="5dp"
         android:divider="@android:color/white"
-        android:dividerHeight="3dp"
+        android:dividerHeight="20dp"
         android:scrollbars="none">
     </ListView>
+
+    <!-- 我要投稿 -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:src="@mipmap/function_add"
+        app:borderWidth="0dp"/>
 </RelativeLayout>
 

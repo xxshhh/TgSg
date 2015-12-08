@@ -7,32 +7,39 @@ package cn.edu.whut.tgsg.bean;
  */
 public class Message {
 
-    private int icon;
-    private int title;
+    /**
+     * title : 系统消息
+     * content : "您的稿件“乖，摸摸头”状态已变更为“刊登”"
+     * date : "17:55"
+     * check : false
+     */
+
+    private String title;
+    private String content;
     private String date;
-    private String time;
+    private boolean check;
 
-    public Message(int icon, int title, String date, String time) {
-        this.icon = icon;
+    public Message(String title, String content, String date, boolean check) {
         this.title = title;
+        this.content = content;
         this.date = date;
-        this.time = time;
+        this.check = check;
     }
 
-    public int getIcon() {
-        return icon;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
-
-    public int getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(int title) {
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getDate() {
@@ -43,11 +50,11 @@ public class Message {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public boolean isCheck() {
+        return check;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 }

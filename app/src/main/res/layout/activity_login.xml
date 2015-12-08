@@ -53,16 +53,16 @@
             android:layout_margin="20dp"
             android:background="@color/primary"
             android:text="登录"
-            android:textColor="@color/white"/>
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
     <!-- Logo展示-->
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="wrap_content"
-        android:layout_height= "wrap_content"
+        android:layout_width="96dp"
+        android:layout_height= "96dp"
         android:layout_above="@id/login_form"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/avatar"
+        android:src="@mipmap/icon_avator"
         app:border_color="@color/primary_light"
         app:border_width="2dp"/>
 

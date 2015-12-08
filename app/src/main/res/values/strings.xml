@@ -4,6 +4,4 @@
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
 
-    <string name="message_from_newsroom">来自编辑部的消息</string>
-    <string name="message_from_system">来自系统的消息</string>
 </resources>

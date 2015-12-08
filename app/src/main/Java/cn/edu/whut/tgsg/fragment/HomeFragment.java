@@ -3,9 +3,6 @@ package cn.edu.whut.tgsg.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -19,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.MessageAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
@@ -27,7 +23,7 @@ import cn.edu.whut.tgsg.bean.Message;
 import cn.edu.whut.tgsg.util.T;
 
 /**
- * 首页内容
+ * 首页
  * <p/>
  * Created by xwh on 2015/11/19.
  */
@@ -43,27 +39,29 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
         return R.layout.fragment_home;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(getContentLayoutId(), container, false);
-        // 注解绑定
-        ButterKnife.bind(this, view);
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // 初始化图片滑动展示栏
         initImageSlider();
+        // 初始化消息列表
+        initMessageList();
 
+    }
+
+    /**
+     * 初始化消息列表
+     */
+    private void initMessageList() {
         List<Message> list = new ArrayList<>();
-        list.add(new Message(R.drawable.manuscript_blue, R.string.message_from_newsroom, "今天", "16:10"));
-        list.add(new Message(R.drawable.manuscript_blue, R.string.message_from_newsroom, "昨天", "15:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
-        list.add(new Message(R.drawable.message_blue, R.string.message_from_system, "11/29", "22:10"));
+        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
+        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“录用”", "12/03", false));
+        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "12/01", false));
+        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "11/30", false));
+        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“编辑初审”", "11/29", true));
+        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“投稿”", "12/27", true));
         MessageAdapter adapter = new MessageAdapter(getContext(), list);
         mListMessage.setAdapter(adapter);
-        return view;
     }
 
     /**
@@ -91,7 +89,7 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);
 
-            //add your extra information
+            //add1 your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
                     .putString("extra", name);
@@ -104,7 +102,6 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
         mSlider.setDuration(4000);
         mSlider.addOnPageChangeListener(this);
     }
-
 
     @Override
     public void onSliderClick(BaseSliderView slider) {

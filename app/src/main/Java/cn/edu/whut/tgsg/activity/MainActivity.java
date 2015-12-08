@@ -17,6 +17,7 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
+import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
 
 /**
  * 主界面
@@ -73,7 +74,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void switchToManuscript() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
         mToolbar.setTitle("稿件管理");
     }
 
@@ -151,7 +152,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item_message clicks here. The action bar will
+        // Handle action bar item_message2 clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();

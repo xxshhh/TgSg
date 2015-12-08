@@ -23,16 +23,20 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
 
-    // UI库
+    // google material design支持库
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
+    // material进度条
     compile 'com.pnikosis:materialish-progress:1.7'
+    // 圆圈图片
     compile 'de.hdodenhof:circleimageview:1.3.0'
     // 图片滑动展示
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'
+    // 云标签
+    compile 'com.github.kingideayou:tagcloudview:1.0.2'
+
     // 框架
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.okhttp:okhttp:2.5.0'

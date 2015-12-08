@@ -16,6 +16,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Context mContext;
 
     protected abstract int getContentLayoutId();
+
     protected abstract Context getContext();
 
     @Override

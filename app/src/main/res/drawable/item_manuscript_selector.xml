@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape>
+            <!-- 填充-->
+            <solid android:color="@color/accent"/>
+            <!-- 描边 -->
+            <stroke
+                android:width="1dp"
+                android:color="@color/accent"/>
+            <!-- 圆角 -->
+            <corners
+                android:radius="3dp" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false">
+        <shape>
+            <!-- 填充-->
+            <solid android:color="@color/primary_light"/>
+            <!-- 描边 -->
+            <stroke
+                android:width="1dp"
+                android:color="@color/accent"/>
+            <!-- 圆角 -->
+            <corners
+                android:radius="3dp" />
+        </shape>
+    </item>
+
+</selector>

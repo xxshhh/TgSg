@@ -47,28 +47,28 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_message, null);
             viewHolder = new ViewHolder();
-            viewHolder.img_icon = (ImageView) convertView.findViewById(R.id.img_icon);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_message, null);
             viewHolder.tv_message_title = (TextView) convertView.findViewById(R.id.tv_message_title);
+            viewHolder.tv_message_content = (TextView) convertView.findViewById(R.id.tv_message_content);
             viewHolder.tv_message_date = (TextView) convertView.findViewById(R.id.tv_message_date);
-            viewHolder.tv_message_time = (TextView) convertView.findViewById(R.id.tv_message_time);
+            viewHolder.img_check = (ImageView) convertView.findViewById(R.id.img_check);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Message message = mMessageList.get(position);
-        viewHolder.img_icon.setImageResource(message.getIcon());
         viewHolder.tv_message_title.setText(message.getTitle());
+        viewHolder.tv_message_content.setText(message.getContent());
         viewHolder.tv_message_date.setText(message.getDate());
-        viewHolder.tv_message_time.setText(message.getTime());
+        viewHolder.img_check.setVisibility((message.isCheck()) ? View.INVISIBLE : View.VISIBLE);
         return convertView;
     }
 
-    private static class ViewHolder {
-        public ImageView img_icon;
+    private final class ViewHolder {
         public TextView tv_message_title;
+        public TextView tv_message_content;
         public TextView tv_message_date;
-        public TextView tv_message_time;
+        public ImageView img_check;
     }
 }
