@@ -3,6 +3,8 @@ package cn.edu.whut.tgsg.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -40,13 +42,29 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void initListener() {
+        /**
+         * 消息点击
+         */
+        mListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                T.show(mContext, "消息" + position);
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
         // 初始化图片滑动展示栏
         initImageSlider();
         // 初始化消息列表
         initMessageList();
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     /**
@@ -105,7 +123,7 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        T.show(getContext(), slider.getBundle().get("extra") + "");
+        T.show(mContext, slider.getBundle().get("extra") + "");
     }
 
     @Override

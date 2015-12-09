@@ -1,5 +1,6 @@
 package cn.edu.whut.tgsg.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,13 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseFragment extends Fragment {
 
+    protected Context mContext;
+
     protected abstract int getContentLayoutId();
+
+    protected abstract void initListener();
+
+    protected abstract void initData();
 
     @Nullable
     @Override
@@ -25,5 +32,21 @@ public abstract class BaseFragment extends Fragment {
         // 注解绑定
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mContext = getContext();
+        initListener();
+        initData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // 绑定重置
+        ButterKnife.unbind(this);
     }
 }

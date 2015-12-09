@@ -21,5 +21,4 @@ public class OkHttpUtil {
     public static void enqueue(Request request, Callback responseCallback) {
         mOkHttpClient.newCall(request).enqueue(responseCallback);
     }
-
 }

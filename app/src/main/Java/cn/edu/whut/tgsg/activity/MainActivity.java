@@ -9,15 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
 import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
+import cn.edu.whut.tgsg.util.T;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 主界面
@@ -26,12 +28,14 @@ import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
  */
 public class MainActivity extends BaseActivity {
 
-    @Bind(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.navigation_view)
     NavigationView mNavigationView;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.profile_image)
+    CircleImageView mProfileImage;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -46,9 +50,22 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initListener() {
+        /**
+         * 个人信息
+         */
+        mProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.show(mContext, "person");
+                switchToPerson();
+                mDrawerLayout.closeDrawers();
+            }
+        });
+    }
 
+    @Override
+    protected void initData() {
         // toolbar替换actionbar
         setSupportActionBar(mToolbar);
         // 设置抽屉开关
@@ -62,11 +79,15 @@ public class MainActivity extends BaseActivity {
         switchToHome();
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     private void switchToPerson() {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
         mToolbar.setTitle("个人信息");
     }
-
 
     private void switchToHome() {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new HomeFragment()).commit();
@@ -98,13 +119,11 @@ public class MainActivity extends BaseActivity {
         mToolbar.setTitle("联系我们");
     }
 
-    @OnClick(R.id.profile_image)
-    void person() {
-        Toast.makeText(MainActivity.this, "person", Toast.LENGTH_SHORT).show();
-        switchToPerson();
-        mDrawerLayout.closeDrawers();
-    }
-
+    /**
+     * 设置抽屉视图
+     *
+     * @param navigationView
+     */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -112,27 +131,27 @@ public class MainActivity extends BaseActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.navigation_home:
-                                Toast.makeText(MainActivity.this, "home", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "home");
                                 switchToHome();
                                 break;
                             case R.id.navigation_manuscript:
-                                Toast.makeText(MainActivity.this, "manuscript", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "manuscript");
                                 switchToManuscript();
                                 break;
                             case R.id.navigation_message:
-                                Toast.makeText(MainActivity.this, "message", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "message");
                                 switchToMessage();
                                 break;
                             case R.id.navigation_setting:
-                                Toast.makeText(MainActivity.this, "setting", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "setting");
                                 switchToSetting();
                                 break;
                             case R.id.navigation_theme:
-                                Toast.makeText(MainActivity.this, "theme", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "theme");
                                 switchToTheme();
                                 break;
                             case R.id.navigation_contact:
-                                Toast.makeText(MainActivity.this, "contact", Toast.LENGTH_SHORT).show();
+                                T.show(mContext, "contact");
                                 switchToContact();
                                 break;
                         }
@@ -159,7 +178,7 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            Toast.makeText(MainActivity.this, "search", Toast.LENGTH_SHORT).show();
+            T.show(mContext, "search");
             return true;
         }
 

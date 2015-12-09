@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.bean.Message;
 
@@ -47,28 +49,38 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_message, null);
-            viewHolder.tv_message_title = (TextView) convertView.findViewById(R.id.tv_message_title);
-            viewHolder.tv_message_content = (TextView) convertView.findViewById(R.id.tv_message_content);
-            viewHolder.tv_message_date = (TextView) convertView.findViewById(R.id.tv_message_date);
-            viewHolder.img_check = (ImageView) convertView.findViewById(R.id.img_check);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Message message = mMessageList.get(position);
-        viewHolder.tv_message_title.setText(message.getTitle());
-        viewHolder.tv_message_content.setText(message.getContent());
-        viewHolder.tv_message_date.setText(message.getDate());
-        viewHolder.img_check.setVisibility((message.isCheck()) ? View.INVISIBLE : View.VISIBLE);
+        viewHolder.mTvMessageTitle.setText(message.getTitle());
+        viewHolder.mTvMessageContent.setText(message.getContent());
+        viewHolder.mTvMessageDate.setText(message.getDate());
+        viewHolder.mImgCheck.setVisibility((message.isCheck()) ? View.INVISIBLE : View.VISIBLE);
         return convertView;
     }
 
-    private final class ViewHolder {
-        public TextView tv_message_title;
-        public TextView tv_message_content;
-        public TextView tv_message_date;
-        public ImageView img_check;
+    /**
+     * This class contains all butterknife-injected Views & Layouts from layout file 'item_message.xml'
+     * for easy to all layout elements.
+     *
+     * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
+     */
+    static class ViewHolder {
+        @Bind(R.id.tv_message_title)
+        TextView mTvMessageTitle;
+        @Bind(R.id.tv_message_content)
+        TextView mTvMessageContent;
+        @Bind(R.id.tv_message_date)
+        TextView mTvMessageDate;
+        @Bind(R.id.img_check)
+        ImageView mImgCheck;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

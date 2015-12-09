@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import me.next.tagview.TagCloudView;
@@ -49,129 +51,138 @@ public class ManuscriptAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_manuscript, null);
-            viewHolder = new ViewHolder();
-            viewHolder.tv_manuscript_title = (TextView) convertView.findViewById(R.id.tv_manuscript_title);
-            viewHolder.tcv_manuscript_keywords = (TagCloudView) convertView.findViewById(R.id.tcv_manuscript_keywords);
-            viewHolder.tv_manuscript_summary = (TextView) convertView.findViewById(R.id.tv_manuscript_summary);
-            viewHolder.img_progress_1 = (ImageView) convertView.findViewById(R.id.img_progress_1);
-            viewHolder.img_progress_2 = (ImageView) convertView.findViewById(R.id.img_progress_2);
-            viewHolder.img_progress_3 = (ImageView) convertView.findViewById(R.id.img_progress_3);
-            viewHolder.img_progress_4 = (ImageView) convertView.findViewById(R.id.img_progress_4);
-            viewHolder.img_progress_5 = (ImageView) convertView.findViewById(R.id.img_progress_5);
-            viewHolder.tv_progress_1 = (TextView) convertView.findViewById(R.id.tv_progress_1);
-            viewHolder.tv_progress_2 = (TextView) convertView.findViewById(R.id.tv_progress_2);
-            viewHolder.tv_progress_3 = (TextView) convertView.findViewById(R.id.tv_progress_3);
-            viewHolder.tv_progress_4 = (TextView) convertView.findViewById(R.id.tv_progress_4);
-            viewHolder.tv_progress_5 = (TextView) convertView.findViewById(R.id.tv_progress_5);
-            viewHolder.img_finished_flag = (ImageView) convertView.findViewById(R.id.img_finished_flag);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Manuscript manuscript = mManuscriptList.get(position);
-        viewHolder.tv_manuscript_title.setText(manuscript.getTitle());
-        viewHolder.tcv_manuscript_keywords.setTags(manuscript.getKeywords());
-        viewHolder.tv_manuscript_summary.setText(manuscript.getSummary());
+        viewHolder.mTvManuscriptTitle.setText(manuscript.getTitle());
+        viewHolder.mTcvManuscriptKeywords.setTags(manuscript.getKeywords());
+        viewHolder.mTvManuscriptSummary.setText(manuscript.getSummary());
         // 根据稿件状态设置进度显示
         int state = manuscript.getState();
         switch (state) {
             case 1:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_doing);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_undo);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.primary));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.img_finished_flag.setVisibility(View.INVISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_doing);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.primary));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mImgFinishedFlag.setVisibility(View.INVISIBLE);
                 break;
             case 2:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_doing);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_undo);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.primary));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.img_finished_flag.setVisibility(View.INVISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_doing);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.primary));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mImgFinishedFlag.setVisibility(View.INVISIBLE);
                 break;
             case 3:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_doing);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_undo);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_undo);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.primary));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.img_finished_flag.setVisibility(View.INVISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_doing);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.primary));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mImgFinishedFlag.setVisibility(View.INVISIBLE);
                 break;
             case 4:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_doing);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_undo);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.primary));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.img_finished_flag.setVisibility(View.INVISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_doing);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_undo);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.primary));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mImgFinishedFlag.setVisibility(View.INVISIBLE);
                 break;
             case 5:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_doing);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.primary));
-                viewHolder.img_finished_flag.setVisibility(View.INVISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_doing);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.primary));
+                viewHolder.mImgFinishedFlag.setVisibility(View.INVISIBLE);
                 break;
             case 6:
-                viewHolder.img_progress_1.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_2.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_3.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_4.setImageResource(R.mipmap.icon_done);
-                viewHolder.img_progress_5.setImageResource(R.mipmap.icon_done);
-                viewHolder.tv_progress_1.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_2.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_3.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_4.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.tv_progress_5.setTextColor(mContext.getResources().getColor(R.color.third_text));
-                viewHolder.img_finished_flag.setVisibility(View.VISIBLE);
+                viewHolder.mImgProgress1.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress2.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress3.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress4.setImageResource(R.mipmap.icon_done);
+                viewHolder.mImgProgress5.setImageResource(R.mipmap.icon_done);
+                viewHolder.mTvProgress1.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress2.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress3.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress4.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mTvProgress5.setTextColor(mContext.getResources().getColor(R.color.third_text));
+                viewHolder.mImgFinishedFlag.setVisibility(View.VISIBLE);
                 break;
         }
         return convertView;
     }
 
-    private final class ViewHolder {
-        public TextView tv_manuscript_title;
-        public TagCloudView tcv_manuscript_keywords;
-        public TextView tv_manuscript_summary;
+    /**
+     * This class contains all butterknife-injected Views & Layouts from layout file 'item_manuscript.xml'
+     * for easy to all layout elements.
+     *
+     * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
+     */
+    static class ViewHolder {
+        @Bind(R.id.tv_manuscript_title)
+        TextView mTvManuscriptTitle;
+        @Bind(R.id.tcv_manuscript_keywords)
+        TagCloudView mTcvManuscriptKeywords;
+        @Bind(R.id.tv_manuscript_summary)
+        TextView mTvManuscriptSummary;
+        @Bind(R.id.img_progress_1)
+        ImageView mImgProgress1;
+        @Bind(R.id.img_progress_2)
+        ImageView mImgProgress2;
+        @Bind(R.id.img_progress_3)
+        ImageView mImgProgress3;
+        @Bind(R.id.img_progress_4)
+        ImageView mImgProgress4;
+        @Bind(R.id.img_progress_5)
+        ImageView mImgProgress5;
+        @Bind(R.id.tv_progress_1)
+        TextView mTvProgress1;
+        @Bind(R.id.tv_progress_2)
+        TextView mTvProgress2;
+        @Bind(R.id.tv_progress_3)
+        TextView mTvProgress3;
+        @Bind(R.id.tv_progress_4)
+        TextView mTvProgress4;
+        @Bind(R.id.tv_progress_5)
+        TextView mTvProgress5;
+        @Bind(R.id.img_finished_flag)
+        ImageView mImgFinishedFlag;
 
-        public ImageView img_progress_1;
-        public ImageView img_progress_2;
-        public ImageView img_progress_3;
-        public ImageView img_progress_4;
-        public ImageView img_progress_5;
-        public TextView tv_progress_1;
-        public TextView tv_progress_2;
-        public TextView tv_progress_3;
-        public TextView tv_progress_4;
-        public TextView tv_progress_5;
-        public ImageView img_finished_flag;
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

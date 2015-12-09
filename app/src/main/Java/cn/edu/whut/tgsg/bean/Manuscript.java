@@ -13,7 +13,7 @@ public class Manuscript {
      * title : 乖，摸摸头
      * keywords : 大冰 旅行 治愈 散文随笔
      * summary : 讲述了12个真实的传奇故事,或许会让你看到那些你永远无法去体... （更多）（30字）
-     * state : 5
+     * state : 6
      */
 
     String title;

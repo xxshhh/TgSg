@@ -12,4 +12,16 @@ public class EmptyFragment extends BaseFragment {
     protected int getContentLayoutId() {
         return R.layout.fragment_empty;
     }
+
+    @Override
+    protected void initListener() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+
 }
