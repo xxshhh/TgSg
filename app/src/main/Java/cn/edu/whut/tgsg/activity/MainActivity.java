@@ -1,6 +1,7 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +18,6 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
-import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
 import cn.edu.whut.tgsg.util.T;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,6 +38,7 @@ public class MainActivity extends BaseActivity {
     CircleImageView mProfileImage;
 
     private ActionBarDrawerToggle mDrawerToggle;
+    private String mUsernameStr;
 
     @Override
     protected int getContentLayoutId() {
@@ -76,6 +77,9 @@ public class MainActivity extends BaseActivity {
         // 设置抽屉视图
         setupDrawerContent(mNavigationView);
 
+        Intent intent = getIntent();
+        mUsernameStr = intent.getStringExtra("username");
+
         switchToHome();
     }
 
@@ -85,7 +89,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void switchToPerson() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
+        Intent intent = new Intent(mContext, PersonInfoActivity.class);
+        intent.putExtra("username", mUsernameStr);
+        startActivity(intent);
         mToolbar.setTitle("个人信息");
     }
 
@@ -95,8 +102,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void switchToManuscript() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
         mToolbar.setTitle("稿件管理");
+        Intent intent = new Intent(mContext, ExpertCKGJActivity.class);
+        startActivity(intent);
     }
 
     private void switchToMessage() {

@@ -24,6 +24,7 @@ import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
+import cn.edu.whut.tgsg.util.RegisterUtil;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -79,7 +80,7 @@ public class LoginActivity extends BaseActivity {
                 OkHttpUtil.enqueue(request, new Callback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
-                        mHandler.sendEmptyMessage(Constant.LOGIN_SUCCEED);
+                        mHandler.sendEmptyMessage(Constant.SUCCEED);
                         //mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
                     }
 
@@ -87,9 +88,9 @@ public class LoginActivity extends BaseActivity {
                     public void onResponse(Response response) throws IOException {
                         String result = response.body().string();
                         if (result.equals("success"))
-                            mHandler.sendEmptyMessage(Constant.LOGIN_SUCCEED);
+                            mHandler.sendEmptyMessage(Constant.SUCCEED);
                         else
-                            mHandler.sendEmptyMessage(Constant.LOGIN_FAILED);
+                            mHandler.sendEmptyMessage(Constant.FAILED);
                     }
                 });
             }
@@ -111,7 +112,10 @@ public class LoginActivity extends BaseActivity {
         mTvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                T.show(mContext, "暂时不提供注册");
+//                T.show(mContext, "暂时不提供注册");
+                RegisterUtil.customRegisterDialog(R.layout.dialog_register, LoginActivity.this);
+
+
             }
         });
     }
@@ -130,12 +134,12 @@ public class LoginActivity extends BaseActivity {
                     case Constant.HTTP_ACCESS_ERROR:
                         T.show(mContext, "网络访问错误");
                         break;
-                    case Constant.LOGIN_FAILED:
+                    case Constant.FAILED:
                         T.show(mContext, "用户名或密码错误");
                         mEdtUsername.setText("");
                         mEdtPassword.setText("");
                         break;
-                    case Constant.LOGIN_SUCCEED:
+                    case Constant.SUCCEED:
                         T.show(mContext, "恭喜你，登录成功。");
                         Intent intent = new Intent(mContext, MainActivity.class);
                         intent.putExtra("username", mEdtUsername.getText().toString());
