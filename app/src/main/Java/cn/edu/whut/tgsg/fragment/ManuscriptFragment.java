@@ -39,7 +39,7 @@ public class ManuscriptFragment extends BaseFragment {
         mListManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "消息" + position);
+                T.show(mContext, "稿件" + position);
             }
         });
     }
