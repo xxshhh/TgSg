@@ -1,5 +1,6 @@
 package cn.edu.whut.tgsg.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.ManuscriptAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Manuscript;
@@ -40,6 +42,8 @@ public class ManuscriptFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 T.show(mContext, "稿件" + position);
+                Intent intent = new Intent(mContext, ManuscriptDetailActivity.class);
+                startActivity(intent);
             }
         });
     }
