@@ -67,7 +67,7 @@ public class LoginActivity extends BaseActivity {
                 String usernameStr = mEdtUsername.getText().toString();
                 String passwordStr = mEdtPassword.getText().toString();
                 if (usernameStr.equals("") || passwordStr.equals("")) {
-                    T.show(mContext, "用户名或密码不能为空");
+                    T.show(mContext, "用户名或密码不能为空!!!!!!!");
                     return;
                 }
                 ProgressDialogUtil.show(mContext);
