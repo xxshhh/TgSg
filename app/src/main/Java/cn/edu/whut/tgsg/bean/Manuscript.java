@@ -1,55 +1,59 @@
 package cn.edu.whut.tgsg.bean;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * 稿件
  * <p/>
  * Created by xwh on 2015/12/3.
  */
-public class Manuscript {
+public class Manuscript implements Serializable {
 
     /**
-     * title : 乖，摸摸头
-     * keywords : 大冰 旅行 治愈 散文随笔
-     * summary : 讲述了12个真实的传奇故事,或许会让你看到那些你永远无法去体... （更多）（30字）
-     * state : 6
+     * 编号 : 1
+     * 类别 : 随笔
+     * // 投稿人 : 当前用户
+     * 投稿时间 : 2015-12-11 10:35:10
+     * 状态 : 1-6
+     * 最新版本 : ManuscriptVersion
      */
 
-    String title;
-    List<String> keywords;
-    String summary;
+    int id;
+    String sort;
+    String date;
     int state;
+    ManuscriptVersion manuscriptVersion;
 
-    public Manuscript(String title, List<String> keywords, String summary, int state) {
-        this.title = title;
-        this.keywords = keywords;
-        this.summary = summary;
+    public Manuscript(int id, String sort, String date, int state, ManuscriptVersion manuscriptVersion) {
+        this.id = id;
+        this.sort = sort;
+        this.date = date;
         this.state = state;
+        this.manuscriptVersion = manuscriptVersion;
     }
 
-    public String getTitle() {
-        return title;
+    public int getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public List<String> getKeywords() {
-        return keywords;
+    public String getSort() {
+        return sort;
     }
 
-    public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getDate() {
+        return date;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getState() {
@@ -58,5 +62,13 @@ public class Manuscript {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public ManuscriptVersion getManuscriptVersion() {
+        return manuscriptVersion;
+    }
+
+    public void setManuscriptVersion(ManuscriptVersion manuscriptVersion) {
+        this.manuscriptVersion = manuscriptVersion;
     }
 }

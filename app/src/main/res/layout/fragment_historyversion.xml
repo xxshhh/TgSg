@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <!-- 稿件版本列表 -->
+    <ListView
+        android:id="@+id/list_historyVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:divider="@android:color/white"
+        android:dividerHeight="3dp"
+        android:scrollbars="none">
+    </ListView>
+</RelativeLayout>

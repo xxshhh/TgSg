@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,16 +14,33 @@
         android:paddingRight="16dp"
         android:paddingTop="10dp">
 
-        <!-- 稿件标题 -->
-        <TextView
-            android:id="@+id/tv_manuscript_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="乖，摸摸头"
-            android:textColor="@color/primary_text"
-            android:textSize="22sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 稿件标题 -->
+            <TextView
+                android:id="@+id/tv_manuscript_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="乖，摸摸头"
+                android:textColor="@color/primary_text"
+                android:textSize="22sp"/>
+
+            <!-- 稿件时间 -->
+            <TextView
+                android:id="@+id/tv_manuscript_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:text="2015-12-11 10:18:25"
+                android:textColor="@color/third_text"
+                android:textSize="13sp"/>
+        </RelativeLayout>
 
         <!-- 关键词 -->
         <me.next.tagview.TagCloudView
@@ -35,7 +52,7 @@
             app:tcvCanTagClick="false"
             app:tcvItemBorderHorizontal="8dp"
             app:tcvItemBorderVertical="6dp"
-            app:tcvSingleLine="false" />
+            app:tcvSingleLine="false"/>
 
         <!-- 摘要 -->
         <TextView
@@ -46,7 +63,7 @@
             android:layout_marginRight="10dp"
             android:text="讲述了12个真实的传奇故事,或许会让你看到那些你永远无法去体... （更多）"
             android:textColor="@color/secondary_text"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <!-- 稿件进度（图片和线） -->
         <LinearLayout
@@ -59,59 +76,59 @@
                 android:id="@+id/img_progress_1"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/icon_done" />
+                android:src="@mipmap/icon_done"/>
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
-                android:gravity="center" />
+                android:gravity="center"/>
 
             <ImageView
                 android:id="@+id/img_progress_2"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/icon_done" />
+                android:src="@mipmap/icon_done"/>
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
-                android:gravity="center" />
+                android:gravity="center"/>
 
             <ImageView
                 android:id="@+id/img_progress_3"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/icon_done" />
+                android:src="@mipmap/icon_done"/>
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
-                android:gravity="center" />
+                android:gravity="center"/>
 
             <ImageView
                 android:id="@+id/img_progress_4"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/icon_done" />
+                android:src="@mipmap/icon_done"/>
 
             <TextView
                 android:layout_width="50dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
-                android:gravity="center" />
+                android:gravity="center"/>
 
             <ImageView
                 android:id="@+id/img_progress_5"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@mipmap/icon_done" />
+                android:src="@mipmap/icon_done"/>
         </LinearLayout>
 
         <!-- 稿件进度（文字） -->
@@ -127,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:text="投稿"
                 android:textColor="@color/third_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_progress_2"
@@ -136,7 +153,7 @@
                 android:layout_marginLeft="26dp"
                 android:text="编辑初审"
                 android:textColor="@color/third_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_progress_3"
@@ -145,7 +162,7 @@
                 android:layout_marginLeft="13dp"
                 android:text="专家审核"
                 android:textColor="@color/third_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_progress_4"
@@ -154,7 +171,7 @@
                 android:layout_marginLeft="26dp"
                 android:text="录用"
                 android:textColor="@color/third_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_progress_5"
@@ -163,7 +180,7 @@
                 android:layout_marginLeft="39dp"
                 android:text="刊登"
                 android:textColor="@color/third_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -174,5 +191,5 @@
         android:layout_height="100dp"
         android:layout_gravity="right|top"
         android:src="@mipmap/icon_finished"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 </FrameLayout>

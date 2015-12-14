@@ -18,6 +18,7 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
+import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
 import cn.edu.whut.tgsg.util.T;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,21 +52,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void initListener() {
-        /**
-         * 个人信息
-         */
-        mProfileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                T.show(mContext, "person");
-                switchToPerson();
-                mDrawerLayout.closeDrawers();
-            }
-        });
-    }
-
-    @Override
     protected void initData() {
         // toolbar替换actionbar
         setSupportActionBar(mToolbar);
@@ -84,15 +70,27 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void initListener() {
+        /**
+         * 个人信息
+         */
+        mProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.show(mContext, "person");
+                switchToPerson();
+                mDrawerLayout.closeDrawers();
+            }
+        });
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     private void switchToPerson() {
-//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
-        Intent intent = new Intent(mContext, PersonInfoActivity.class);
-        intent.putExtra("username", mUsernameStr);
-        startActivity(intent);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
         mToolbar.setTitle("个人信息");
     }
 
@@ -102,10 +100,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void switchToManuscript() {
-//        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
         mToolbar.setTitle("稿件管理");
-        Intent intent = new Intent(mContext, ExpertCKGJActivity.class);
-        startActivity(intent);
     }
 
     private void switchToMessage() {
@@ -213,5 +209,4 @@ public class MainActivity extends BaseActivity {
             doExitApp();
         }
     }
-
 }

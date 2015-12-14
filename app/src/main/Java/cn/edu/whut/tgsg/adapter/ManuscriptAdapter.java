@@ -1,10 +1,8 @@
 package cn.edu.whut.tgsg.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,53 +11,45 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
+import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import me.next.tagview.TagCloudView;
 
 /**
- * 消息adapter
+ * 稿件adapter
  * <p/>
  * Created by xwh on 2015/11/30.
  */
-public class ManuscriptAdapter extends BaseAdapter {
+public class ManuscriptAdapter extends CommonAdapter<Manuscript> {
 
-    private Context mContext;
-    private List<Manuscript> mManuscriptList;
-
-    public ManuscriptAdapter(Context context, List<Manuscript> list) {
-        mContext = context;
-        mManuscriptList = list;
-    }
-
-    @Override
-    public int getCount() {
-        return mManuscriptList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mManuscriptList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    /**
+     * 构造方法：对成员变量进行初始化
+     *
+     * @param context
+     * @param data
+     */
+    public ManuscriptAdapter(Context context, List<Manuscript> data) {
+        super(context, data);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_manuscript, null);
+            convertView = mInflater.inflate(R.layout.item_manuscript, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Manuscript manuscript = mManuscriptList.get(position);
-        viewHolder.mTvManuscriptTitle.setText(manuscript.getTitle());
-        viewHolder.mTcvManuscriptKeywords.setTags(manuscript.getKeywords());
-        viewHolder.mTvManuscriptSummary.setText(manuscript.getSummary());
+        Manuscript manuscript = mData.get(position);
+        // 根据稿件对象获取最新稿件版本
+        ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
+        viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+        viewHolder.mTvManuscriptDate.setText(manuscript.getDate());
+        viewHolder.mTcvManuscriptKeywords.setTags(manuscriptVersion.getKeywords());
+        viewHolder.mTvManuscriptSummary.setText(manuscriptVersion.getSummary().substring(0, 30) + "...（更多）");
         // 根据稿件状态设置进度显示
         int state = manuscript.getState();
         switch (state) {
@@ -154,6 +144,8 @@ public class ManuscriptAdapter extends BaseAdapter {
     static class ViewHolder {
         @Bind(R.id.tv_manuscript_title)
         TextView mTvManuscriptTitle;
+        @Bind(R.id.tv_manuscript_date)
+        TextView mTvManuscriptDate;
         @Bind(R.id.tcv_manuscript_keywords)
         TagCloudView mTcvManuscriptKeywords;
         @Bind(R.id.tv_manuscript_summary)

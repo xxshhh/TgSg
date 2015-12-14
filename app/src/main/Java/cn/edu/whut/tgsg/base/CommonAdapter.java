@@ -14,24 +14,27 @@ import java.util.List;
  * Created by ylj on 2015-12-09.
  */
 public abstract class CommonAdapter<T> extends BaseAdapter {
-    protected List<T> mDatas;//数据源
+
+    protected List<T> mData;//数据源
     protected Context mContext;
     protected LayoutInflater mInflater;
 
     /**
      * 构造方法：对成员变量进行初始化
+     *
+     * @param context
+     * @param data
      */
-    public CommonAdapter(Context context, List<T> datas) {
+    public CommonAdapter(Context context, List<T> data) {
         this.mContext = context;
-        this.mDatas = datas;
+        this.mData = data;
         mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return mDatas.size();
+        return mData.size();
     }
-
 
     /**
      * 返回第position处的列表项内容
@@ -41,7 +44,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
      */
     @Override
     public T getItem(int position) {
-        return mDatas.get(position);
+        return mData.get(position);
     }
 
     @Override

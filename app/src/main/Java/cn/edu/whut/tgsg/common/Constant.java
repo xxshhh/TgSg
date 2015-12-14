@@ -19,12 +19,11 @@ public class Constant {
     public static final String REGISTER_URL = "http://192.168.191.1:8080/android/register";
     public static final int INPUT_IS_NULL = 5;
     public static final int NET_ACCESS_ERROR = 6;
-    /*public static final int REGISTER_FAILED = 7;
-    public static final int REGISTER_SUCCEED = 8;*/
+    public static final int PSWNOTSAME = 7;
 
+    public static final int EMAILFORMATERROR = 8;
+    public static final int PSWFORAMTERROR = 9;
 
-    /*public static final int GETPERSONINFO_FAILED = 9;
-    public static final int GETPERSONINFO_SUCCEED = 10;*/
     public static final String GETPERSONINFO_URL = "http://192.168.191.1:8080/android/getPersonInfo";
 
 }

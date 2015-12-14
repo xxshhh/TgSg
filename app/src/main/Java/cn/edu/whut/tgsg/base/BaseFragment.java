@@ -21,9 +21,9 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getContentLayoutId();
 
-    protected abstract void initListener();
-
     protected abstract void initData();
+
+    protected abstract void initListener();
 
     @Nullable
     @Override
@@ -39,8 +39,8 @@ public abstract class BaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mContext = getContext();
-        initListener();
         initData();
+        initListener();
     }
 
     @Override

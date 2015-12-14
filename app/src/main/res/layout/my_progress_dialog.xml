@@ -11,6 +11,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
-        app:matProg_barColor="@color/primary"
+        app:matProg_barColor="@color/accent"
         app:matProg_progressIndeterminate="true"/>
 </RelativeLayout>

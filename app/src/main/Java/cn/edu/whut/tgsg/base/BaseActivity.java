@@ -19,9 +19,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract Context getContext();
 
-    protected abstract void initListener();
-
     protected abstract void initData();
+
+    protected abstract void initListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = getContext();
         // 注解绑定
         ButterKnife.bind(this);
-        initListener();
         initData();
+        initListener();
     }
 }

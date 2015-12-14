@@ -24,7 +24,6 @@ import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
-import cn.edu.whut.tgsg.util.RegisterUtil;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -55,69 +54,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected Context getContext() {
         return LoginActivity.this;
-    }
-
-    @Override
-    protected void initListener() {
-        /**
-         * 登录
-         */
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String usernameStr = mEdtUsername.getText().toString();
-                String passwordStr = mEdtPassword.getText().toString();
-                if (usernameStr.equals("") || passwordStr.equals("")) {
-                    T.show(mContext, "用户名或密码不能为空!!!!!!!");
-                    return;
-                }
-                ProgressDialogUtil.show(mContext);
-                RequestBody loginFormBody = new FormEncodingBuilder()
-                        .add("username", usernameStr)
-                        .add("password", passwordStr)
-                        .build();
-                Request request = new Request.Builder().url(Constant.LOGIN_URL).post(loginFormBody).build();
-                OkHttpUtil.enqueue(request, new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-                        mHandler.sendEmptyMessage(Constant.SUCCEED);
-                        //mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
-                    }
-
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        String result = response.body().string();
-                        if (result.equals("success"))
-                            mHandler.sendEmptyMessage(Constant.SUCCEED);
-                        else
-                            mHandler.sendEmptyMessage(Constant.FAILED);
-                    }
-                });
-            }
-        });
-
-        /**
-         * 忘记密码
-         */
-        mTvForget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                T.show(mContext, "抱歉");
-            }
-        });
-
-        /**
-         * 注册
-         */
-        mTvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                T.show(mContext, "暂时不提供注册");
-                RegisterUtil.customRegisterDialog(R.layout.dialog_register, LoginActivity.this);
-
-
-            }
-        });
     }
 
     @Override
@@ -152,8 +88,69 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    protected void initListener() {
+        /**
+         * 登录
+         */
+        mBtnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String usernameStr = mEdtUsername.getText().toString();
+                String passwordStr = mEdtPassword.getText().toString();
+                if (usernameStr.equals("") || passwordStr.equals("")) {
+                    T.show(mContext, "用户名或密码不能为空!!!!!!!");
+                    return;
+                }
+                ProgressDialogUtil.show(mContext);
+                RequestBody loginFormBody = new FormEncodingBuilder()
+                        .add("username", usernameStr)
+                        .add("password", passwordStr)
+                        .build();
+                Request request = new Request.Builder().url(Constant.LOGIN_URL).post(loginFormBody).build();
+                OkHttpUtil.enqueue(request, new Callback() {
+                    @Override
+                    public void onFailure(Request request, IOException e) {
+                        mHandler.sendEmptyMessage(Constant.SUCCEED);
+                        //mHandler.sendEmptyMessage(Constant.FAILED);
+                    }
+
+                    @Override
+                    public void onResponse(Response response) throws IOException {
+                        String result = response.body().string();
+                        if (result.equals("success"))
+                            mHandler.sendEmptyMessage(Constant.SUCCEED);
+                        else
+                            mHandler.sendEmptyMessage(Constant.FAILED);
+                    }
+                });
+            }
+        });
+
+        /**
+         * 忘记密码
+         */
+        mTvForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ForgetPswActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        /**
+         * 注册
+         */
+        mTvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
 }

@@ -12,7 +12,5 @@
     <color name="window_background">#F0F0F0</color>
     <color name="tab_bgcolor">#eeeeee</color>
 
-    <color name="white">#ffffff</color>
-    <color name="transparent">#00000000</color>
-
+    <color name="red">#eb4f38</color>
 </resources>

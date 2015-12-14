@@ -3,7 +3,6 @@ package cn.edu.whut.tgsg.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -12,22 +11,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.CommonAdapter;
-import cn.edu.whut.tgsg.bean.Message;
+import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 
 /**
- * 消息adapter
+ * 稿件版本adapter
  * <p/>
- * Created by xwh on 2015/11/30.
+ * Created by xwh on 2015/12/14.
  */
-public class MessageAdapter extends CommonAdapter<Message> {
-
+public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
     /**
      * 构造方法：对成员变量进行初始化
      *
      * @param context
      * @param data
      */
-    public MessageAdapter(Context context, List<Message> data) {
+    public HistoryVersionAdapter(Context context, List<ManuscriptVersion> data) {
         super(context, data);
     }
 
@@ -35,35 +33,32 @@ public class MessageAdapter extends CommonAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_message, null);
+            convertView = mInflater.inflate(R.layout.item_historyversion, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Message message = mData.get(position);
-        viewHolder.mTvMessageTitle.setText(message.getTitle());
-        viewHolder.mTvMessageContent.setText(message.getContent());
-        viewHolder.mTvMessageDate.setText(message.getDate());
-        viewHolder.mImgCheck.setVisibility((message.isCheck()) ? View.INVISIBLE : View.VISIBLE);
+        ManuscriptVersion manuscriptVersion = mData.get(position);
+        viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+        viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getDate());
+        viewHolder.mTvManuscriptIndex.setText(String.valueOf(mData.size() - position));
         return convertView;
     }
 
     /**
-     * This class contains all butterknife-injected Views & Layouts from layout file 'item_message.xml'
+     * This class contains all butterknife-injected Views & Layouts from layout file 'item_historyversion.xml'
      * for easy to all layout elements.
      *
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @Bind(R.id.tv_message_title)
-        TextView mTvMessageTitle;
-        @Bind(R.id.tv_message_content)
-        TextView mTvMessageContent;
-        @Bind(R.id.tv_message_date)
-        TextView mTvMessageDate;
-        @Bind(R.id.img_check)
-        ImageView mImgCheck;
+        @Bind(R.id.tv_manuscript_title)
+        TextView mTvManuscriptTitle;
+        @Bind(R.id.tv_manuscript_date)
+        TextView mTvManuscriptDate;
+        @Bind(R.id.tv_manuscript_index)
+        TextView mTvManuscriptIndex;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

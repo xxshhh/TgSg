@@ -14,14 +14,12 @@ public class EmptyFragment extends BaseFragment {
     }
 
     @Override
-    protected void initListener() {
-
-    }
-
-    @Override
     protected void initData() {
 
     }
 
+    @Override
+    protected void initListener() {
 
+    }
 }

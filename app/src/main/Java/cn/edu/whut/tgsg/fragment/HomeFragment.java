@@ -42,6 +42,14 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
     }
 
     @Override
+    protected void initData() {
+        // 初始化图片滑动展示栏
+        initImageSlider();
+        // 初始化消息列表
+        initMessageList();
+    }
+
+    @Override
     protected void initListener() {
         /**
          * 消息点击
@@ -52,14 +60,6 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
                 T.show(mContext, "消息" + position);
             }
         });
-    }
-
-    @Override
-    protected void initData() {
-        // 初始化图片滑动展示栏
-        initImageSlider();
-        // 初始化消息列表
-        initMessageList();
     }
 
     @Override
@@ -132,7 +132,7 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
 
     @Override
     public void onPageSelected(int position) {
-        Log.e("Slider Demo", "Page Changed: " + position);
+        //Log.e("Slider Demo", "Page Changed: " + position);
     }
 
     @Override
