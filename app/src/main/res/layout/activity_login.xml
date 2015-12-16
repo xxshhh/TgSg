@@ -51,15 +51,16 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="@color/primary"
+            android:background="@drawable/btn_selector"
             android:text="登录"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <!-- Logo展示-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="96dp"
-        android:layout_height= "96dp"
+        android:layout_height="96dp"
         android:layout_above="@id/login_form"
         android:layout_centerHorizontal="true"
         android:src="@mipmap/icon_avator"
@@ -73,10 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="15dp"
+        android:layout_margin="20dp"
         android:clickable="true"
         android:text="忘记密码？"
-        android:textColor="@color/primary"/>
+        android:textColor="@color/primary"
+        android:textSize="16dp"/>
 
     <!-- 注册 -->
     <TextView
@@ -85,9 +87,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="15dp"
+        android:layout_margin="20dp"
         android:clickable="true"
         android:text="没有账号？注册"
-        android:textColor="@color/primary"/>
+        android:textColor="@color/primary"
+        android:textSize="16dp"/>
 
 </RelativeLayout>

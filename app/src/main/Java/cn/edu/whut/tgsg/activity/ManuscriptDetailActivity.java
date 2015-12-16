@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
@@ -13,8 +14,8 @@ import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
-import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HistoryVersionFragment;
+import cn.edu.whut.tgsg.util.T;
 
 /**
  * 稿件详情界面
@@ -27,6 +28,8 @@ public class ManuscriptDetailActivity extends BaseActivity {
     Toolbar mToolbar;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
+    @Bind(R.id.btn_cancel)
+    Button mBtnCancel;
     @Bind(R.id.viewPager)
     ViewPager mViewPager;
 
@@ -43,7 +46,7 @@ public class ManuscriptDetailActivity extends BaseActivity {
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.activity_manuscriptdetail;
+        return R.layout.activity_manuscript_detail;
     }
 
     @Override
@@ -66,22 +69,29 @@ public class ManuscriptDetailActivity extends BaseActivity {
             }
         });
 
+        // 设置是否隐藏取消投稿按钮
+        if (mManuscript.getState() == 1) {
+            mBtnCancel.setVisibility(View.VISIBLE);
+        }
+
         // 设置Viewpager
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BaseInfoFragment(), "基本信息");
         adapter.addFragment(new HistoryVersionFragment(), "历史版本");
-        adapter.addFragment(new EmptyFragment(), "留言");
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
     protected void initListener() {
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        /**
+         * 取消投稿
+         */
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.show(mContext, "取消投稿");
+            }
+        });
     }
 }

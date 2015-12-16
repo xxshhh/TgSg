@@ -12,7 +12,7 @@ public class Manuscript implements Serializable {
     /**
      * 编号 : 1
      * 类别 : 随笔
-     * // 投稿人 : 当前用户
+     * 投稿人 : 当前用户
      * 投稿时间 : 2015-12-11 10:35:10
      * 状态 : 1-6
      * 最新版本 : ManuscriptVersion
@@ -20,13 +20,15 @@ public class Manuscript implements Serializable {
 
     int id;
     String sort;
+    User user;
     String date;
     int state;
     ManuscriptVersion manuscriptVersion;
 
-    public Manuscript(int id, String sort, String date, int state, ManuscriptVersion manuscriptVersion) {
+    public Manuscript(int id, String sort, User user, String date, int state, ManuscriptVersion manuscriptVersion) {
         this.id = id;
         this.sort = sort;
+        this.user = user;
         this.date = date;
         this.state = state;
         this.manuscriptVersion = manuscriptVersion;
@@ -46,6 +48,14 @@ public class Manuscript implements Serializable {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getDate() {

@@ -25,10 +25,10 @@ public class MessageAdapter extends CommonAdapter<Message> {
      * 构造方法：对成员变量进行初始化
      *
      * @param context
-     * @param data
+     * @param dataList
      */
-    public MessageAdapter(Context context, List<Message> data) {
-        super(context, data);
+    public MessageAdapter(Context context, List<Message> dataList) {
+        super(context, dataList);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MessageAdapter extends CommonAdapter<Message> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Message message = mData.get(position);
+        Message message = mDataList.get(position);
         viewHolder.mTvMessageTitle.setText(message.getTitle());
         viewHolder.mTvMessageContent.setText(message.getContent());
         viewHolder.mTvMessageDate.setText(message.getDate());

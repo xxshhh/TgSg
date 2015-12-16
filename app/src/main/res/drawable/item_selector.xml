@@ -4,7 +4,14 @@
     <item android:state_pressed="true">
         <shape>
             <!-- 填充-->
-            <solid android:color="@color/accent"/>
+            <solid android:color="@color/tab_bgcolor"/>
+            <!-- 描边 -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/accent"/>
+            <!-- 圆角 -->
+            <corners
+                android:radius="3dp"/>
         </shape>
     </item>
 
@@ -12,6 +19,13 @@
         <shape>
             <!-- 填充-->
             <solid android:color="@color/primary_light"/>
+            <!-- 描边 -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/accent"/>
+            <!-- 圆角 -->
+            <corners
+                android:radius="3dp"/>
         </shape>
     </item>
 

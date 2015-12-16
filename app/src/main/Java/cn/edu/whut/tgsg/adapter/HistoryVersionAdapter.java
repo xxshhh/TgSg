@@ -19,14 +19,15 @@ import cn.edu.whut.tgsg.bean.ManuscriptVersion;
  * Created by xwh on 2015/12/14.
  */
 public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
+
     /**
      * 构造方法：对成员变量进行初始化
      *
      * @param context
-     * @param data
+     * @param dataList
      */
-    public HistoryVersionAdapter(Context context, List<ManuscriptVersion> data) {
-        super(context, data);
+    public HistoryVersionAdapter(Context context, List<ManuscriptVersion> dataList) {
+        super(context, dataList);
     }
 
     @Override
@@ -39,10 +40,10 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        ManuscriptVersion manuscriptVersion = mData.get(position);
+        ManuscriptVersion manuscriptVersion = mDataList.get(position);
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
         viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getDate());
-        viewHolder.mTvManuscriptIndex.setText(String.valueOf(mData.size() - position));
+        viewHolder.mTvManuscriptIndex.setText(String.valueOf(mDataList.size() - position));
         return convertView;
     }
 

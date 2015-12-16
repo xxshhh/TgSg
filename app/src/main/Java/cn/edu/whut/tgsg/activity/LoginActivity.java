@@ -78,7 +78,8 @@ public class LoginActivity extends BaseActivity {
                     case Constant.SUCCEED:
                         T.show(mContext, "恭喜你，登录成功。");
                         Intent intent = new Intent(mContext, MainActivity.class);
-                        intent.putExtra("username", mEdtUsername.getText().toString());
+                        Constant.GLOBAL_USER.setUsername("大冰");
+                        Constant.GLOBAL_USER.setRole(Integer.valueOf(mEdtUsername.getText().toString()));
                         startActivity(intent);
                         finish();
                         break;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -16,9 +17,13 @@ import android.widget.Toast;
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.fragment.AuthorManuscriptFragment;
+import cn.edu.whut.tgsg.fragment.EditorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
+import cn.edu.whut.tgsg.fragment.ExpertManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
-import cn.edu.whut.tgsg.fragment.ManuscriptFragment;
+import cn.edu.whut.tgsg.fragment.MessageFragment;
 import cn.edu.whut.tgsg.util.T;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,7 +83,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 T.show(mContext, "person");
-                switchToPerson();
+                Intent intent = new Intent(mContext, PersonInfoActivity.class);
+                startActivity(intent);
                 mDrawerLayout.closeDrawers();
             }
         });
@@ -89,34 +95,39 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
     }
 
-    private void switchToPerson() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
-        mToolbar.setTitle("个人信息");
-    }
-
     private void switchToHome() {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new HomeFragment()).commit();
         mToolbar.setTitle("首页");
     }
 
     private void switchToManuscript() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new ManuscriptFragment()).commit();
+        // 1-作者 2-编辑 3-专家 4-管理员
+        Fragment fragment = null;
+        switch (Constant.GLOBAL_USER.getRole()) {
+            case 1:
+                fragment = new AuthorManuscriptFragment();
+                break;
+            case 2:
+                fragment = new EditorManuscriptFragment();
+                break;
+            case 3:
+                fragment = new ExpertManuscriptFragment();
+                break;
+            default:
+                fragment = new EmptyFragment();
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment).commit();
         mToolbar.setTitle("稿件管理");
     }
 
     private void switchToMessage() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new MessageFragment()).commit();
         mToolbar.setTitle("消息");
     }
 
     private void switchToSetting() {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
         mToolbar.setTitle("设置");
-    }
-
-    private void switchToTheme() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
-        mToolbar.setTitle("主题");
     }
 
     private void switchToContact() {
@@ -150,10 +161,6 @@ public class MainActivity extends BaseActivity {
                             case R.id.navigation_setting:
                                 T.show(mContext, "setting");
                                 switchToSetting();
-                                break;
-                            case R.id.navigation_theme:
-                                T.show(mContext, "theme");
-                                switchToTheme();
                                 break;
                             case R.id.navigation_contact:
                                 T.show(mContext, "contact");

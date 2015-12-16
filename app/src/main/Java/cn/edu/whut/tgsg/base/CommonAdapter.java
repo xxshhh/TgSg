@@ -15,25 +15,29 @@ import java.util.List;
  */
 public abstract class CommonAdapter<T> extends BaseAdapter {
 
-    protected List<T> mData;//数据源
+    protected List<T> mDataList;//数据源
     protected Context mContext;
     protected LayoutInflater mInflater;
+
+    public List<T> getDataList() {
+        return mDataList;
+    }
 
     /**
      * 构造方法：对成员变量进行初始化
      *
      * @param context
-     * @param data
+     * @param dataList
      */
-    public CommonAdapter(Context context, List<T> data) {
+    public CommonAdapter(Context context, List<T> dataList) {
         this.mContext = context;
-        this.mData = data;
+        this.mDataList = dataList;
         mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return mData.size();
+        return mDataList.size();
     }
 
     /**
@@ -44,7 +48,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
      */
     @Override
     public T getItem(int position) {
-        return mData.get(position);
+        return mDataList.get(position);
     }
 
     @Override

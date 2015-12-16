@@ -29,5 +29,8 @@
         <activity
             android:name=".activity.RegisterActivity">
         </activity>
+        <activity
+            android:name=".activity.PersonInfoActivity">
+        </activity>
     </application>
 </manifest>

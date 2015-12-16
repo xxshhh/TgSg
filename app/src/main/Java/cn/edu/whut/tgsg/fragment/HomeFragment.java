@@ -62,11 +62,6 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
         });
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     /**
      * 初始化消息列表
      */
@@ -117,7 +112,7 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
         mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mSlider.setCustomAnimation(new DescriptionAnimation());
-        mSlider.setDuration(4000);
+        mSlider.setDuration(6000);
         mSlider.addOnPageChangeListener(this);
     }
 

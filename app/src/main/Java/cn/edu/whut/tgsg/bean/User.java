@@ -1,11 +1,13 @@
 package cn.edu.whut.tgsg.bean;
 
+import java.io.Serializable;
+
 /**
  * 用户
  * <p/>
  * Created by ylj on 2015/12/14.
  */
-public class User {
+public class User implements Serializable   {
 
     /**
      * id：1
@@ -36,6 +38,10 @@ public class User {
     String researchDirection;//研究方向
     String workPlace;//工作单位
     String desc;//个人简介
+
+    public User() {
+
+    }
 
     public User(int id, String email, String password, String username, int age, String tel, String profileImage, int role, String degree, String major, String researchDirection, String workPlace, String desc) {
         this.id = id;

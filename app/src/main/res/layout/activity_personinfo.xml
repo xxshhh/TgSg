@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        android:background="?attr/colorPrimaryDark"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/icon_avator"
+            app:border_color="@color/primary_light"
+            app:border_width="2dp"/>
+
+        <TextView
+            android:id="@+id/edt_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="昵称"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- 邮箱 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="邮箱"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="1076030808@qq.com"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 密码 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="密码"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_psw"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:text="123456"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 年龄 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="年龄"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:text="20"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 电话 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="电话"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:text="18271393200"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 学历 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="学历"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_degree"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="大学"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 专业 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="专业"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_major"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="18271393200"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 研究方向 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="研究方向"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_research_direction"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="18271393200"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 工作单位 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="工作单位"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_work_place"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="武汉理工大学"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+
+            <!-- 个人简介 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="个人简介"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/divider"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/edt_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:text="我是一名学生"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/divider"
+                android:contentDescription="@null"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

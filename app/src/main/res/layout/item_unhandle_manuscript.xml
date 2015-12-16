@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/item_selector"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:paddingBottom="4dp"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:paddingTop="4dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:orientation="vertical">
+
+        <!-- 稿件标题 -->
+        <TextView
+            android:id="@+id/tv_manuscript_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="乖，摸摸头"
+            android:textColor="@color/primary_text"
+            android:textSize="20sp"
+            android:textStyle="italic"/>
+
+        <!-- 投稿人 -->
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_manuscript_title"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="投稿人"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_manuscript_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="大冰"
+                android:textColor="@color/third_text"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 投稿时间 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="投稿时间"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_manuscript_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015-12-15 18:40:09"
+                android:textColor="@color/third_text"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 受理 -->
+        <Button
+            android:id="@+id/btn_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_selector"
+            android:clickable="true"
+            android:focusable="false"
+            android:text="受理"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+</LinearLayout>

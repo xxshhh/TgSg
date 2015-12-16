@@ -29,7 +29,7 @@ public class HistoryVersionFragment extends BaseFragment {
     ListView mListHistoryVersion;
 
     Manuscript mManuscript;
-    List<ManuscriptVersion> mManuscriptVersionList;
+    List<ManuscriptVersion> mManuscriptVersions;
 
     @Override
     protected int getContentLayoutId() {
@@ -52,7 +52,7 @@ public class HistoryVersionFragment extends BaseFragment {
         mListHistoryVersion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, String.valueOf(mManuscriptVersionList.size() - position));
+                T.show(mContext, String.valueOf(mManuscriptVersions.size() - position));
             }
         });
     }
@@ -66,13 +66,20 @@ public class HistoryVersionFragment extends BaseFragment {
      * 初始化历史版本列表
      */
     private void initHistoryVersionList() {
-        mManuscriptVersionList = new ArrayList<>();
+        mManuscriptVersions = new ArrayList<>();
         ManuscriptVersion manuscriptVersion = mManuscript.getManuscriptVersion();
-        mManuscriptVersionList.add(new ManuscriptVersion(1, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), manuscriptVersion.getDate()));
-        mManuscriptVersionList.add(new ManuscriptVersion(2, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-07 15:19:11"));
-        mManuscriptVersionList.add(new ManuscriptVersion(3, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-05 09:19:11"));
-        mManuscriptVersionList.add(new ManuscriptVersion(4, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
-        HistoryVersionAdapter adapter = new HistoryVersionAdapter(mContext, mManuscriptVersionList);
+        mManuscriptVersions.add(new ManuscriptVersion(1, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), manuscriptVersion.getDate()));
+        mManuscriptVersions.add(new ManuscriptVersion(2, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-07 15:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(3, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-05 09:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(4, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(5, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(6, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(7, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(8, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(9, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(10, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        mManuscriptVersions.add(new ManuscriptVersion(11, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-02 12:19:11"));
+        HistoryVersionAdapter adapter = new HistoryVersionAdapter(mContext, mManuscriptVersions);
         mListHistoryVersion.setAdapter(adapter);
     }
 }

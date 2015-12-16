@@ -66,8 +66,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@color/primary"
+            android:background="@drawable/btn_selector"
             android:text="注册"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
     </LinearLayout>
 </LinearLayout>

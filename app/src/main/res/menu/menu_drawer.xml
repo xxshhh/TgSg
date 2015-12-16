@@ -23,11 +23,6 @@
     <item android:title="扩展功能">
         <menu>
             <item
-                android:id="@+id/navigation_theme"
-                android:checkable="true"
-                android:icon="@mipmap/menu_theme"
-                android:title="更换主题"/>
-            <item
                 android:id="@+id/navigation_contact"
                 android:checkable="true"
                 android:icon="@mipmap/menu_contact"

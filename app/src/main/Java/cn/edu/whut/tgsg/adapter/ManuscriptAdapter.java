@@ -27,10 +27,10 @@ public class ManuscriptAdapter extends CommonAdapter<Manuscript> {
      * 构造方法：对成员变量进行初始化
      *
      * @param context
-     * @param data
+     * @param dataList
      */
-    public ManuscriptAdapter(Context context, List<Manuscript> data) {
-        super(context, data);
+    public ManuscriptAdapter(Context context, List<Manuscript> dataList) {
+        super(context, dataList);
     }
 
     @Override
@@ -43,13 +43,13 @@ public class ManuscriptAdapter extends CommonAdapter<Manuscript> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Manuscript manuscript = mData.get(position);
+        Manuscript manuscript = mDataList.get(position);
         // 根据稿件对象获取最新稿件版本
         ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
         viewHolder.mTvManuscriptDate.setText(manuscript.getDate());
         viewHolder.mTcvManuscriptKeywords.setTags(manuscriptVersion.getKeywords());
-        viewHolder.mTvManuscriptSummary.setText(manuscriptVersion.getSummary().substring(0, 30) + "...（更多）");
+        viewHolder.mTvManuscriptSummary.setText(manuscriptVersion.getSummary().length() > 30 ? manuscriptVersion.getSummary().substring(0, 30) + "...（更多）" : manuscriptVersion.getSummary());
         // 根据稿件状态设置进度显示
         int state = manuscript.getState();
         switch (state) {

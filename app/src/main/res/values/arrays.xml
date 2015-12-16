@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="states">
+        <item>投稿</item>
+        <item>编辑初审</item>
+        <item>专家审核</item>
+        <item>录用</item>
+        <item>刊登</item>
+    </string-array>
+</resources>
