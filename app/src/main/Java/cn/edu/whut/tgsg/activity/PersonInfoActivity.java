@@ -1,7 +1,6 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -75,7 +74,19 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
-        //getData(Constant.EMAIL);
+        Gson gson = new Gson();
+        user = gson.fromJson(jsonString, User.class);
+        //初始化个人信息界面
+        mEdtUsername.setText(user.getUsername());
+        mEdtEmail.setText(user.getEmail());
+        mEdtPsw.setText(user.getPassword());
+        mEdtAge.setText(user.getAge() + "");
+        mEdtTel.setText(user.getTel());
+        mEdtDegree.setText(user.getDegree());
+        mEdtMajor.setText(user.getMajor());
+        mEdtResearchDirection.setText(user.getResearchDirection());
+        mEdtWorkPlace.setText(user.getWorkPlace());
+        mEdtDesc.setText(user.getDesc());
         /**
          * 处理消息
          */
@@ -88,18 +99,7 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
                         T.show(mContext, "网络访问错误");
                         break;
                     case Constant.GETJSON_SUCCEED:
-                        dealJson(jsonString);
-                        mEdtUsername.setText(user.getUsername());
-                        mEdtEmail.setText(user.getEmail());
-                        mEdtPsw.setText(user.getPassword());
-                        mEdtAge.setText(user.getAge() + "");
-                        mEdtTel.setText(user.getTel());
-                        mEdtDegree.setText(user.getDegree());
-                        mEdtMajor.setText(user.getMajor());
-                        mEdtResearchDirection.setText(user.getResearchDirection());
-                        mEdtWorkPlace.setText(user.getWorkPlace());
-                        mEdtDesc.setText(user.getDesc());
-                        break;
+
                     case Constant.FAILED:
                         T.show(mContext, "修改失败");
                         break;
@@ -125,15 +125,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         mEdtDesc.setOnClickListener(this);
     }
 
-    /**
-     * 解析json字符串
-     *
-     * @param jsonString
-     */
-    private void dealJson(String jsonString) {
-        Gson gson = new Gson();
-        user = gson.fromJson(jsonString, User.class);
-    }
 
     /**
      * 将用户修改的信息发送到服务器，保存修改
@@ -165,6 +156,8 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()) {//10个字段
             case R.id.edt_psw:
                 showMyDialog(v.getId(), R.layout.dialog_chg_psw);//以该自定义布局显示对话框
+                break;
+            case R.id.edt_degree:
                 break;
             default:
                 showMyDialog(v.getId(), R.layout.dialog_chg_personinfo);//以该自定义布局显示对话框
@@ -255,31 +248,4 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     }
 
 
-    /**
-     * 得到服务器返回的json数据，初始化个人信息显示界面
-     *
-     * @param email
-     */
-    private void getData(String email) {
-        RequestBody personCenterFormBody = new FormEncodingBuilder()
-                .add("email", email)
-                .build();
-        Request request = new Request.Builder().url(Constant.GET_PERSONINFO_URL)
-                .post(personCenterFormBody)
-                .build();
-        OkHttpUtil.enqueue(request, new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-//                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
-                mHandler.sendEmptyMessage(Constant.GETJSON_SUCCEED);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                jsonString = response.body().string();
-                mHandler.sendEmptyMessage(Constant.GETJSON_SUCCEED);
-            }
-        });
-
-    }
 }

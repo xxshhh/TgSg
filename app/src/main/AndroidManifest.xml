@@ -32,5 +32,11 @@
         <activity
             android:name=".activity.PersonInfoActivity">
         </activity>
+        <activity
+            android:name=".activity.PdfActivity">
+        </activity>
+        <activity
+            android:name=".activity.NoticeDetailActivity">
+        </activity>
     </application>
 </manifest>

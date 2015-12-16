@@ -1,8 +1,7 @@
 package cn.edu.whut.tgsg.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,9 +18,10 @@ import java.util.List;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
-import cn.edu.whut.tgsg.adapter.MessageAdapter;
+import cn.edu.whut.tgsg.activity.NoticeDetailActivity;
+import cn.edu.whut.tgsg.adapter.NoticeAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
-import cn.edu.whut.tgsg.bean.Message;
+import cn.edu.whut.tgsg.bean.Notice;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -33,8 +33,10 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
 
     @Bind(R.id.slider)
     SliderLayout mSlider;
-    @Bind(R.id.list_message)
-    ListView mListMessage;
+    @Bind(R.id.list_notice)
+    ListView mListNotice;
+
+    NoticeAdapter mAdapter;
 
     @Override
     protected int getContentLayoutId() {
@@ -45,36 +47,45 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
     protected void initData() {
         // 初始化图片滑动展示栏
         initImageSlider();
-        // 初始化消息列表
-        initMessageList();
+        // 初始化公告列表
+        initNoticeList();
     }
 
     @Override
     protected void initListener() {
         /**
-         * 消息点击
+         * 公告点击
          */
-        mListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListNotice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "消息" + position);
+                T.show(mContext, "公告" + position);
+                Intent intent = new Intent(mContext, NoticeDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("notice", mAdapter.getItem(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
 
     /**
-     * 初始化消息列表
+     * 初始化公告列表
      */
-    private void initMessageList() {
-        List<Message> list = new ArrayList<>();
-        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
-        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“录用”", "12/03", false));
-        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "12/01", false));
-        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "11/30", false));
-        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“编辑初审”", "11/29", true));
-        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“投稿”", "12/27", true));
-        MessageAdapter adapter = new MessageAdapter(getContext(), list);
-        mListMessage.setAdapter(adapter);
+    private void initNoticeList() {
+        List<Notice> list = new ArrayList<>();
+        list.add(new Notice("关于余区管委会工人技师评审组拟推荐评聘万荣为技师的情况公示", "12-15", "<h2 style=\"font-style:italic;\">dsfsgs<span class=\"marker\">gfdgfdsdfsdf</span></h2>\n" +
+                "\n" + "<h1>sfsdfadsafsafdsfykfsafsd散发的发放<span style=\"font-family:georgia,serif\">大风哥哥如果我</span></h1>\n" +
+                "\n" + "<p><span style=\"font-family:georgia,serif\">撒<s>德国大使馆的发声</s></span></p>\n" +
+                "\n" + "<p><span style=\"font-family:georgia,serif\"><s>阿飞大范德萨发沙发<sub>是非得失</sub></s></span></p>"));
+        list.add(new Notice("关于开展“十二五”规划全面总结及末期考核的通知", "12-14", ""));
+        list.add(new Notice("关于加强校园活动安全管理的通知", "12-13", ""));
+        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-12", ""));
+        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-11", ""));
+        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-10", ""));
+        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-04", ""));
+        mAdapter = new NoticeAdapter(getContext(), list);
+        mListNotice.setAdapter(mAdapter);
     }
 
     /**
@@ -133,5 +144,4 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
     @Override
     public void onPageScrollStateChanged(int state) {
     }
-
 }

@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="30dp"
-                android:background="@drawable/item_selector"
+                android:background="@drawable/item_common_selector"
                 android:text="确定"
                 android:textColor="@color/primary_text"
                 />
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/item_selector"
+                android:background="@drawable/item_common_selector"
                 android:text="取消"
                 android:layout_marginRight="30dp"
                 android:textColor="@color/primary_text"

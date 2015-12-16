@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
+import fr.ganfra.materialspinner.MaterialSpinner;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -38,14 +38,13 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
 public class HandleFragment extends BaseFragment {
 
     @Bind(R.id.spinner_state)
-    Spinner mSpinnerState;
+    MaterialSpinner mSpinnerState;
     @Bind(R.id.list_handle_manuscript)
     ListView mListhandleManuscript;
     @Bind(R.id.ptr_frame)
     PtrFrameLayout mPtrFrame;
 
     HandleManuscriptAdapter mAdapter;
-
 
     @Override
     protected int getContentLayoutId() {
@@ -70,8 +69,10 @@ public class HandleFragment extends BaseFragment {
         mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String[] states = getResources().getStringArray(R.array.states);
-                T.show(mContext, "你点击的是:" + states[position]);
+                if (position != -1) {
+                    String[] states = getResources().getStringArray(R.array.states);
+                    T.show(mContext, "你点击的是:" + states[position]);
+                }
             }
 
             @Override
@@ -118,8 +119,8 @@ public class HandleFragment extends BaseFragment {
      * 初始化状态下拉框
      */
     private void initSpinnerState() {
-        String[] mItems = getResources().getStringArray(R.array.states);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, mItems);
+        String[] array = getResources().getStringArray(R.array.states);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerState.setAdapter(adapter);
     }

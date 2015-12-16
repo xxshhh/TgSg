@@ -4,12 +4,18 @@
                                             android:layout_height="match_parent"
                                             android:padding="10dp">
 
-    <!-- 基本信息展示 -->
-    <TextView
-        android:id="@+id/tv_baseInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="10dp"
-        android:textColor="@color/primary_text"
-        android:textSize="17sp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 基本信息展示 -->
+        <TextView
+            android:id="@+id/tv_baseInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="10dp"
+            android:textColor="@color/primary_text"
+            android:textSize="17sp"/>
+    </ScrollView>
+
 </android.support.v4.widget.NestedScrollView>

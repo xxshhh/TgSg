@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/item_notice_selector"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp">
+
+    <!-- 公告标题 -->
+    <TextView
+        android:id="@+id/tv_notice_title"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="3"
+        android:gravity="center|left"
+        android:singleLine="true"
+        android:text="关于余区管委会工人技师评审组拟推荐评聘万荣为技师的情况公示"
+        android:textColor="@color/primary_text"
+        android:textSize="16sp"/>
+
+    <!-- 公告时间 -->
+    <TextView
+        android:id="@+id/tv_notice_date"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:gravity="center|right"
+        android:text="12-16"
+        android:textColor="@color/secondary_text"
+        android:textSize="14sp"/>
+</LinearLayout>
