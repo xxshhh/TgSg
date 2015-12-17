@@ -1,12 +1,11 @@
-package cn.edu.whut.tgsg.fragment;
+package cn.edu.whut.tgsg.fragment.author;
 
-import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,10 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
+import cn.edu.whut.tgsg.adapter.ManuscriptAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
-import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.common.Constant;
@@ -29,28 +28,30 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
- * 编辑未受理稿件界面
+ * 作者稿件界面
  * <p/>
- * Created by xwh on 2015/12/15.
+ * Created by xwh on 2015/12/3.
  */
-public class EditorUnhandleFragment extends BaseFragment {
+public class AuthorManuscriptFragment extends BaseFragment {
 
-    @Bind(R.id.list_unhandle_manuscript)
-    ListView mListUnhandleManuscript;
+    @Bind(R.id.list_manuscript)
+    ListView mListManuscript;
+    @Bind(R.id.btn_add)
+    FloatingActionButton mBtnAdd;
     @Bind(R.id.ptr_frame)
     PtrFrameLayout mPtrFrame;
 
-    UnhandleManuscriptAdapter mAdapter;
+    ManuscriptAdapter mAdapter;
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.fragment_editor_unhandle;
+        return R.layout.fragment_author_manuscript;
     }
 
     @Override
     protected void initData() {
-        // 初始化未处理稿件列表
-        initUnhandleManuscriptList();
+        // 初始化稿件列表
+        initManuscriptList();
         // 初始化下拉刷新控件
         initPtrFrame();
     }
@@ -60,10 +61,25 @@ public class EditorUnhandleFragment extends BaseFragment {
         /**
          * 稿件点击
          */
-        mListUnhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "未处理稿件" + position);
+                T.show(mContext, "稿件" + position);
+                Intent intent = new Intent(mContext, ManuscriptDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manuscript", mAdapter.getItem(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        /**
+         * 我要投稿
+         */
+        mBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.show(mContext, "我要投稿！！！");
             }
         });
 
@@ -92,9 +108,9 @@ public class EditorUnhandleFragment extends BaseFragment {
     }
 
     /**
-     * 初始化未处理稿件列表
+     * 初始化稿件列表
      */
-    private void initUnhandleManuscriptList() {
+    private void initManuscriptList() {
         List<Manuscript> list = new ArrayList<>();
         ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "乖，摸摸头", "真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。", Arrays.asList("大冰", "旅行", "治愈", "散文随笔"), "", "2015-12-11 10:45:21");
         list.add(new Manuscript(1, "随笔", Constant.GLOBAL_USER, "2015-12-11 10:35:10", 6, manuscriptVersion));
@@ -102,8 +118,8 @@ public class EditorUnhandleFragment extends BaseFragment {
         list.add(new Manuscript(2, "名著", Constant.GLOBAL_USER, "2015-12-10 11:35:10", 4, manuscriptVersion));
         manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", Arrays.asList("芈月传", "中国文学", "女性", "蔣胜男", "小说", "古代"), "", "2015-12-11 10:45:21");
         list.add(new Manuscript(3, "文学", Constant.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
-        mAdapter = new UnhandleManuscriptAdapter(mContext, list);
-        mListUnhandleManuscript.setAdapter(mAdapter);
+        mAdapter = new ManuscriptAdapter(mContext, list);
+        mListManuscript.setAdapter(mAdapter);
     }
 
     /**
@@ -116,82 +132,5 @@ public class EditorUnhandleFragment extends BaseFragment {
         header.setTextColor(getResources().getColor(R.color.primary));
         mPtrFrame.setHeaderView(header);
         mPtrFrame.addPtrUIHandler(header);
-        mPtrFrame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPtrFrame.autoRefresh(false);
-            }
-        }, 100);
-    }
-
-    /**
-     * 受理稿件操作
-     */
-    public void handleManuscript(int position) {
-        T.show(mContext, "受理稿件" + position);
-        mAdapter.getDataList().remove(position);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * 未受理稿件adapter
-     */
-    public class UnhandleManuscriptAdapter extends CommonAdapter<Manuscript> {
-
-        /**
-         * 构造方法：对成员变量进行初始化
-         *
-         * @param context
-         * @param dataList
-         */
-        public UnhandleManuscriptAdapter(Context context, List<Manuscript> dataList) {
-            super(context, dataList);
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder = null;
-            if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_editor_unhandle_manuscript, null);
-                viewHolder = new ViewHolder(convertView);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-            Manuscript manuscript = mDataList.get(position);
-            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
-            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptUser.setText(manuscript.getUser().getUsername());
-            viewHolder.mTvManuscriptDate.setText(manuscript.getDate());
-            viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 调用受理稿件操作
-                    handleManuscript(position);
-                }
-            });
-            return convertView;
-        }
-
-        /**
-         * This class contains all butterknife-injected Views & Layouts from layout file 'item_unhandle_manuscript.xml'
-         * for easy to all layout elements.
-         *
-         * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
-         */
-        final class ViewHolder {
-            @Bind(R.id.tv_manuscript_title)
-            TextView mTvManuscriptTitle;
-            @Bind(R.id.tv_manuscript_user)
-            TextView mTvManuscriptUser;
-            @Bind(R.id.tv_manuscript_date)
-            TextView mTvManuscriptDate;
-            @Bind(R.id.btn_handle)
-            Button mBtnHandle;
-
-            ViewHolder(View view) {
-                ButterKnife.bind(this, view);
-            }
-        }
     }
 }

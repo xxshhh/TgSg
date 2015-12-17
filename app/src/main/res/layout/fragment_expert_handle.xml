@@ -5,14 +5,12 @@
                 android:descendantFocusability="blocksDescendants"
                 android:padding="5dp">
 
-
     <!-- 下拉刷新控件 -->
     <in.srain.cube.views.ptr.PtrFrameLayout
         android:id="@+id/ptr_frame"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:layout_marginTop="10dp"
         cube_ptr:ptr_duration_to_close="300"
         cube_ptr:ptr_duration_to_close_header="2000"

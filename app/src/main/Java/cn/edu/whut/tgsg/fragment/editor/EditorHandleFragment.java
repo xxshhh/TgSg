@@ -1,4 +1,4 @@
-package cn.edu.whut.tgsg.fragment;
+package cn.edu.whut.tgsg.fragment.editor;
 
 import android.content.Context;
 import android.view.View;
@@ -47,8 +47,6 @@ public class EditorHandleFragment extends BaseFragment {
 
     HandleManuscriptAdapter mAdapter;
 
-    int state;
-
     @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_editor_handle;
@@ -91,7 +89,7 @@ public class EditorHandleFragment extends BaseFragment {
         mListhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "已处理稿件" + position);
+                T.show(mContext, "已受理稿件" + position);
             }
         });
 
@@ -196,7 +194,7 @@ public class EditorHandleFragment extends BaseFragment {
     }
 
     /**
-     * 操作稿件
+     * 编辑操作稿件
      *
      * @param manuscript
      */
@@ -216,7 +214,6 @@ public class EditorHandleFragment extends BaseFragment {
             default:
         }
     }
-
 
     /**
      * 已受理稿件adapter

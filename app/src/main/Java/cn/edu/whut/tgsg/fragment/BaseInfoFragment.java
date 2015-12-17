@@ -1,7 +1,5 @@
 package cn.edu.whut.tgsg.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -79,10 +77,5 @@ public class BaseInfoFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 }

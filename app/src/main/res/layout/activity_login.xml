@@ -92,5 +92,4 @@
         android:text="没有账号？注册"
         android:textColor="@color/primary"
         android:textSize="16dp"/>
-
 </RelativeLayout>

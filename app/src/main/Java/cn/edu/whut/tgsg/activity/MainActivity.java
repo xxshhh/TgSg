@@ -18,12 +18,12 @@ import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
-import cn.edu.whut.tgsg.fragment.AuthorManuscriptFragment;
-import cn.edu.whut.tgsg.fragment.EditorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
-import cn.edu.whut.tgsg.fragment.ExpertManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
 import cn.edu.whut.tgsg.fragment.MessageFragment;
+import cn.edu.whut.tgsg.fragment.author.AuthorManuscriptFragment;
+import cn.edu.whut.tgsg.fragment.editor.EditorManuscriptFragment;
+import cn.edu.whut.tgsg.fragment.expert.ExpertManuscriptFragment;
 import cn.edu.whut.tgsg.util.T;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -67,10 +67,7 @@ public class MainActivity extends BaseActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         // 设置抽屉视图
         setupDrawerContent(mNavigationView);
-
-        Intent intent = getIntent();
-        mUsernameStr = intent.getStringExtra("username");
-
+        // 跳到首页
         switchToHome();
     }
 

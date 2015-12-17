@@ -16,7 +16,6 @@
         android:layout_margin="4dp"
         android:orientation="vertical">
 
-
         <!-- 稿件标题 -->
         <TextView
             android:id="@+id/tv_manuscript_title"
@@ -29,7 +28,7 @@
 
         <!-- 稿件状态 -->
         <LinearLayout
-            android:id="@+id/layout"
+            android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_manuscript_title"
@@ -42,14 +41,14 @@
                 android:text="已完成专家审稿"
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp"/>
-
         </LinearLayout>
 
         <!-- 审稿时间 -->
         <LinearLayout
+            android:id="@+id/layout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout"
+            android:layout_below="@id/layout1"
             android:layout_marginTop="4dp">
 
             <TextView
@@ -69,5 +68,14 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
+        <!-- 点击查看详情 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout2"
+            android:layout_marginTop="10dp"
+            android:text="点击查看详情"
+            android:textColor="@color/primary_text"
+            android:textSize="14sp"/>
     </RelativeLayout>
 </LinearLayout>

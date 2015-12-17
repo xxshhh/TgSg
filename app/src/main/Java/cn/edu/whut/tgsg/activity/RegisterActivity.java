@@ -33,6 +33,7 @@ import cn.edu.whut.tgsg.util.T;
  * Created by ylj on 2015-12-11.
  */
 public class RegisterActivity extends BaseActivity {
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.edt_email)
@@ -160,11 +161,6 @@ public class RegisterActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     /**

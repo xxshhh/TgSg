@@ -1,14 +1,12 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.joanzapata.pdfview.PDFView;
 import com.joanzapata.pdfview.listener.OnPageChangeListener;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 

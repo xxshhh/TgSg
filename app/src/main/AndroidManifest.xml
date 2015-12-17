@@ -39,7 +39,8 @@
             android:name=".activity.NoticeDetailActivity">
         </activity>
         <activity
-            android:name=".activity.ExamineManuscriptActivity">
+            android:name=".activity.ExamineManuscriptActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
     </application>
 </manifest>

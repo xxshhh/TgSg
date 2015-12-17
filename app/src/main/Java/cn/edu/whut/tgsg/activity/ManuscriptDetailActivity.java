@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
@@ -15,7 +14,6 @@ import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
 import cn.edu.whut.tgsg.fragment.HistoryVersionFragment;
-import cn.edu.whut.tgsg.util.T;
 
 /**
  * 稿件详情界面
@@ -59,6 +57,7 @@ public class ManuscriptDetailActivity extends BaseActivity {
         mManuscript = (Manuscript) bundle.getSerializable("manuscript");
         mToolbar.setTitle(mManuscript.getManuscriptVersion().getTitle());
         setSupportActionBar(mToolbar);
+        // 设置返回键<-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +65,6 @@ public class ManuscriptDetailActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-
         // 设置Viewpager
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BaseInfoFragment(), "基本信息");

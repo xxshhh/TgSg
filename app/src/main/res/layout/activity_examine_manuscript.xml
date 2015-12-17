@@ -28,9 +28,12 @@
 
             <!-- 稿件标题-->
             <TextView
+                android:id="@+id/tv_manuscript_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="乖，摸摸头"
                 android:textColor="@color/primary_text"
                 android:textSize="20sp"
@@ -52,41 +55,47 @@
         </RelativeLayout>
     </LinearLayout>
 
-
     <!-- 状态下拉框 -->
     <fr.ganfra.materialspinner.MaterialSpinner
         android:id="@+id/spinner_state"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="5dp"
-        app:ms_multiline="false"
-        app:ms_hint="选择稿件状态"
-        app:ms_enableFloatingLabel="true"
-        app:ms_enableErrorLabel="false"
-        app:ms_floatingLabelText="审稿结果"
-        app:ms_baseColor="@color/accent"
-        app:ms_highlightColor="@color/primary"
-        app:ms_errorColor="@color/red"
-        app:ms_thickness="1dp"
-        app:ms_hintColor="@color/third_text"
+        app:ms_alignLabels="true"
         app:ms_arrowColor="@color/accent"
         app:ms_arrowSize="16dp"
-        app:ms_alignLabels="true"
-        app:ms_floatingLabelColor="@color/accent"/>
+        app:ms_baseColor="@color/accent"
+        app:ms_enableErrorLabel="false"
+        app:ms_enableFloatingLabel="true"
+        app:ms_errorColor="@color/red"
+        app:ms_floatingLabelColor="@color/accent"
+        app:ms_floatingLabelText="审稿结果"
+        app:ms_highlightColor="@color/primary"
+        app:ms_hint="请选择审稿结果"
+        app:ms_hintColor="@color/third_text"
+        app:ms_multiline="false"
+        app:ms_thickness="1dp"/>
 
-    <!-- 审稿意见-->
-    <TextView
+    <!-- 审稿意见 -->
+    <EditText
         android:id="@+id/edt_suggestion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
+        android:autoLink="all"
         android:background="@drawable/item_common_selector"
-        android:hint="请输入审稿意见"/>
+        android:enabled="true"
+        android:gravity="top"
+        android:hint="请输入审稿意见"
+        android:inputType="textMultiLine"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        android:textSize="16sp"/>
 
-    <!-- 提交审稿意见-->
+    <!-- 提交 -->
     <Button
-        android:id="@+id/btn_submit_suggestion"
+        android:id="@+id/btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -95,6 +104,4 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:visibility="visible"/>
-
-
 </LinearLayout>

@@ -43,6 +43,7 @@ public class NoticeDetailActivity extends BaseActivity {
         mNotice = (Notice) bundle.getSerializable("notice");
         mToolbar.setTitle(mNotice.getTitle());
         setSupportActionBar(mToolbar);
+        // 设置返回键<-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

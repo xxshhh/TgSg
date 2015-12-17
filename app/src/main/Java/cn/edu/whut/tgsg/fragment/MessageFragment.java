@@ -105,11 +105,5 @@ public class MessageFragment extends BaseFragment {
         header.setTextColor(getResources().getColor(R.color.primary));
         mPtrFrame.setHeaderView(header);
         mPtrFrame.addPtrUIHandler(header);
-        mPtrFrame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPtrFrame.autoRefresh(false);
-            }
-        }, 100);
     }
 }

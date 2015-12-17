@@ -11,6 +11,7 @@
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         cube_ptr:ptr_duration_to_close="300"
         cube_ptr:ptr_duration_to_close_header="2000"
         cube_ptr:ptr_keep_header_when_refresh="true"

@@ -22,6 +22,7 @@ import cn.edu.whut.tgsg.util.T;
  * Created by ylj on 2015-12-13.
  */
 public class ForgetPswActivity extends BaseActivity {
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.edt_email)
@@ -109,11 +110,6 @@ public class ForgetPswActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     /**

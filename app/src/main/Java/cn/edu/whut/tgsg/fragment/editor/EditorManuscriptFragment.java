@@ -1,4 +1,4 @@
-package cn.edu.whut.tgsg.fragment;
+package cn.edu.whut.tgsg.fragment.editor;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,11 +9,11 @@ import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
 
 /**
- * 专家稿件界面
+ * 编辑稿件界面
  * <p/>
- * Created by ylj on 2015/12/17.
+ * Created by xwh on 2015/12/3.
  */
-public class ExpertManuscriptFragment extends BaseFragment {
+public class EditorManuscriptFragment extends BaseFragment {
 
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
@@ -22,16 +22,15 @@ public class ExpertManuscriptFragment extends BaseFragment {
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.fragment_expert_manuscript;
+        return R.layout.fragment_editor_manuscript;
     }
 
     @Override
     protected void initData() {
-
         // 设置Viewpager
         ViewpagerAdapter adapter = new ViewpagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new ExpertUnhandleFragment(), "未审稿");
-        adapter.addFragment(new ExpertHandleFragment(), "已审稿");
+        adapter.addFragment(new EditorUnhandleFragment(), "未受理");
+        adapter.addFragment(new EditorHandleFragment(), "已受理");
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -40,6 +39,4 @@ public class ExpertManuscriptFragment extends BaseFragment {
     protected void initListener() {
 
     }
-
-
 }

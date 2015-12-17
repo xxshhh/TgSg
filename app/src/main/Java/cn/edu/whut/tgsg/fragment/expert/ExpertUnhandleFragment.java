@@ -1,9 +1,12 @@
-package cn.edu.whut.tgsg.fragment;
+package cn.edu.whut.tgsg.fragment.expert;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ExamineManuscriptActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
@@ -28,41 +32,42 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
- * 专家已处理稿件界面
+ * 专家未审核稿件界面
  * <p/>
- * Created by ylj on 2015-12-16.
+ * Created by ylj on 2015/12/15.
  */
-public class ExpertHandleFragment extends BaseFragment {
-    @Bind(R.id.list_handle_manuscript)
-    ListView mListHandleManuscript;
+public class ExpertUnhandleFragment extends BaseFragment {
+
+    @Bind(R.id.list_unhandle_manuscript)
+    ListView mListUnhandleManuscript;
     @Bind(R.id.ptr_frame)
     PtrFrameLayout mPtrFrame;
 
-    HandleManuscriptAdapter mAdapter;
+    UnhandleManuscriptAdapter mAdapter;
 
     @Override
+
     protected int getContentLayoutId() {
-        return R.layout.fragment_expert_handle;
+        return R.layout.fragment_expert_unhandle;
     }
 
     @Override
     protected void initData() {
-        // 初始化已处理稿件列表
-        initHandleManuscriptList();
+        // 初始化未处理稿件列表
+        initUnhandleManuscriptList();
         // 初始化下拉刷新控件
         initPtrFrame();
     }
 
     @Override
     protected void initListener() {
-
         /**
          * 稿件点击
          */
-        mListHandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListUnhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "已处理稿件" + position);
+                T.show(mContext, "未审核稿件" + position);
             }
         });
 
@@ -88,13 +93,12 @@ public class ExpertHandleFragment extends BaseFragment {
                 }, 2000);
             }
         });
-
     }
 
     /**
-     * 初始化已处理稿件列表
+     * 初始化未审核稿件列表
      */
-    private void initHandleManuscriptList() {
+    private void initUnhandleManuscriptList() {
         List<Manuscript> list = new ArrayList<>();
         ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "乖，摸摸头", "真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。", Arrays.asList("大冰", "旅行", "治愈", "散文随笔"), "", "2015-12-11 10:45:21");
         list.add(new Manuscript(1, "随笔", Constant.GLOBAL_USER, "2015-12-11 10:35:10", 6, manuscriptVersion));
@@ -102,8 +106,8 @@ public class ExpertHandleFragment extends BaseFragment {
         list.add(new Manuscript(2, "名著", Constant.GLOBAL_USER, "2015-12-10 11:35:10", 4, manuscriptVersion));
         manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", Arrays.asList("芈月传", "中国文学", "女性", "蔣胜男", "小说", "古代"), "", "2015-12-11 10:45:21");
         list.add(new Manuscript(3, "文学", Constant.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
-        mAdapter = new HandleManuscriptAdapter(mContext, list);
-        mListHandleManuscript.setAdapter(mAdapter);
+        mAdapter = new UnhandleManuscriptAdapter(mContext, list);
+        mListUnhandleManuscript.setAdapter(mAdapter);
     }
 
     /**
@@ -116,18 +120,26 @@ public class ExpertHandleFragment extends BaseFragment {
         header.setTextColor(getResources().getColor(R.color.primary));
         mPtrFrame.setHeaderView(header);
         mPtrFrame.addPtrUIHandler(header);
-        mPtrFrame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPtrFrame.autoRefresh(false);
-            }
-        }, 100);
     }
 
     /**
-     * 已处理稿件adapter
+     * 专家审稿操作
+     *
+     * @param manuscript
      */
-    public class HandleManuscriptAdapter extends CommonAdapter<Manuscript> {
+    public void handleManuscript(Manuscript manuscript) {
+        T.show(mContext, "审稿:" + manuscript.getManuscriptVersion().getTitle());
+        Intent intent = new Intent(mContext, ExamineManuscriptActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("manuscript", manuscript);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    /**
+     * 未审核稿件adapter
+     */
+    public class UnhandleManuscriptAdapter extends CommonAdapter<Manuscript> {
 
         /**
          * 构造方法：对成员变量进行初始化
@@ -135,7 +147,7 @@ public class ExpertHandleFragment extends BaseFragment {
          * @param context
          * @param dataList
          */
-        public HandleManuscriptAdapter(Context context, List<Manuscript> dataList) {
+        public UnhandleManuscriptAdapter(Context context, List<Manuscript> dataList) {
             super(context, dataList);
         }
 
@@ -143,22 +155,28 @@ public class ExpertHandleFragment extends BaseFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_expert_handle_manuscript, null);
+                convertView = mInflater.inflate(R.layout.item_expert_unhandle_manuscript, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            Manuscript manuscript = mDataList.get(position);
+            final Manuscript manuscript = mDataList.get(position);
             ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
             viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptState.setText("专家审稿完成");
-            viewHolder.mTvManuscriptDate.setText(manuscript.getDate());//-----审稿表中的审稿时间
+            viewHolder.mTvManuscriptDate.setText(manuscript.getDate());
+            viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 调用专家审稿操作
+                    handleManuscript(manuscript);
+                }
+            });
             return convertView;
         }
 
         /**
-         * This class contains all butterknife-injected Views & Layouts from layout file 'item_handle_manuscript.xml'
+         * This class contains all butterknife-injected Views & Layouts from layout file 'item_unhandle_manuscript.xml'
          * for easy to all layout elements.
          *
          * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
@@ -166,30 +184,14 @@ public class ExpertHandleFragment extends BaseFragment {
         final class ViewHolder {
             @Bind(R.id.tv_manuscript_title)
             TextView mTvManuscriptTitle;
-            /* @Bind(R.id.tv_manuscript_user)
-             TextView mTvManuscriptUser;*/
-            @Bind(R.id.tv_manuscript_state)
-            TextView mTvManuscriptState;
             @Bind(R.id.tv_manuscript_date)
             TextView mTvManuscriptDate;
+            @Bind(R.id.btn_handle)
+            Button mBtnHandle;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
         }
     }
-
-
-    /**
-     * 审稿操作
-     */
-    public void examineManuscript(int position) {
-        T.show(mContext, "审核稿件" + position);
-
-
-    }
-
-
 }
-
-
