@@ -13,4 +13,15 @@
         android:dividerHeight="3dp"
         android:scrollbars="none">
     </ListView>
+
+    <!-- 上传新版本 -->
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_selector"
+        android:text="上传新版本"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
 </RelativeLayout>

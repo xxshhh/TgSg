@@ -29,11 +29,11 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
- * 未受理稿件界面
+ * 编辑未受理稿件界面
  * <p/>
  * Created by xwh on 2015/12/15.
  */
-public class UnhandleFragment extends BaseFragment {
+public class EditorUnhandleFragment extends BaseFragment {
 
     @Bind(R.id.list_unhandle_manuscript)
     ListView mListUnhandleManuscript;
@@ -44,7 +44,7 @@ public class UnhandleFragment extends BaseFragment {
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.fragment_unhandle;
+        return R.layout.fragment_editor_unhandle;
     }
 
     @Override
@@ -152,7 +152,7 @@ public class UnhandleFragment extends BaseFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_unhandle_manuscript, null);
+                convertView = mInflater.inflate(R.layout.item_editor_unhandle_manuscript, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {

@@ -21,8 +21,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="vertical">
+        android:layout_margin="4dp">
 
         <!-- 稿件标题 -->
         <TextView
@@ -42,6 +41,16 @@
             android:layout_marginTop="4dp"
             android:text="2015-12-11 10:45:21"
             android:textColor="@color/secondary_text"
+            android:textSize="14sp"/>
+
+        <!-- 点击查看详情 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_manuscript_date"
+            android:layout_marginTop="10dp"
+            android:text="点击查看详情"
+            android:textColor="@color/primary_text"
             android:textSize="14sp"/>
 
         <!-- 版本排序 -->

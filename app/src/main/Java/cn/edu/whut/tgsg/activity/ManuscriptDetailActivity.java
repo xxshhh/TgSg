@@ -28,8 +28,6 @@ public class ManuscriptDetailActivity extends BaseActivity {
     Toolbar mToolbar;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
-    @Bind(R.id.btn_cancel)
-    Button mBtnCancel;
     @Bind(R.id.viewPager)
     ViewPager mViewPager;
 
@@ -69,11 +67,6 @@ public class ManuscriptDetailActivity extends BaseActivity {
             }
         });
 
-        // 设置是否隐藏取消投稿按钮
-        if (mManuscript.getState() == 1) {
-            mBtnCancel.setVisibility(View.VISIBLE);
-        }
-
         // 设置Viewpager
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new BaseInfoFragment(), "基本信息");
@@ -84,14 +77,6 @@ public class ManuscriptDetailActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        /**
-         * 取消投稿
-         */
-        mBtnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                T.show(mContext, "取消投稿");
-            }
-        });
+
     }
 }

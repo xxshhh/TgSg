@@ -4,14 +4,14 @@
     <item android:state_pressed="true">
         <shape>
             <!-- 填充-->
-            <solid android:color="@color/primary_dark"/>
+            <solid android:color="@color/secondary_text"/>
         </shape>
     </item>
 
     <item android:state_pressed="false">
         <shape>
             <!-- 填充-->
-            <solid android:color="@color/primary"/>
+            <solid android:color="@color/third_text"/>
         </shape>
     </item>
 

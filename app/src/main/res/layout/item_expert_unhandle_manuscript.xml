@@ -26,37 +26,13 @@
             android:textSize="20sp"
             android:textStyle="italic"/>
 
-        <!-- 投稿人 -->
+        <!-- 稿件状态 -->
         <LinearLayout
             android:id="@+id/layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_manuscript_title"
             android:layout_marginTop="10dp">
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="投稿人"
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/tv_manuscript_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="大冰"
-                android:textColor="@color/third_text"
-                android:textSize="14sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <!-- 稿件状态 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/layout"
-            android:layout_marginTop="4dp">
 
             <TextView
                 android:layout_width="80dp"
@@ -69,7 +45,31 @@
                 android:id="@+id/tv_manuscript_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="编辑初审"
+                android:text="待专家审稿"
+                android:textColor="@color/third_text"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 分发时间 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="分发时间"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_manuscript_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015-12-15 18:40:09"
                 android:textColor="@color/third_text"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
@@ -77,7 +77,7 @@
 
         <!-- 审稿 -->
         <Button
-            android:id="@+id/btn_examine"
+            android:id="@+id/btn_handle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

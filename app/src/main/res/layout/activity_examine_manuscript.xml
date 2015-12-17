@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/include_toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/item_common_selector"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="4dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <!-- 稿件标题-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="乖，摸摸头"
+                android:textColor="@color/primary_text"
+                android:textSize="20sp"
+                android:textStyle="italic"/>
+
+            <!-- 查看稿件-->
+            <Button
+                android:id="@+id/btn_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/btn_selector"
+                android:clickable="true"
+                android:focusable="false"
+                android:text="查看稿件"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <!-- 状态下拉框 -->
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_state"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
+        app:ms_multiline="false"
+        app:ms_hint="选择稿件状态"
+        app:ms_enableFloatingLabel="true"
+        app:ms_enableErrorLabel="false"
+        app:ms_floatingLabelText="审稿结果"
+        app:ms_baseColor="@color/accent"
+        app:ms_highlightColor="@color/primary"
+        app:ms_errorColor="@color/red"
+        app:ms_thickness="1dp"
+        app:ms_hintColor="@color/third_text"
+        app:ms_arrowColor="@color/accent"
+        app:ms_arrowSize="16dp"
+        app:ms_alignLabels="true"
+        app:ms_floatingLabelColor="@color/accent"/>
+
+    <!-- 审稿意见-->
+    <TextView
+        android:id="@+id/edt_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/item_common_selector"
+        android:hint="请输入审稿意见"/>
+
+    <!-- 提交审稿意见-->
+    <Button
+        android:id="@+id/btn_submit_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_selector"
+        android:text="提交"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:visibility="visible"/>
+
+
+</LinearLayout>

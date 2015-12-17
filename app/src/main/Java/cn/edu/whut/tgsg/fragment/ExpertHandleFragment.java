@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,23 +22,19 @@ import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
-import fr.ganfra.materialspinner.MaterialSpinner;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
- * 已受理稿件界面
+ * 专家已处理稿件界面
  * <p/>
- * Created by xwh on 2015/12/15.
+ * Created by ylj on 2015-12-16.
  */
-public class HandleFragment extends BaseFragment {
-
-    @Bind(R.id.spinner_state)
-    MaterialSpinner mSpinnerState;
+public class ExpertHandleFragment extends BaseFragment {
     @Bind(R.id.list_handle_manuscript)
-    ListView mListhandleManuscript;
+    ListView mListHandleManuscript;
     @Bind(R.id.ptr_frame)
     PtrFrameLayout mPtrFrame;
 
@@ -48,13 +42,11 @@ public class HandleFragment extends BaseFragment {
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.fragment_handle;
+        return R.layout.fragment_expert_handle;
     }
 
     @Override
     protected void initData() {
-        // 初始化状态下拉框
-        initSpinnerState();
         // 初始化已处理稿件列表
         initHandleManuscriptList();
         // 初始化下拉刷新控件
@@ -63,28 +55,11 @@ public class HandleFragment extends BaseFragment {
 
     @Override
     protected void initListener() {
-        /**
-         * 状态下拉框
-         */
-        mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != -1) {
-                    String[] states = getResources().getStringArray(R.array.states);
-                    T.show(mContext, "你点击的是:" + states[position]);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         /**
          * 稿件点击
          */
-        mListhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListHandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 T.show(mContext, "已处理稿件" + position);
@@ -113,16 +88,7 @@ public class HandleFragment extends BaseFragment {
                 }, 2000);
             }
         });
-    }
 
-    /**
-     * 初始化状态下拉框
-     */
-    private void initSpinnerState() {
-        String[] array = getResources().getStringArray(R.array.states);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, array);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerState.setAdapter(adapter);
     }
 
     /**
@@ -137,7 +103,7 @@ public class HandleFragment extends BaseFragment {
         manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", Arrays.asList("芈月传", "中国文学", "女性", "蔣胜男", "小说", "古代"), "", "2015-12-11 10:45:21");
         list.add(new Manuscript(3, "文学", Constant.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
         mAdapter = new HandleManuscriptAdapter(mContext, list);
-        mListhandleManuscript.setAdapter(mAdapter);
+        mListHandleManuscript.setAdapter(mAdapter);
     }
 
     /**
@@ -159,14 +125,7 @@ public class HandleFragment extends BaseFragment {
     }
 
     /**
-     * 审稿操作
-     */
-    public void examineManuscript(int position) {
-        T.show(mContext, "审核稿件" + position);
-    }
-
-    /**
-     * 已受理稿件adapter
+     * 已处理稿件adapter
      */
     public class HandleManuscriptAdapter extends CommonAdapter<Manuscript> {
 
@@ -184,7 +143,7 @@ public class HandleFragment extends BaseFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
             if (convertView == null) {
-                convertView = mInflater.inflate(R.layout.item_handle_manuscript, null);
+                convertView = mInflater.inflate(R.layout.item_expert_handle_manuscript, null);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             } else {
@@ -193,15 +152,8 @@ public class HandleFragment extends BaseFragment {
             Manuscript manuscript = mDataList.get(position);
             ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
             viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptUser.setText(manuscript.getUser().getUsername());
-            viewHolder.mTvManuscriptState.setText("编辑初审");
-            viewHolder.mBtnExamine.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 调用审稿操作
-                    examineManuscript(position);
-                }
-            });
+            viewHolder.mTvManuscriptState.setText("专家审稿完成");
+            viewHolder.mTvManuscriptDate.setText(manuscript.getDate());//-----审稿表中的审稿时间
             return convertView;
         }
 
@@ -214,16 +166,30 @@ public class HandleFragment extends BaseFragment {
         final class ViewHolder {
             @Bind(R.id.tv_manuscript_title)
             TextView mTvManuscriptTitle;
-            @Bind(R.id.tv_manuscript_user)
-            TextView mTvManuscriptUser;
+            /* @Bind(R.id.tv_manuscript_user)
+             TextView mTvManuscriptUser;*/
             @Bind(R.id.tv_manuscript_state)
             TextView mTvManuscriptState;
-            @Bind(R.id.btn_examine)
-            Button mBtnExamine;
+            @Bind(R.id.tv_manuscript_date)
+            TextView mTvManuscriptDate;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
         }
     }
+
+
+    /**
+     * 审稿操作
+     */
+    public void examineManuscript(int position) {
+        T.show(mContext, "审核稿件" + position);
+
+
+    }
+
+
 }
+
+

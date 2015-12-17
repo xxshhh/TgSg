@@ -29,8 +29,8 @@ public class EditorManuscriptFragment extends BaseFragment {
     protected void initData() {
         // 设置Viewpager
         ViewpagerAdapter adapter = new ViewpagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new UnhandleFragment(), "未受理");
-        adapter.addFragment(new HandleFragment(), "已受理");
+        adapter.addFragment(new EditorUnhandleFragment(), "未受理");
+        adapter.addFragment(new EditorHandleFragment(), "已受理");
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
