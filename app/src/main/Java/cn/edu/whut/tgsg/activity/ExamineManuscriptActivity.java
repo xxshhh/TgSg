@@ -3,6 +3,7 @@ package cn.edu.whut.tgsg.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,11 +13,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.bean.ExamineManuscript;
 import cn.edu.whut.tgsg.bean.Manuscript;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
+import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -27,6 +34,8 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  */
 public class ExamineManuscriptActivity extends BaseActivity {
 
+
+    Manuscript mManuscript;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
     @Bind(R.id.tv_manuscript_title)
@@ -39,8 +48,6 @@ public class ExamineManuscriptActivity extends BaseActivity {
     EditText mEdtSuggestion;
     @Bind(R.id.btn_submit)
     Button mBtnSubmit;
-
-    Manuscript mManuscript;
 
     @Override
     protected int getContentLayoutId() {
@@ -109,7 +116,18 @@ public class ExamineManuscriptActivity extends BaseActivity {
         mBtnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mSpinnerState.getSelectedItemPosition() == -1) {
+                    T.show(mContext, "审稿结果不能为空！！！");
+                    return;
+                } else if (mEdtSuggestion.getText().toString().equals("")) {
+                    T.show(mContext, "审稿意见不能为空！！！");
+                    return;
+                }
+                String opinion = mEdtSuggestion.getText().toString();
+                int result = mSpinnerState.getSelectedItemPosition() == 0 ? 1 : 0;
+                ExamineManuscript examineManuscript = new ExamineManuscript(1, Constant.GLOBAL_USER, mManuscript, opinion, result, DateHandleUtil.convertToStandard(new Date()));
+                T.show(mContext, examineManuscript.toString());
+                finish();
             }
         });
     }

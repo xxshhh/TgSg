@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ContributeManuscriptActivity;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.ManuscriptAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
@@ -80,6 +81,8 @@ public class AuthorManuscriptFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 T.show(mContext, "我要投稿！！！");
+                Intent intent = new Intent(mContext, ContributeManuscriptActivity.class);
+                startActivity(intent);
             }
         });
 

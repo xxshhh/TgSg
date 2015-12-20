@@ -54,21 +54,27 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_special_selector"
+            android:background="@drawable/btn_common_selector"
             android:clickable="true"
             android:focusable="false"
             android:text="查询"
             android:textColor="@android:color/white"
             android:textSize="14sp"/>
 
-        <!-- 查询条件 -->
-        <EditText
-            android:id="@+id/edt_input"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_toLeftOf="@+id/btn_search"
-            android:gravity="center|left"
-            android:hint="请输入查询条件"/>
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btn_search">
+
+            <!-- 查询条件 -->
+            <EditText
+                android:id="@+id/edt_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center|left"
+                android:hint="查询条件"
+                android:singleLine="true"/>
+        </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
     <!-- 分配专家列表 -->

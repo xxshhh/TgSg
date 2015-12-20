@@ -21,6 +21,7 @@
 
         <!-- 稿件标题 -->
         <TextView
+            android:id="@+id/tv_manuscript_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="true"
@@ -29,48 +30,22 @@
             android:textColor="@color/accent"
             android:textSize="14sp"/>
 
-        <TextView
-            android:id="@+id/tv_manuscript_title"
+        <EditText
+            android:id="@+id/edt_manuscript_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:layout_marginTop="2dp"
+            android:hint="请输入稿件标题"
             android:singleLine="true"
-            android:text="乖，摸摸头"
             android:textColor="@color/primary_text"
-            android:textSize="20sp"
-            android:textStyle="italic"/>
+            android:textSize="18sp"/>
 
-        <!-- 查看稿件 -->
+        <!-- 稿件类别 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="查看稿件"
-            android:textColor="@color/accent"
-            android:textSize="14sp"/>
-
-        <Button
-            android:id="@+id/btn_read"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_special_selector"
-            android:clickable="true"
-            android:focusable="false"
-            android:text="查看稿件"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"/>
-
-        <!-- 审稿结果 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="审稿结果"
+            android:text="稿件类别"
             android:textColor="@color/accent"
             android:textSize="14sp"/>
 
@@ -85,20 +60,81 @@
             app:ms_enableErrorLabel="false"
             app:ms_enableFloatingLabel="false"
             app:ms_highlightColor="@color/accent"
-            app:ms_hint="请选择审稿结果"
+            app:ms_hint="请选择稿件类别"
             app:ms_multiline="false"/>
 
-        <!-- 审稿意见 -->
+        <!-- 关键词 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="审稿意见"
+            android:text="关键词"
+            android:textColor="@color/accent"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/btn_add_keywords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_common_selector"
+            android:text="+ 添加关键词"
+            android:textColor="@android:color/white"/>
+
+        <me.next.tagview.TagCloudView
+            android:id="@+id/tcv_manuscript_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tcvBorder="8dp"
+            app:tcvCanTagClick="false"
+            app:tcvItemBorderHorizontal="8dp"
+            app:tcvItemBorderVertical="6dp"
+            app:tcvSingleLine="false"/>
+
+        <!-- 添加稿件 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="添加稿件"
+            android:textColor="@color/accent"
+            android:textSize="14sp"/>
+
+        <Button
+            android:id="@+id/btn_add_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_common_selector"
+            android:text="+ 添加稿件"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tv_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:singleLine="true"
+            android:text="未添加文件"
+            android:textSize="14sp"/>
+
+        <!-- 摘要 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="摘要"
             android:textColor="@color/accent"
             android:textSize="14sp"/>
 
         <EditText
-            android:id="@+id/edt_suggestion"
+            android:id="@+id/edt_summary"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="2dp"
@@ -108,20 +144,20 @@
             android:background="@drawable/item_common_selector"
             android:enabled="true"
             android:gravity="top"
-            android:hint="请输入审稿意见"
+            android:hint="请输入稿件摘要"
             android:inputType="textMultiLine"
             android:padding="5dp"
             android:scrollbars="vertical"
             android:textSize="16sp"/>
 
-        <!-- 提交 -->
+        <!-- 投稿 -->
         <Button
-            android:id="@+id/btn_submit"
+            android:id="@+id/btn_contribute"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/btn_common_selector"
-            android:text="提交"
+            android:text="投稿"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:visibility="visible"/>

@@ -155,10 +155,6 @@ public class MainActivity extends BaseActivity {
                                 T.show(mContext, "setting");
                                 switchToSetting();
                                 break;
-                            case R.id.navigation_contact:
-                                T.show(mContext, "contact");
-                                switchToContact();
-                                break;
                         }
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();

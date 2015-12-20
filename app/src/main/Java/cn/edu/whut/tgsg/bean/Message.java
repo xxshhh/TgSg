@@ -21,6 +21,9 @@ public class Message implements Serializable {
     private String date;
     private boolean check;
 
+    public Message() {
+    }
+
     public Message(String title, String content, String date, boolean check) {
         this.title = title;
         this.content = content;

@@ -19,6 +19,9 @@ public class Notice implements Serializable {
     String date;
     String content;
 
+    public Notice() {
+    }
+
     public Notice(String title, String date, String content) {
         this.title = title;
         this.date = date;

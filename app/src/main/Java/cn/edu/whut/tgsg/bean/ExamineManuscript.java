@@ -17,12 +17,16 @@ public class ExamineManuscript implements Serializable {
      * 审稿结果 : 1
      * 审稿时间 : 2015-12-20 11:53:48
      */
+
     int id;
     User user;
     Manuscript manuscript;
     String opinion;
     int result;
     String date;
+
+    public ExamineManuscript() {
+    }
 
     public ExamineManuscript(int id, User user, Manuscript manuscript, String opinion, int result, String date) {
         this.id = id;

@@ -1,12 +1,12 @@
 package cn.edu.whut.tgsg.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
@@ -56,7 +56,7 @@ public class BaseInfoFragment extends BaseFragment {
 
     @Override
     protected void initListener() {
-        
+
     }
 
     /**
@@ -71,18 +71,18 @@ public class BaseInfoFragment extends BaseFragment {
                     mBtnCancel.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            new AlertDialogWrapper.Builder(mContext)
-                                    .setTitle("取消投稿")
-                                    .setMessage("真的要取消投稿吗？")
-                                    .setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
+                            new MaterialDialog.Builder(mContext)
+                                    .title("取消投稿")
+                                    .content("真的要取消投稿吗？")
+                                    .positiveText(R.string.agree)
+                                    .negativeText(R.string.disagree)
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                                             T.show(mContext, "已经取消投稿！！！");
-                                            dialog.dismiss();
+                                            materialDialog.dismiss();
                                         }
-                                    })
-                                    .setNegativeButton(R.string.disagree, null)
-                                    .show();
+                                    }).show();
                         }
                     });
                 } else {

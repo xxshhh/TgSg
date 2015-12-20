@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -20,9 +21,12 @@ import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.base.CommonAdapter;
+import cn.edu.whut.tgsg.bean.DistributeExpert;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.User;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
+import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
 import fr.ganfra.materialspinner.MaterialSpinner;
 
@@ -150,7 +154,8 @@ public class DistributeExpertActivity extends BaseActivity {
      * @param expert
      */
     private void distributeExpert(User expert) {
-        T.show(mContext, mManuscript.getManuscriptVersion().getTitle() + "——分配专家:" + expert.getUsername());
+        DistributeExpert distributeExpert = new DistributeExpert(1, mManuscript.getManuscriptVersion(), Constant.GLOBAL_USER, expert, DateHandleUtil.convertToStandard(new Date()));
+        T.show(mContext, distributeExpert.toString());
     }
 
     /**
