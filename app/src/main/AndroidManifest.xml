@@ -42,5 +42,8 @@
             android:name=".activity.ExamineManuscriptActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity
+            android:name=".activity.DistributeExpertActivity">
+        </activity>
     </application>
 </manifest>

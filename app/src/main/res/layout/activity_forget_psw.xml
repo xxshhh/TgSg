@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_common_selector"
             android:text="发送邮件"
             android:textColor="@android:color/white"
             android:textSize="18sp"/>

@@ -21,7 +21,6 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">0dp</item>
@@ -29,17 +28,6 @@
         <item name="tabPaddingEnd">12dp</item>
         <item name="tabBackground">@color/tab_bgcolor</item>
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
-    </style>
-
-    <!-- MyProgressDialog 样式-->
-    <style name="My_Progress_Dialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
     </style>
 
 </resources>

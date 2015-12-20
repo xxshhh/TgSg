@@ -46,12 +46,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
-                android:background="@drawable/btn_selector"
+                android:background="@drawable/btn_special_selector"
                 android:clickable="true"
                 android:focusable="false"
                 android:text="查看稿件"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"/>
+                android:textSize="14sp"/>
         </RelativeLayout>
     </LinearLayout>
 
@@ -99,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/btn_selector"
+        android:background="@drawable/btn_common_selector"
         android:text="提交"
         android:textColor="@android:color/white"
         android:textSize="18sp"

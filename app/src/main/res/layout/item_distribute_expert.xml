@@ -16,42 +16,41 @@
         android:layout_margin="4dp"
         android:orientation="vertical">
 
-        <!-- 稿件标题 -->
+        <!-- 专家姓名 -->
         <TextView
-            android:id="@+id/tv_manuscript_title"
+            android:id="@+id/tv_expert_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="乖，摸摸头"
+            android:text="张大嘴"
             android:textColor="@color/primary_text"
             android:textSize="20sp"
             android:textStyle="italic"/>
 
-        <!-- 投稿人 -->
         <LinearLayout
             android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_manuscript_title"
+            android:layout_below="@id/tv_expert_name"
             android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="投稿人"
+                android:text="专业"
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp"/>
 
+            <!-- 专家专业 -->
             <TextView
-                android:id="@+id/tv_manuscript_user"
+                android:id="@+id/tv_expert_major"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="大冰"
+                android:text="计算机"
                 android:textColor="@color/third_text"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- 稿件状态 -->
         <LinearLayout
             android:id="@+id/layout2"
             android:layout_width="wrap_content"
@@ -62,33 +61,24 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:text="稿件状态"
+                android:text="研究方向"
                 android:textColor="@color/secondary_text"
                 android:textSize="14sp"/>
 
+            <!-- 研究方向 -->
             <TextView
-                android:id="@+id/tv_manuscript_state"
+                android:id="@+id/tv_expert_research_direction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="编辑初审"
+                android:text="机器学习"
                 android:textColor="@color/third_text"
                 android:textSize="14sp"
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- 点击查看详情 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/layout2"
-            android:layout_marginTop="10dp"
-            android:text="点击查看详情"
-            android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
-
-        <!-- 操作 -->
+        <!-- 分配 -->
         <Button
-            android:id="@+id/btn_handle"
+            android:id="@+id/btn_distribute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -96,7 +86,7 @@
             android:background="@drawable/btn_special_selector"
             android:clickable="true"
             android:focusable="false"
-            android:text="操作"
+            android:text="分配"
             android:textColor="@android:color/white"
             android:textSize="14sp"/>
     </RelativeLayout>

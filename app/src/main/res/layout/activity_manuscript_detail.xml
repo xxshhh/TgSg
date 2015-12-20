@@ -22,7 +22,7 @@
             android:fillViewport="false"
             app:tabIndicatorColor="@color/primary"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/primary_text"
+            app:tabSelectedTextColor="@color/primary"
             app:tabTextColor="@color/secondary_text"/>
 
         <android.support.v4.view.ViewPager

@@ -1,6 +1,8 @@
 package cn.edu.whut.tgsg.fragment.expert;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,6 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
@@ -55,7 +58,6 @@ public class ExpertHandleFragment extends BaseFragment {
 
     @Override
     protected void initListener() {
-
         /**
          * 稿件点击
          */
@@ -63,6 +65,11 @@ public class ExpertHandleFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 T.show(mContext, "已审核稿件" + position);
+                Intent intent = new Intent(mContext, ManuscriptDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manuscript", mAdapter.getItem(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

@@ -1,8 +1,10 @@
 package cn.edu.whut.tgsg.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.PdfActivity;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 
@@ -42,8 +45,15 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
         }
         ManuscriptVersion manuscriptVersion = mDataList.get(position);
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-        viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getDate());
         viewHolder.mTvManuscriptIndex.setText(String.valueOf(mDataList.size() - position));
+        viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getDate());
+        viewHolder.mBtnCheckOpinion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PdfActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
         return convertView;
     }
 
@@ -56,10 +66,12 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
     static class ViewHolder {
         @Bind(R.id.tv_manuscript_title)
         TextView mTvManuscriptTitle;
-        @Bind(R.id.tv_manuscript_date)
-        TextView mTvManuscriptDate;
         @Bind(R.id.tv_manuscript_index)
         TextView mTvManuscriptIndex;
+        @Bind(R.id.tv_manuscript_date)
+        TextView mTvManuscriptDate;
+        @Bind(R.id.btn_check_opinion)
+        Button mBtnCheckOpinion;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

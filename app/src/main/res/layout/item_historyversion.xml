@@ -30,39 +30,70 @@
             android:layout_height="wrap_content"
             android:text="乖，摸摸头"
             android:textColor="@color/primary_text"
-            android:textSize="18sp"/>
+            android:textSize="20sp"
+            android:textStyle="italic"/>
 
-        <!-- 稿件版本时间 -->
-        <TextView
-            android:id="@+id/tv_manuscript_date"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_manuscript_title"
-            android:layout_marginTop="4dp"
-            android:text="2015-12-11 10:45:21"
-            android:textColor="@color/secondary_text"
-            android:textSize="14sp"/>
-
-        <!-- 点击查看详情 -->
-        <TextView
+        <!-- 稿件版本 -->
+        <LinearLayout
+            android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_manuscript_date"
-            android:layout_marginTop="10dp"
-            android:text="点击查看详情"
-            android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:layout_below="@id/tv_manuscript_title"
+            android:layout_marginTop="10dp">
 
-        <!-- 版本排序 -->
-        <TextView
-            android:id="@+id/tv_manuscript_index"
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="稿件版本"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_manuscript_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="@color/third_text"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 版本时间 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout1"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="版本时间"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_manuscript_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015-12-15 18:40:09"
+                android:textColor="@color/third_text"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 查看稿件 -->
+        <Button
+            android:id="@+id/btn_check_opinion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="1"
-            android:textColor="@color/red"
-            android:textSize="30sp"
-            android:textStyle="bold|italic"/>
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_special_selector"
+            android:clickable="true"
+            android:focusable="false"
+            android:text="查看稿件"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
     </RelativeLayout>
 </LinearLayout>

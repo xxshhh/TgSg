@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/btn_selector"
+        android:background="@drawable/btn_common_selector"
         android:text="取消投稿"
         android:textColor="@android:color/white"
         android:textSize="18sp"/>

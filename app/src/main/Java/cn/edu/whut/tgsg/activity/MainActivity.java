@@ -25,7 +25,6 @@ import cn.edu.whut.tgsg.fragment.author.AuthorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.editor.EditorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.expert.ExpertManuscriptFragment;
 import cn.edu.whut.tgsg.util.T;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 主界面
@@ -40,11 +39,8 @@ public class MainActivity extends BaseActivity {
     NavigationView mNavigationView;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.profile_image)
-    CircleImageView mProfileImage;
 
     private ActionBarDrawerToggle mDrawerToggle;
-    private String mUsernameStr;
 
     @Override
     protected int getContentLayoutId() {
@@ -76,7 +72,7 @@ public class MainActivity extends BaseActivity {
         /**
          * 个人信息
          */
-        mProfileImage.setOnClickListener(new View.OnClickListener() {
+        mNavigationView.getHeaderView(0).findViewById(R.id.profile_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 T.show(mContext, "person");

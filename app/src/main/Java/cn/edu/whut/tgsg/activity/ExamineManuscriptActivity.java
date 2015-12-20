@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.common.StateTable;
 import cn.edu.whut.tgsg.util.T;
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -40,6 +40,8 @@ public class ExamineManuscriptActivity extends BaseActivity {
     @Bind(R.id.btn_submit)
     Button mBtnSubmit;
 
+    Manuscript mManuscript;
+
     @Override
     protected int getContentLayoutId() {
         return R.layout.activity_examine_manuscript;
@@ -63,10 +65,14 @@ public class ExamineManuscriptActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        // 获取传来的Manuscript对象
+        Bundle bundle = getIntent().getExtras();
+        mManuscript = (Manuscript) bundle.getSerializable("manuscript");
         // 初始化状态下拉框
         initSpinnerState();
         // 标题获得焦点,防止自动弹出软键盘
         mTvManuscriptTitle.requestFocus();
+        mTvManuscriptTitle.setText(mManuscript.getManuscriptVersion().getTitle());
     }
 
     @Override
@@ -112,16 +118,10 @@ public class ExamineManuscriptActivity extends BaseActivity {
      * 初始化状态下拉框
      */
     private void initSpinnerState() {
-        String[] array = StateTable.getExpertSpinner();
+        String[] array = StateTable.getExpertExamineResultSpinner();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerState.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
     }
 
     private long exitTime = 0;

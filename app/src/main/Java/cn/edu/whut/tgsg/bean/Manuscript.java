@@ -25,6 +25,9 @@ public class Manuscript implements Serializable {
     int state;
     ManuscriptVersion manuscriptVersion;
 
+    public Manuscript() {
+    }
+
     public Manuscript(int id, String sort, User user, String date, int state, ManuscriptVersion manuscriptVersion) {
         this.id = id;
         this.sort = sort;

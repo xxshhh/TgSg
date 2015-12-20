@@ -1,11 +1,13 @@
 package cn.edu.whut.tgsg.bean;
 
+import java.io.Serializable;
+
 /**
  * 消息
  * <p/>
  * Created by xwh on 2015/12/1.
  */
-public class Message {
+public class Message implements Serializable {
 
     /**
      * title : 系统消息

@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/btn_selector"
+            android:background="@drawable/btn_special_selector"
             android:clickable="true"
             android:focusable="false"
             android:text="受理"

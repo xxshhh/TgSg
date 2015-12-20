@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/include_toolbar"/>
+
+    <TextView
+        android:id="@+id/tv_focus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <!-- 状态下拉框 -->
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_state"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        app:ms_alignLabels="true"
+        app:ms_arrowColor="@color/accent"
+        app:ms_arrowSize="16dp"
+        app:ms_baseColor="@color/accent"
+        app:ms_enableErrorLabel="false"
+        app:ms_enableFloatingLabel="true"
+        app:ms_errorColor="@color/red"
+        app:ms_floatingLabelColor="@color/accent"
+        app:ms_floatingLabelText="专家查询条件"
+        app:ms_highlightColor="@color/primary"
+        app:ms_hint="请选择专家查询条件"
+        app:ms_hintColor="@color/third_text"
+        app:ms_multiline="false"
+        app:ms_thickness="1dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="20dp"
+        android:paddingTop="4dp">
+
+        <!-- 查询 -->
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_special_selector"
+            android:clickable="true"
+            android:focusable="false"
+            android:text="查询"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+
+        <!-- 查询条件 -->
+        <EditText
+            android:id="@+id/edt_input"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_toLeftOf="@+id/btn_search"
+            android:gravity="center|left"
+            android:hint="请输入查询条件"/>
+    </RelativeLayout>
+
+    <!-- 分配专家列表 -->
+    <ListView
+        android:id="@+id/list_distribute_expert"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:dividerHeight="3dp"
+        android:scrollbarStyle="outsideOverlay">
+    </ListView>
+</LinearLayout>

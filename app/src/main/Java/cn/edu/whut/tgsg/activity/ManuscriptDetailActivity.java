@@ -12,11 +12,14 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.Manuscript;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
+import cn.edu.whut.tgsg.fragment.EmptyFragment;
+import cn.edu.whut.tgsg.fragment.ExamineOpinionFragment;
 import cn.edu.whut.tgsg.fragment.HistoryVersionFragment;
 
 /**
- * 稿件详情界面
+ * 稿件详情界面（包括作者、编辑、）
  * <p/>
  * Created by xwh on 2015/12/9.
  */
@@ -65,16 +68,38 @@ public class ManuscriptDetailActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        // 设置Viewpager
-        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new BaseInfoFragment(), "基本信息");
-        adapter.addFragment(new HistoryVersionFragment(), "历史版本");
-        mViewPager.setAdapter(adapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        // 根据用户角色设置Viewpager
+        initViewPager();
     }
 
     @Override
     protected void initListener() {
 
+    }
+
+    /**
+     * 根据用户角色设置Viewpager
+     */
+    private void initViewPager() {
+        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
+        switch (Constant.GLOBAL_USER.getRole()) {
+            case 1:
+                adapter.addFragment(new BaseInfoFragment(), "基本信息");
+                adapter.addFragment(new HistoryVersionFragment(), "历史版本");
+                adapter.addFragment(new EmptyFragment(), "留言信息");
+                break;
+            case 2:
+                adapter.addFragment(new BaseInfoFragment(), "基本信息");
+                adapter.addFragment(new HistoryVersionFragment(), "历史版本");
+                adapter.addFragment(new ExamineOpinionFragment(), "审稿意见");
+                adapter.addFragment(new EmptyFragment(), "留言信息");
+                break;
+            case 3:
+                adapter.addFragment(new BaseInfoFragment(), "基本信息");
+                adapter.addFragment(new ExamineOpinionFragment(), "审稿意见");
+            default:
+        }
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

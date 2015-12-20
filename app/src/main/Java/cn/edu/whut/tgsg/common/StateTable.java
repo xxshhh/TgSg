@@ -8,22 +8,42 @@ package cn.edu.whut.tgsg.common;
 public class StateTable {
 
     /**
-     * 获取编辑下拉框内容
+     * 获取编辑稿件状态下拉框内容
      *
      * @return
      */
-    public static String[] getEditorSpinner() {
+    public static String[] getEditorStateSpinner() {
         String[] array = new String[]{"编辑初审", "待专家审核", "专家审核", "编辑复审", "通过", "录用"};
         return array;
     }
 
     /**
-     * 获取专家下拉框内容
+     * 获取专家审稿结果下拉框内容
      *
      * @return
      */
-    public static String[] getExpertSpinner() {
+    public static String[] getExpertExamineResultSpinner() {
         String[] array = new String[]{"通过", "不通过"};
+        return array;
+    }
+
+    /**
+     * 获取分配专家下拉框内容
+     *
+     * @return
+     */
+    public static String[] getDistributeExpertSpinner() {
+        String[] array = new String[]{"全部", "研究方向", "专业", "姓名"};
+        return array;
+    }
+
+    /**
+     * 获取稿件类别下拉框内容
+     *
+     * @return
+     */
+    public static String[] getManuscriptSortSpinner() {
+        String[] array = new String[]{"随笔", "专业研究", "前言技术", "奇思妙想"};
         return array;
     }
 
