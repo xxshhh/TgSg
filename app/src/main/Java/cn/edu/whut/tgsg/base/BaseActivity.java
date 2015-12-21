@@ -16,6 +16,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context mContext;
 
+    protected abstract String getTagName();
+
     protected abstract int getContentLayoutId();
 
     protected abstract Context getContext();
@@ -27,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 设置横屏
+        // 设置竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(getContentLayoutId());

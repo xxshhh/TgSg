@@ -14,24 +14,24 @@ public class DistributeExpert implements Serializable {
      * 稿件版本 : ManuscriptVersion
      * 编辑 : editor
      * 专家 : expert
-     * 时间 : date
+     * 时间 : contributeTime
      */
 
     int id;
-    ManuscriptVersion manuscriptVersion;
+    ManuscriptVersion articleVersion;
     User editor;
     User expert;
-    String date;
+    String distributeTime;
 
     public DistributeExpert() {
     }
 
-    public DistributeExpert(int id, ManuscriptVersion manuscriptVersion, User editor, User expert, String date) {
+    public DistributeExpert(int id, ManuscriptVersion articleVersion, User editor, User expert, String distributeTime) {
         this.id = id;
-        this.manuscriptVersion = manuscriptVersion;
+        this.articleVersion = articleVersion;
         this.editor = editor;
         this.expert = expert;
-        this.date = date;
+        this.distributeTime = distributeTime;
     }
 
     public int getId() {
@@ -42,12 +42,12 @@ public class DistributeExpert implements Serializable {
         this.id = id;
     }
 
-    public ManuscriptVersion getManuscriptVersion() {
-        return manuscriptVersion;
+    public ManuscriptVersion getArticleVersion() {
+        return articleVersion;
     }
 
-    public void setManuscriptVersion(ManuscriptVersion manuscriptVersion) {
-        this.manuscriptVersion = manuscriptVersion;
+    public void setArticleVersion(ManuscriptVersion articleVersion) {
+        this.articleVersion = articleVersion;
     }
 
     public User getEditor() {
@@ -66,11 +66,11 @@ public class DistributeExpert implements Serializable {
         this.expert = expert;
     }
 
-    public String getDate() {
-        return date;
+    public String getDistributeTime() {
+        return distributeTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDistributeTime(String distributeTime) {
+        this.distributeTime = distributeTime;
     }
 }

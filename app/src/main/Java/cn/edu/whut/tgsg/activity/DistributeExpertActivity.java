@@ -18,11 +18,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.DistributeExpert;
 import cn.edu.whut.tgsg.bean.Manuscript;
+import cn.edu.whut.tgsg.bean.Role;
 import cn.edu.whut.tgsg.bean.User;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
@@ -53,6 +55,11 @@ public class DistributeExpertActivity extends BaseActivity {
     DistributeExpertAdapter mAdapter;
 
     Manuscript mManuscript;
+
+    @Override
+    protected String getTagName() {
+        return "DistributeExpertActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -123,7 +130,7 @@ public class DistributeExpertActivity extends BaseActivity {
             public void onClick(View v) {
                 T.show(mContext, mSpinnerState.getSelectedItemPosition() + mEdtInput.getText().toString());
                 mAdapter.getDataList().clear();
-                mAdapter.getDataList().add(0, new User(0, null, null, "杨志", 0, null, null, 3, null, "计算机", "信息安全", null, null));
+                mAdapter.getDataList().add(0, new User(0, null, null, "杨志", 0, null, null, null, null, "计算机", "信息安全", null, null));
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -154,7 +161,7 @@ public class DistributeExpertActivity extends BaseActivity {
      * @param expert
      */
     private void distributeExpert(User expert) {
-        DistributeExpert distributeExpert = new DistributeExpert(1, mManuscript.getManuscriptVersion(), Constant.GLOBAL_USER, expert, DateHandleUtil.convertToStandard(new Date()));
+        DistributeExpert distributeExpert = new DistributeExpert(1, mManuscript.getManuscriptVersion(), MyApplication.GLOBAL_USER, expert, DateHandleUtil.convertToStandard(new Date()));
         T.show(mContext, distributeExpert.toString());
     }
 
@@ -184,9 +191,9 @@ public class DistributeExpertActivity extends BaseActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final User expert = mDataList.get(position);
-            viewHolder.mTvExpertName.setText(expert.getUsername());
-            viewHolder.mTvExpertMajor.setText(expert.getMajor());
-            viewHolder.mTvExpertResearchDirection.setText(expert.getResearchDirection());
+            viewHolder.mTvExpertName.setText(expert.getName());
+            viewHolder.mTvExpertMajor.setText(expert.getProfessional());
+            viewHolder.mTvExpertResearchDirection.setText(expert.getResearch());
             viewHolder.mBtnDistribute.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

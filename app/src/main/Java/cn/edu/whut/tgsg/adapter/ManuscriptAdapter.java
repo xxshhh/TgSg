@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,8 +48,8 @@ public class ManuscriptAdapter extends CommonAdapter<Manuscript> {
         // 根据稿件对象获取最新稿件版本
         ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-        viewHolder.mTvManuscriptDate.setText(manuscript.getDate());
-        viewHolder.mTcvManuscriptKeywords.setTags(manuscriptVersion.getKeywords());
+        viewHolder.mTvManuscriptDate.setText(manuscript.getContributeTime());
+        viewHolder.mTcvManuscriptKeywords.setTags(Arrays.asList(manuscriptVersion.getKeyword().split(",")));
         viewHolder.mTvManuscriptSummary.setText(manuscriptVersion.getSummary().length() > 30 ? manuscriptVersion.getSummary().substring(0, 30) + "...（更多）" : manuscriptVersion.getSummary());
         // 根据稿件状态设置进度显示
         int state = manuscript.getState();

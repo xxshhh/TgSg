@@ -33,6 +33,11 @@ public class ForgetPswActivity extends BaseActivity {
     private Handler mHandler;
 
     @Override
+    protected String getTagName() {
+        return "ForgetPswActivity";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.activity_forget_psw;
     }

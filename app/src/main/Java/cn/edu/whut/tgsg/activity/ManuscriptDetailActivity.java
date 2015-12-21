@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseActivity;
@@ -41,6 +42,11 @@ public class ManuscriptDetailActivity extends BaseActivity {
      */
     public Manuscript getManuscript() {
         return mManuscript;
+    }
+
+    @Override
+    protected String getTagName() {
+        return "ManuscriptDetailActivity";
     }
 
     @Override
@@ -82,12 +88,7 @@ public class ManuscriptDetailActivity extends BaseActivity {
      */
     private void initViewPager() {
         ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
-        switch (Constant.GLOBAL_USER.getRole()) {
-            case 1:
-                adapter.addFragment(new BaseInfoFragment(), "基本信息");
-                adapter.addFragment(new HistoryVersionFragment(), "历史版本");
-                adapter.addFragment(new EmptyFragment(), "留言信息");
-                break;
+        switch (MyApplication.GLOBAL_USER.getRole().getId()) {
             case 2:
                 adapter.addFragment(new BaseInfoFragment(), "基本信息");
                 adapter.addFragment(new HistoryVersionFragment(), "历史版本");
@@ -95,6 +96,11 @@ public class ManuscriptDetailActivity extends BaseActivity {
                 adapter.addFragment(new EmptyFragment(), "留言信息");
                 break;
             case 3:
+                adapter.addFragment(new BaseInfoFragment(), "基本信息");
+                adapter.addFragment(new HistoryVersionFragment(), "历史版本");
+                adapter.addFragment(new EmptyFragment(), "留言信息");
+                break;
+            case 4:
                 adapter.addFragment(new BaseInfoFragment(), "基本信息");
                 adapter.addFragment(new ExamineOpinionFragment(), "审稿意见");
             default:

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.AlertDialogWrapper;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
@@ -54,6 +55,11 @@ public class ContributeManuscriptActivity extends BaseActivity {
     Button mBtnContribute;
 
     List<String> mKeywords;
+
+    @Override
+    protected String getTagName() {
+        return "ContributeManuscriptActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -111,23 +117,29 @@ public class ContributeManuscriptActivity extends BaseActivity {
                     T.show(mContext, "最多只能有5个关键词");
                     return;
                 }
-                new MaterialDialog.Builder(mContext)
+                final MaterialDialog dialog = new MaterialDialog.Builder(mContext)
                         .title("添加")
                         .input(null, null, false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                T.show(mContext, input.toString());
-                                if (mKeywords == null) {
-                                    mKeywords = new ArrayList<>();
-                                }
-                                if (mKeywords.contains(input.toString().trim())) {
-                                    T.show(mContext, "该关键词存在！！！");
-                                    return;
-                                }
-                                mKeywords.add(input.toString().trim());
-                                mTcvManuscriptKeywords.setTags(mKeywords);
                             }
-                        }).show();
+                        })
+                        .positiveText(R.string.agree)
+                        .show();
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mKeywords == null) {
+                            mKeywords = new ArrayList<>();
+                        }
+                        if (mKeywords.contains(dialog.getInputEditText().getText().toString().trim())) {
+                            T.show(mContext, "该关键词存在！！！");
+                            return;
+                        }
+                        mKeywords.add(dialog.getInputEditText().getText().toString().trim());
+                        mTcvManuscriptKeywords.setTags(mKeywords);
+                    }
+                });
             }
         });
 

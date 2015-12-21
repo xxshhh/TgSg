@@ -19,15 +19,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
-            <!-- 账号 -->
+            <!-- 邮箱 -->
             <EditText
-                android:id="@+id/edt_username"
+                android:id="@+id/edt_email"
                 android:layout_width="240dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:hint="账号"
+                android:hint="邮箱"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:text="1943309689@qq.com"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -42,7 +43,8 @@
                 android:layout_margin="5dp"
                 android:hint="密码"
                 android:password="true"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:text="123456"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- 登录 -->

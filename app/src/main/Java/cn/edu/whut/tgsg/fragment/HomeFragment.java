@@ -74,16 +74,16 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
      */
     private void initNoticeList() {
         List<Notice> list = new ArrayList<>();
-        list.add(new Notice("关于余区管委会工人技师评审组拟推荐评聘万荣为技师的情况公示", "12-15", "<h2 style=\"font-style:italic;\">dsfsgs<span class=\"marker\">gfdgfdsdfsdf</span></h2>\n" +
+        list.add(new Notice(1, "关于余区管委会工人技师评审组拟推荐评聘万荣为技师的情况公示", "12-15", "<h2 style=\"font-style:italic;\">dsfsgs<span class=\"marker\">gfdgfdsdfsdf</span></h2>\n" +
                 "\n" + "<h1>sfsdfadsafsafdsfykfsafsd散发的发放<span style=\"font-family:georgia,serif\">大风哥哥如果我</span></h1>\n" +
                 "\n" + "<p><span style=\"font-family:georgia,serif\">撒<s>德国大使馆的发声</s></span></p>\n" +
                 "\n" + "<p><span style=\"font-family:georgia,serif\"><s>阿飞大范德萨发沙发<sub>是非得失</sub></s></span></p>"));
-        list.add(new Notice("关于开展“十二五”规划全面总结及末期考核的通知", "12-14", ""));
-        list.add(new Notice("关于加强校园活动安全管理的通知", "12-13", ""));
-        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-12", ""));
-        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-11", ""));
-        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-10", ""));
-        list.add(new Notice("关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-04", ""));
+        list.add(new Notice(2, "关于开展“十二五”规划全面总结及末期考核的通知", "12-14", ""));
+        list.add(new Notice(3, "关于加强校园活动安全管理的通知", "12-13", ""));
+        list.add(new Notice(4, "关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-12", ""));
+        list.add(new Notice(5, "关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-11", ""));
+        list.add(new Notice(6, "关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-10", ""));
+        list.add(new Notice(7, "关于开展2015年目标责任制暨竞争性绩效津贴年度考核工作的通知", "12-04", ""));
         mAdapter = new NoticeAdapter(getContext(), list);
         mListNotice.setAdapter(mAdapter);
     }

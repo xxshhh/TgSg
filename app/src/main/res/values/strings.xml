@@ -8,4 +8,7 @@
     <string name="agree">"确定"</string>
     <string name="disagree">"取消"</string>
     <string name="choose">"选择"</string>
+
+    <string name="xiaomi_attention">
+        <![CDATA[小米系统用户请进入系统应用:安全中心->授权管理->自启动应用管理 后允许『Tgsg』自启动，否则无法自启动]]></string>
 </resources>

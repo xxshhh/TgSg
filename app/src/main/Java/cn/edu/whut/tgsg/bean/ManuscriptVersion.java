@@ -1,7 +1,6 @@
 package cn.edu.whut.tgsg.bean;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 稿件版本
@@ -16,24 +15,27 @@ public class ManuscriptVersion implements Serializable {
      * 标题 : 乖，摸摸头
      * 摘要 : 真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。
      * 关键字 : 大冰 旅行 治愈 散文随笔
-     * 存储路径 : url
+     * 存储路径 : path
      * 版本时间 : 2015-12-11 10:45:21
      */
 
     int id;
     String title;
     String summary;
-    List<String> keywords;
-    String url;
-    String date;
+    String keyword;
+    String path;
+    String versionTime;
 
-    public ManuscriptVersion(int id, String title, String summary, List<String> keywords, String url, String date) {
+    public ManuscriptVersion() {
+    }
+
+    public ManuscriptVersion(int id, String title, String summary, String keyword, String path, String versionTime) {
         this.id = id;
         this.title = title;
         this.summary = summary;
-        this.keywords = keywords;
-        this.url = url;
-        this.date = date;
+        this.keyword = keyword;
+        this.path = path;
+        this.versionTime = versionTime;
     }
 
     public int getId() {
@@ -60,27 +62,27 @@ public class ManuscriptVersion implements Serializable {
         this.summary = summary;
     }
 
-    public List<String> getKeywords() {
-        return keywords;
+    public String getKeyword() {
+        return keyword;
     }
 
-    public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
-    public String getUrl() {
-        return url;
+    public String getPath() {
+        return path;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public String getDate() {
-        return date;
+    public String getVersionTime() {
+        return versionTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setVersionTime(String versionTime) {
+        this.versionTime = versionTime;
     }
 }

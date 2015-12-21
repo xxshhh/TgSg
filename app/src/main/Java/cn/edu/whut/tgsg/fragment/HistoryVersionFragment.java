@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.HistoryVersionAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
-import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -68,9 +68,9 @@ public class HistoryVersionFragment extends BaseFragment {
     private void initHistoryVersionList() {
         List<ManuscriptVersion> list = new ArrayList<>();
         ManuscriptVersion manuscriptVersion = mManuscript.getManuscriptVersion();
-        list.add(new ManuscriptVersion(1, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), manuscriptVersion.getDate()));
-        list.add(new ManuscriptVersion(2, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-07 15:19:11"));
-        list.add(new ManuscriptVersion(3, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeywords(), manuscriptVersion.getUrl(), "2015-12-05 09:19:11"));
+        list.add(new ManuscriptVersion(1, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeyword(), manuscriptVersion.getPath(), manuscriptVersion.getVersionTime()));
+        list.add(new ManuscriptVersion(2, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeyword(), manuscriptVersion.getPath(), "2015-12-07 15:19:11"));
+        list.add(new ManuscriptVersion(3, manuscriptVersion.getTitle(), manuscriptVersion.getSummary(), manuscriptVersion.getKeyword(), manuscriptVersion.getPath(), "2015-12-05 09:19:11"));
         mAdapter = new HistoryVersionAdapter(mContext, list);
         mListHistoryVersion.setAdapter(mAdapter);
     }
@@ -79,8 +79,11 @@ public class HistoryVersionFragment extends BaseFragment {
      * 设置底部按钮
      */
     private void setupButton() {
-        switch (Constant.GLOBAL_USER.getRole()) {
-            case 1:
+        switch (MyApplication.GLOBAL_USER.getRole().getId()) {
+            case 2:
+                mBtnUpload.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
                 // 设置上传新版本按钮外观
                 if (mManuscript.getState() == 1 || mManuscript.getState() == 6) {
                     mBtnUpload.setBackgroundResource(R.drawable.btn_common_selector);
@@ -100,9 +103,6 @@ public class HistoryVersionFragment extends BaseFragment {
                         }
                     });
                 }
-                break;
-            case 2:
-                mBtnUpload.setVisibility(View.INVISIBLE);
                 break;
             default:
         }

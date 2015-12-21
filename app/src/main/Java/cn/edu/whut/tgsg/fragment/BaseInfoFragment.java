@@ -9,13 +9,13 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.activity.PdfActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
-import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -45,9 +45,9 @@ public class BaseInfoFragment extends BaseFragment {
         // 初始化页面数据
         mManuscriptVersion = mManuscript.getManuscriptVersion();
         String info = "标题：" + mManuscriptVersion.getTitle() + "\n"
-                + "投稿时间：" + mManuscript.getDate() + "\n"
-                + "类别：" + mManuscript.getSort() + "\n"
-                + "关键词：" + mManuscriptVersion.getKeywords().toString() + "\n"
+                + "投稿时间：" + mManuscript.getContributeTime() + "\n"
+                + "类别：" + mManuscript.getType() + "\n"
+                + "关键词：" + mManuscriptVersion.getKeyword().toString() + "\n"
                 + "摘要：" + mManuscriptVersion.getSummary() + "\n";
         mTvInfo.setText(info);
         // 设置底部按钮
@@ -63,8 +63,11 @@ public class BaseInfoFragment extends BaseFragment {
      * 设置底部按钮
      */
     private void setupButton() {
-        switch (Constant.GLOBAL_USER.getRole()) {
-            case 1:
+        switch (MyApplication.GLOBAL_USER.getRole().getId()) {
+            case 2:
+                mBtnCancel.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
                 // 设置取消投稿按钮外观
                 if (mManuscript.getState() == 1) {
                     mBtnCancel.setBackgroundResource(R.drawable.btn_common_selector);
@@ -95,10 +98,7 @@ public class BaseInfoFragment extends BaseFragment {
                     });
                 }
                 break;
-            case 2:
-                mBtnCancel.setVisibility(View.INVISIBLE);
-                break;
-            case 3:
+            case 4:
                 mBtnCancel.setText("查看稿件");
                 mBtnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override

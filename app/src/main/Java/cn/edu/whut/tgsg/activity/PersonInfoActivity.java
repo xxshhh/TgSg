@@ -12,20 +12,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.User;
 import cn.edu.whut.tgsg.common.Constant;
-import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -63,6 +58,11 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     private User user = new User();//初始化
 
     @Override
+    protected String getTagName() {
+        return "PersonInfoActivity";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.activity_personinfo;
     }
@@ -77,16 +77,16 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         Gson gson = new Gson();
         user = gson.fromJson(jsonString, User.class);
         //初始化个人信息界面
-        mEdtUsername.setText(user.getUsername());
+        mEdtUsername.setText(user.getName());
         mEdtEmail.setText(user.getEmail());
         mEdtPsw.setText(user.getPassword());
         mEdtAge.setText(user.getAge() + "");
-        mEdtTel.setText(user.getTel());
-        mEdtDegree.setText(user.getDegree());
-        mEdtMajor.setText(user.getMajor());
-        mEdtResearchDirection.setText(user.getResearchDirection());
-        mEdtWorkPlace.setText(user.getWorkPlace());
-        mEdtDesc.setText(user.getDesc());
+        mEdtTel.setText(user.getPhone());
+        mEdtDegree.setText(user.getEducation());
+        mEdtMajor.setText(user.getProfessional());
+        mEdtResearchDirection.setText(user.getResearch());
+        mEdtWorkPlace.setText(user.getWork());
+        mEdtDesc.setText(user.getPersonal());
         /**
          * 处理消息
          */
@@ -137,18 +137,18 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
                 .add(tagName, chgedText)
                 .build();
         Request request = new Request.Builder().url(Constant.SAVE_PERSONINFO_URL).post(ChgedPersonInfoFormBody).build();
-        OkHttpUtil.enqueue(request, new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
+//        OkHttpUtil.enqueue(request, new Callback() {
+//            @Override
+//            public void onFailure(Request request, IOException e) {
+////                mHandler.sendEmptyMessage(Constant.SUCCEED);
+//                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
+//            }
+//
+//            @Override
+//            public void onResponse(Response response) throws IOException {
 //                mHandler.sendEmptyMessage(Constant.SUCCEED);
-                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                mHandler.sendEmptyMessage(Constant.SUCCEED);
-            }
-        });
+//            }
+//        });
     }
 
     @Override

@@ -19,20 +19,20 @@ public class Manuscript implements Serializable {
      */
 
     int id;
-    String sort;
-    User user;
-    String date;
+    String type;
+    User contributor;
+    String contributeTime;
     int state;
     ManuscriptVersion manuscriptVersion;
 
     public Manuscript() {
     }
 
-    public Manuscript(int id, String sort, User user, String date, int state, ManuscriptVersion manuscriptVersion) {
+    public Manuscript(int id, String type, User contributor, String contributeTime, int state, ManuscriptVersion manuscriptVersion) {
         this.id = id;
-        this.sort = sort;
-        this.user = user;
-        this.date = date;
+        this.type = type;
+        this.contributor = contributor;
+        this.contributeTime = contributeTime;
         this.state = state;
         this.manuscriptVersion = manuscriptVersion;
     }
@@ -45,28 +45,28 @@ public class Manuscript implements Serializable {
         this.id = id;
     }
 
-    public String getSort() {
-        return sort;
+    public String getType() {
+        return type;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public User getContributor() {
+        return contributor;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setContributor(User contributor) {
+        this.contributor = contributor;
     }
 
-    public String getDate() {
-        return date;
+    public String getContributeTime() {
+        return contributeTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setContributeTime(String contributeTime) {
+        this.contributeTime = contributeTime;
     }
 
     public int getState() {

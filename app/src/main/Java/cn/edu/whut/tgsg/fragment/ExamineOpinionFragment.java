@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.ExamineOpinionAdapter;
@@ -61,17 +62,17 @@ public class ExamineOpinionFragment extends BaseFragment {
      * 初始化审稿意见列表
      */
     private void initExamineOpinionList() {
-        // 根据不同的角色查找不同的审稿意见列表
-        switch (Constant.GLOBAL_USER.getRole()) {
+        // 根据不同的角色(编辑和专家)查找不同的审稿意见列表
+        switch (MyApplication.GLOBAL_USER.getRole().getId()) {
             case 2:
                 break;
-            case 3:
+            case 4:
                 break;
             default:
         }
         List<ExamineManuscript> list = new ArrayList<>();
-        list.add(new ExamineManuscript(1, Constant.GLOBAL_USER, mManuscript, "这世界有另一种人，他们的生活模式与朝九晚五格格不入，却也活得有血有肉，有模有样。世界上还有另一种人，他们既可以朝九晚五，又可以浪荡天涯，比如大冰。", 1, "2015-12-20 11:53:48"));
-        list.add(new ExamineManuscript(2, Constant.GLOBAL_USER, mManuscript, "读书，就是和作者交谈。我相信看完书的朋友，会和我当初一样，在和大冰对话，听他讲完那些故事后，把他当作自己的朋友。", 2, "2015-12-20 11:57:07"));
+        list.add(new ExamineManuscript(1, MyApplication.GLOBAL_USER, mManuscript.getManuscriptVersion(), "这世界有另一种人，他们的生活模式与朝九晚五格格不入，却也活得有血有肉，有模有样。世界上还有另一种人，他们既可以朝九晚五，又可以浪荡天涯，比如大冰。", 1, "2015-12-20 11:53:48"));
+        list.add(new ExamineManuscript(2, MyApplication.GLOBAL_USER, mManuscript.getManuscriptVersion(), "读书，就是和作者交谈。我相信看完书的朋友，会和我当初一样，在和大冰对话，听他讲完那些故事后，把他当作自己的朋友。", 2, "2015-12-20 11:57:07"));
         mAdapter = new ExamineOpinionAdapter(mContext, list);
         mListExamineopinion.setAdapter(mAdapter);
     }

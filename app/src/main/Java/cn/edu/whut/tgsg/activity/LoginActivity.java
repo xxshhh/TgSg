@@ -2,26 +2,28 @@ package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
+import com.google.gson.Gson;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.bean.User;
 import cn.edu.whut.tgsg.common.Constant;
-import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 
@@ -32,8 +34,8 @@ import cn.edu.whut.tgsg.util.T;
  */
 public class LoginActivity extends BaseActivity {
 
-    @Bind(R.id.edt_username)
-    EditText mEdtUsername;
+    @Bind(R.id.edt_email)
+    EditText mEdtEmail;
     @Bind(R.id.edt_password)
     EditText mEdtPassword;
     @Bind(R.id.btn_login)
@@ -43,7 +45,10 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.tv_register)
     TextView mTvRegister;
 
-    private Handler mHandler;
+    @Override
+    protected String getTagName() {
+        return "LoginActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -57,34 +62,49 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        /**
-         * 处理消息
-         */
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                ProgressDialogUtil.dismiss();
-                switch (msg.what) {
-                    case Constant.HTTP_ACCESS_ERROR:
-                        T.show(mContext, "网络访问错误");
-                        break;
-                    case Constant.FAILED:
-                        T.show(mContext, "用户名或密码错误");
-                        mEdtUsername.setText("");
-                        mEdtPassword.setText("");
-                        break;
-                    case Constant.SUCCEED:
-                        T.show(mContext, "恭喜你，登录成功。");
-                        Intent intent = new Intent(mContext, MainActivity.class);
-                        Constant.GLOBAL_USER.setUsername("大冰");
-                        Constant.GLOBAL_USER.setRole(Integer.valueOf(mEdtUsername.getText().toString()));
-                        startActivity(intent);
-                        finish();
-                        break;
-                }
-            }
-        };
+        // 取SharedPreferences数据
+        String user_email = null;
+        String user_password = null;
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        user_email = sharedPreferences.getString("user_email", "");
+        user_password = sharedPreferences.getString("user_password", "");
+        // 自动登录
+        if (!user_email.equals("") && !user_password.equals("")) {
+            Log.e(getTagName(), user_email + "," + user_password);
+            OkHttpUtils
+                    .post()
+                    .url(Constant.URL + "login")
+                    .addParams("email", user_email)
+                    .addParams("password", user_password)
+                    .addParams("remember", "true")
+                    .addParams("source", "android")
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            Log.e(getTagName(), "onError:" + e.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(String response) {
+                            Log.e(getTagName(), "onResponse:" + response);
+                            try {
+                                JSONObject serverInfo = new JSONObject(response);
+                                if (!serverInfo.getBoolean("isSuccess")) {
+
+                                } else {
+                                    Intent intent = new Intent(mContext, MainActivity.class);
+                                    MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
+                                    Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
@@ -95,34 +115,58 @@ public class LoginActivity extends BaseActivity {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String usernameStr = mEdtUsername.getText().toString();
-                String passwordStr = mEdtPassword.getText().toString();
-                if (usernameStr.equals("") || passwordStr.equals("")) {
-                    T.show(mContext, "用户名或密码不能为空!!!!!!!");
+                String emailStr = mEdtEmail.getText().toString().trim();
+                String passwordStr = mEdtPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(emailStr) || TextUtils.isEmpty(passwordStr)) {
+                    T.show(mContext, "邮箱或密码不能为空!!!!!!!");
                     return;
                 }
                 ProgressDialogUtil.show(mContext);
-                RequestBody loginFormBody = new FormEncodingBuilder()
-                        .add("username", usernameStr)
-                        .add("password", passwordStr)
-                        .build();
-                Request request = new Request.Builder().url(Constant.LOGIN_URL).post(loginFormBody).build();
-                OkHttpUtil.enqueue(request, new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-                        mHandler.sendEmptyMessage(Constant.SUCCEED);
-                        //mHandler.sendEmptyMessage(Constant.FAILED);
-                    }
+                OkHttpUtils
+                        .post()
+                        .url(Constant.URL + "login")
+                        .addParams("email", emailStr)
+                        .addParams("password", passwordStr)
+                        .addParams("remember", "true")
+                        .addParams("source", "android")
+                        .build()
+                        .execute(new StringCallback() {
+                            @Override
+                            public void onError(Request request, Exception e) {
+                                ProgressDialogUtil.dismiss();
+                                Log.e(getTagName(), "onError:" + e.getMessage());
+                                T.show(mContext, "网络访问错误");
+                            }
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        String result = response.body().string();
-                        if (result.equals("success"))
-                            mHandler.sendEmptyMessage(Constant.SUCCEED);
-                        else
-                            mHandler.sendEmptyMessage(Constant.FAILED);
-                    }
-                });
+                            @Override
+                            public void onResponse(String response) {
+                                ProgressDialogUtil.dismiss();
+                                Log.e(getTagName(), "onResponse:" + response);
+                                try {
+                                    JSONObject serverInfo = new JSONObject(response);
+                                    if (!serverInfo.getBoolean("isSuccess")) {
+                                        T.show(mContext, "邮箱或密码错误");
+                                        mEdtEmail.setText("");
+                                        mEdtPassword.setText("");
+                                    } else {
+                                        T.show(mContext, "登录成功");
+                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                        MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
+                                        Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
+                                        // 存数据到SharedPreferences
+                                        SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString("user_email", MyApplication.GLOBAL_USER.getEmail());
+                                        editor.putString("user_password", MyApplication.GLOBAL_USER.getPassword());
+                                        editor.commit();
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
             }
         });
 

@@ -1,7 +1,6 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
@@ -9,13 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +19,6 @@ import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
-import cn.edu.whut.tgsg.util.OkHttpUtil;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 
@@ -46,6 +41,11 @@ public class RegisterActivity extends BaseActivity {
     Button mBtnRegister;
 
     private Handler mHandler;
+
+    @Override
+    protected String getTagName() {
+        return "RegisterActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -176,21 +176,21 @@ public class RegisterActivity extends BaseActivity {
                 .add("password", pswStr)
                 .build();
         Request request = new Request.Builder().url(Constant.REGISTER_URL).post(RegisterFormBody).build();
-        OkHttpUtil.enqueue(request, new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                mHandler.sendEmptyMessage(Constant.SUCCEED);
-//                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                String result = response.body().string();
-                if (result.equals("success"))
-                    mHandler.sendEmptyMessage(Constant.SUCCEED);
-                else
-                    mHandler.sendEmptyMessage(Constant.FAILED);
-            }
-        });
+//        OkHttpUtil.enqueue(request, new Callback() {
+//            @Override
+//            public void onFailure(Request request, IOException e) {
+//                mHandler.sendEmptyMessage(Constant.SUCCEED);
+////                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
+//            }
+//
+//            @Override
+//            public void onResponse(Response response) throws IOException {
+//                String result = response.body().string();
+//                if (result.equals("success"))
+//                    mHandler.sendEmptyMessage(Constant.SUCCEED);
+//                else
+//                    mHandler.sendEmptyMessage(Constant.FAILED);
+//            }
+//        });
     }
 }

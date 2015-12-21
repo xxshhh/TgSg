@@ -27,6 +27,11 @@ public class NoticeDetailActivity extends BaseActivity {
     Notice mNotice;
 
     @Override
+    protected String getTagName() {
+        return "NoticeDetailActivity";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.activity_notice_detail;
     }

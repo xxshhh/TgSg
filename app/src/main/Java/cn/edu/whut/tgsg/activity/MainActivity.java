@@ -2,7 +2,6 @@ package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -15,12 +14,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
-import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
 import cn.edu.whut.tgsg.fragment.MessageFragment;
+import cn.edu.whut.tgsg.fragment.SettingsFragment;
 import cn.edu.whut.tgsg.fragment.author.AuthorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.editor.EditorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.expert.ExpertManuscriptFragment;
@@ -41,6 +41,11 @@ public class MainActivity extends BaseActivity {
     DrawerLayout mDrawerLayout;
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    @Override
+    protected String getTagName() {
+        return "ForgetPswActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -76,56 +81,69 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 T.show(mContext, "person");
-                Intent intent = new Intent(mContext, PersonInfoActivity.class);
+                Intent intent = new Intent(mContext, ChgPersonInfoActivity.class);
                 startActivity(intent);
                 mDrawerLayout.closeDrawers();
             }
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private Fragment mFragment;
+    private android.app.Fragment settingFragment;
 
     private void switchToHome() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new HomeFragment()).commit();
+        mFragment = new HomeFragment();
+        if (settingFragment != null) {
+            getFragmentManager().beginTransaction().remove(settingFragment).commit();
+            settingFragment = null;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, mFragment).commit();
         mToolbar.setTitle("首页");
     }
 
     private void switchToManuscript() {
-        // 1-作者 2-编辑 3-专家 4-管理员
+        // 1-管理员 2-编辑 3-作者 4-专家
         Fragment fragment = null;
-        switch (Constant.GLOBAL_USER.getRole()) {
-            case 1:
-                fragment = new AuthorManuscriptFragment();
-                break;
+        switch (MyApplication.GLOBAL_USER.getRole().getId()) {
             case 2:
                 fragment = new EditorManuscriptFragment();
                 break;
             case 3:
+                fragment = new AuthorManuscriptFragment();
+                break;
+            case 4:
                 fragment = new ExpertManuscriptFragment();
                 break;
             default:
                 fragment = new EmptyFragment();
+        }
+        mFragment = fragment;
+        if (settingFragment != null) {
+            getFragmentManager().beginTransaction().remove(settingFragment).commit();
+            settingFragment = null;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment).commit();
         mToolbar.setTitle("稿件管理");
     }
 
     private void switchToMessage() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new MessageFragment()).commit();
+        mFragment = new MessageFragment();
+        if (settingFragment != null) {
+            getFragmentManager().beginTransaction().remove(settingFragment).commit();
+            settingFragment = null;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, mFragment).commit();
         mToolbar.setTitle("消息");
     }
 
     private void switchToSetting() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
+        settingFragment = new SettingsFragment();
+        if (mFragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
+            mFragment = null;
+        }
+        getFragmentManager().beginTransaction().replace(R.id.frame_content, settingFragment).commit();
         mToolbar.setTitle("设置");
-    }
-
-    private void switchToContact() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, new EmptyFragment()).commit();
-        mToolbar.setTitle("联系我们");
     }
 
     /**

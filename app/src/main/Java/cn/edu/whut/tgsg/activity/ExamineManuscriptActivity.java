@@ -17,6 +17,7 @@ import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.ExamineManuscript;
@@ -34,7 +35,6 @@ import fr.ganfra.materialspinner.MaterialSpinner;
  */
 public class ExamineManuscriptActivity extends BaseActivity {
 
-
     Manuscript mManuscript;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -48,6 +48,11 @@ public class ExamineManuscriptActivity extends BaseActivity {
     EditText mEdtSuggestion;
     @Bind(R.id.btn_submit)
     Button mBtnSubmit;
+
+    @Override
+    protected String getTagName() {
+        return "ExamineManuscriptActivity";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -125,7 +130,7 @@ public class ExamineManuscriptActivity extends BaseActivity {
                 }
                 String opinion = mEdtSuggestion.getText().toString();
                 int result = mSpinnerState.getSelectedItemPosition() == 0 ? 1 : 0;
-                ExamineManuscript examineManuscript = new ExamineManuscript(1, Constant.GLOBAL_USER, mManuscript, opinion, result, DateHandleUtil.convertToStandard(new Date()));
+                ExamineManuscript examineManuscript = new ExamineManuscript(1, MyApplication.GLOBAL_USER, mManuscript.getManuscriptVersion(), opinion, result, DateHandleUtil.convertToStandard(new Date()));
                 T.show(mContext, examineManuscript.toString());
                 finish();
             }

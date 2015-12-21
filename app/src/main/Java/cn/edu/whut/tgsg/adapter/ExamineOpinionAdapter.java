@@ -45,10 +45,10 @@ public class ExamineOpinionAdapter extends CommonAdapter<ExamineManuscript> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         final ExamineManuscript examineManuscript = mDataList.get(position);
-        viewHolder.mTvManuscriptState.setText(StateTable.getString(examineManuscript.getManuscript().getState()));
-        viewHolder.mTvExamineUser.setText(examineManuscript.getUser().getUsername());
+        viewHolder.mTvManuscriptState.setText(StateTable.getString(1));
+        viewHolder.mTvExamineUser.setText(examineManuscript.getUserInfo().getName());
         viewHolder.mTvExamineResult.setText(examineManuscript.getResult() == 1 ? "通过" : "不通过");
-        viewHolder.mTvExamineDate.setText(examineManuscript.getDate());
+        viewHolder.mTvExamineDate.setText(examineManuscript.getAuditingTime());
         viewHolder.mBtnCheckOpinion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

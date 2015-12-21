@@ -1,7 +1,6 @@
 package cn.edu.whut.tgsg.util;
 
 import android.content.Context;
-import android.os.Looper;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -19,22 +18,15 @@ public class ProgressDialogUtil {
      * @param context
      */
     public static void show(final Context context) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                if (progress == null) {
-                    progress = new MaterialDialog.Builder(context)
-                            .content("loading...")
-                            .progress(true, 0)
-                            .progressIndeterminateStyle(false)
-                            .show();
-                } else {
-                    progress.show();
-                }
-                Looper.loop();
-            }
-        }).start();
+        if (progress == null) {
+            progress = new MaterialDialog.Builder(context)
+                    .content("loading...")
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(false)
+                    .show();
+        } else {
+            progress.show();
+        }
     }
 
     /**

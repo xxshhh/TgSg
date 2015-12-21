@@ -46,7 +46,7 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
         ManuscriptVersion manuscriptVersion = mDataList.get(position);
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
         viewHolder.mTvManuscriptIndex.setText(String.valueOf(mDataList.size() - position));
-        viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getDate());
+        viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getVersionTime());
         viewHolder.mBtnCheckOpinion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

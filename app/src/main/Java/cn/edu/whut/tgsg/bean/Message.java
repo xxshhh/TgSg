@@ -12,7 +12,7 @@ public class Message implements Serializable {
     /**
      * title : 系统消息
      * content : "您的稿件“乖，摸摸头”状态已变更为“刊登”"
-     * date : "17:55"
+     * contributeTime : "17:55"
      * check : false
      */
 

@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,6 +18,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.DistributeExpertActivity;
 import cn.edu.whut.tgsg.activity.ExamineManuscriptActivity;
@@ -28,7 +27,6 @@ import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
-import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
@@ -130,33 +128,33 @@ public class EditorHandleFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
                 break;
             case 0:
-                manuscriptVersion = new ManuscriptVersion(1, "编辑初审", "这是编辑初审状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 2, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "编辑初审", "这是编辑初审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 2, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
             case 1:
-                manuscriptVersion = new ManuscriptVersion(1, "待专家审核", "这是待专家审核状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 3, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "待专家审核", "这是待专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 3, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
             case 2:
-                manuscriptVersion = new ManuscriptVersion(1, "专家审核", "这是专家审核状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 4, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "专家审核", "这是专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 4, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
             case 3:
-                manuscriptVersion = new ManuscriptVersion(1, "编辑复审", "这是编辑复审状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 5, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "编辑复审", "这是编辑复审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 5, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
             case 4:
-                manuscriptVersion = new ManuscriptVersion(1, "通过", "这是通过状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "通过", "这是通过状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
             case 5:
-                manuscriptVersion = new ManuscriptVersion(1, "录用", "这是录用状态的稿件", Arrays.asList("测试1", "测试2"), "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", Constant.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 7, manuscriptVersion));
+                manuscriptVersion = new ManuscriptVersion(1, "录用", "这是录用状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
+                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 7, manuscriptVersion));
                 mAdapter.notifyDataSetChanged();
                 break;
         }
@@ -236,7 +234,7 @@ public class EditorHandleFragment extends BaseFragment {
             final Manuscript manuscript = mDataList.get(position);
             ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
             viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptUser.setText(manuscript.getUser().getUsername());
+            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
             viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
             switch (manuscript.getState()) {
                 case 2:

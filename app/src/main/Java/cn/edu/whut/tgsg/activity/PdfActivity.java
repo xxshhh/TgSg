@@ -25,6 +25,11 @@ public class PdfActivity extends BaseActivity implements OnPageChangeListener {
     String pdfName = "sample.pdf";
 
     @Override
+    protected String getTagName() {
+        return "PdfActivity";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.activity_pdf;
     }

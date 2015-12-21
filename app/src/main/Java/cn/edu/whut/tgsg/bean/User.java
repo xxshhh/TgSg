@@ -7,17 +7,17 @@ import java.io.Serializable;
  * <p/>
  * Created by ylj on 2015/12/14.
  */
-public class User implements Serializable   {
+public class User implements Serializable {
 
     /**
      * id：1
      * email：107603@163.com
      * password：123
-     * username：张三
+     * name：张三
      * age：12
-     * tel：182123392
-     * profileImage：url
-     * role:1-------
+     * phone：182123392
+     * profileImage：path
+     * role: Role
      * degree：大学
      * major：计算机
      * researchDirection：机器学习
@@ -28,35 +28,35 @@ public class User implements Serializable   {
     int id;
     String email;
     String password;
-    String username;
+    String name;
     int age;
-    String tel;
-    String profileImage;
-    int role;
-    String degree;//学历
-    String major;//专业
-    String researchDirection;//研究方向
-    String workPlace;//工作单位
-    String desc;//个人简介
+    String phone;
+    String image;
+    Role role;
+    String education;//学历
+    String professional;//专业
+    String research;//研究方向
+    String work;//工作单位
+    String personal;//个人简介
 
     public User() {
 
     }
 
-    public User(int id, String email, String password, String username, int age, String tel, String profileImage, int role, String degree, String major, String researchDirection, String workPlace, String desc) {
+    public User(int id, String email, String password, String name, int age, String phone, String image, Role role, String education, String professional, String research, String work, String personal) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.username = username;
+        this.name = name;
         this.age = age;
-        this.tel = tel;
-        this.profileImage = profileImage;
+        this.phone = phone;
+        this.image = image;
         this.role = role;
-        this.degree = degree;
-        this.major = major;
-        this.researchDirection = researchDirection;
-        this.workPlace = workPlace;
-        this.desc = desc;
+        this.education = education;
+        this.professional = professional;
+        this.research = research;
+        this.work = work;
+        this.personal = personal;
     }
 
     public int getId() {
@@ -83,12 +83,12 @@ public class User implements Serializable   {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getAge() {
@@ -99,67 +99,67 @@ public class User implements Serializable   {
         this.age = age;
     }
 
-    public String getTel() {
-        return tel;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getProfileImage() {
-        return profileImage;
+    public String getImage() {
+        return image;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
-    public String getDegree() {
-        return degree;
+    public String getEducation() {
+        return education;
     }
 
-    public void setDegree(String degree) {
-        this.degree = degree;
+    public void setEducation(String education) {
+        this.education = education;
     }
 
-    public String getMajor() {
-        return major;
+    public String getProfessional() {
+        return professional;
     }
 
-    public void setMajor(String major) {
-        this.major = major;
+    public void setProfessional(String professional) {
+        this.professional = professional;
     }
 
-    public String getResearchDirection() {
-        return researchDirection;
+    public String getResearch() {
+        return research;
     }
 
-    public void setResearchDirection(String researchDirection) {
-        this.researchDirection = researchDirection;
+    public void setResearch(String research) {
+        this.research = research;
     }
 
-    public String getWorkPlace() {
-        return workPlace;
+    public String getWork() {
+        return work;
     }
 
-    public void setWorkPlace(String workPlace) {
-        this.workPlace = workPlace;
+    public void setWork(String work) {
+        this.work = work;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getPersonal() {
+        return personal;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setPersonal(String personal) {
+        this.personal = personal;
     }
 }

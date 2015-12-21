@@ -8,12 +8,10 @@ import cn.edu.whut.tgsg.bean.User;
  * Created by xwh on 2015/11/30.
  */
 public class Constant {
-    public static final String LOGIN_URL = "http://192.168.191.1:8080/android/login";
+    public static final String URL = "http://192.168.191.1:8080/web/";
     public static final String REGISTER_URL = "http://192.168.191.1:8080/android/register";
     public static final String SAVE_PERSONINFO_URL = "http://192.168.191.1:8080/android/getPersonInfo";
     public static final String GET_PERSONINFO_URL = "http://192.168.191.1:8080/android/getPersonInfo";
-
-    public static User GLOBAL_USER = new User();
 
     public static final int HTTP_ACCESS_OK = 1;
     public static final int HTTP_ACCESS_ERROR = 2;
