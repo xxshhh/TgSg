@@ -17,6 +17,40 @@ public class StateTable {
         return array;
     }
 
+
+    /**
+     * 获取个人信息界面学历单选按钮内容
+     *
+     * @return
+     */
+    public static String[] getPersonDegreeRadio() {
+        String[] array = new String[]{"小学","初中","高中","中专","大学","研究生"};
+        return array;
+    }
+
+    /**
+     * 获取个人信息界面专业单选按钮内容
+     *
+     * @return
+     */
+    public static String[] getPersonMajorRadio() {
+        String[] array = new String[]{"计算机", "经济学", "法学", "电子信息", "材料化学", "农学", "医学"};
+        return array;
+    }
+
+
+    /**
+     * 获取个人信息界面研究方向单选按钮内容
+     *
+     * @return
+     */
+    public static String[] getPersonResearchRadio() {
+        String[] array = new String[]{"计算机", "经济学", "法学", "电子信息", "材料化学", "农学", "医学"};
+        return array;
+    }
+
+
+
     /**
      * 获取专家审稿结果下拉框内容
      *

@@ -90,14 +90,20 @@ public class LoginActivity extends BaseActivity {
                             Log.e(getTagName(), "onResponse:" + response);
                             try {
                                 JSONObject serverInfo = new JSONObject(response);
-                                if (!serverInfo.getBoolean("isSuccess")) {
-
-                                } else {
+                                boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                                if (isSuccess) {
                                     Intent intent = new Intent(mContext, MainActivity.class);
                                     MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
                                     Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
                                     startActivity(intent);
                                     finish();
+                                } else {
+                                    // 存数据到SharedPreferences
+                                    SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("user_email", "");
+                                    editor.putString("user_password", "");
+                                    editor.commit();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -144,13 +150,10 @@ public class LoginActivity extends BaseActivity {
                                 Log.e(getTagName(), "onResponse:" + response);
                                 try {
                                     JSONObject serverInfo = new JSONObject(response);
-                                    if (!serverInfo.getBoolean("isSuccess")) {
-                                        T.show(mContext, "邮箱或密码错误");
-                                        mEdtEmail.setText("");
-                                        mEdtPassword.setText("");
-                                    } else {
-                                        T.show(mContext, "登录成功");
-                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                    boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                                    String msg = serverInfo.getString("msg");
+                                    T.show(mContext, msg);
+                                    if (isSuccess) {
                                         MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
                                         Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
                                         // 存数据到SharedPreferences
@@ -159,8 +162,13 @@ public class LoginActivity extends BaseActivity {
                                         editor.putString("user_email", MyApplication.GLOBAL_USER.getEmail());
                                         editor.putString("user_password", MyApplication.GLOBAL_USER.getPassword());
                                         editor.commit();
+                                        // 跳转主界面
+                                        Intent intent = new Intent(mContext, MainActivity.class);
                                         startActivity(intent);
                                         finish();
+                                    } else {
+                                        mEdtEmail.setText("");
+                                        mEdtPassword.setText("");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

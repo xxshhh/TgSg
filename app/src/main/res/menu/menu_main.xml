@@ -9,4 +9,10 @@
         android:orderInCategory="100"
         android:title="search"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_ok"
+        android:icon="@mipmap/menu_ok"
+        android:orderInCategory="100"
+        android:title="search"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -1,61 +1,58 @@
 package cn.edu.whut.tgsg.activity;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.squareup.okhttp.FormEncodingBuilder;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
-import cn.edu.whut.tgsg.bean.User;
 import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.util.FileHandleUtil;
+import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 个人信息界面
  * <p/>
- * Created by ylj on 2015-12-14.
+ * Created by xwh on 2015-12-22 11:32:12.
  */
-public class PersonInfoActivity extends BaseActivity implements View.OnClickListener {
+public class PersonInfoActivity extends BaseActivity {
 
-    @Bind(R.id.edt_username)
-    TextView mEdtUsername;
-    @Bind(R.id.edt_email)
-    TextView mEdtEmail;
-    @Bind(R.id.edt_psw)
-    TextView mEdtPsw;
-    @Bind(R.id.edt_age)
-    TextView mEdtAge;
-    @Bind(R.id.edt_tel)
-    TextView mEdtTel;
-    @Bind(R.id.edt_degree)
-    TextView mEdtDegree;
-    @Bind(R.id.edt_major)
-    TextView mEdtMajor;
-    @Bind(R.id.edt_research_direction)
-    TextView mEdtResearchDirection;
-    @Bind(R.id.edt_work_place)
-    TextView mEdtWorkPlace;
-    @Bind(R.id.edt_desc)
-    TextView mEdtDesc;
-
-    private Handler mHandler;
-    private String jsonString = "{\"authorId\":1,\"username\":\"小杨\"," +
-            "\"email\":\"110@163.com\",\"tel\":\"5511952\"," +
-            "\"edubkg\":\"大学\",\"desc\":\"我有一头小毛驴，从来也不骑\"}";
-    private User user = new User();//初始化
+    @Bind(R.id.profile_image)
+    CircleImageView mProfileImage;
+    @Bind(R.id.tv_username)
+    TextView mTvUsername;
+    @Bind(R.id.layout_change_psw)
+    LinearLayout mLayoutChangePsw;
+    @Bind(R.id.layout_change_info)
+    LinearLayout mLayoutChangeInfo;
 
     @Override
     protected String getTagName() {
@@ -74,178 +71,237 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
-        Gson gson = new Gson();
-        user = gson.fromJson(jsonString, User.class);
-        //初始化个人信息界面
-        mEdtUsername.setText(user.getName());
-        mEdtEmail.setText(user.getEmail());
-        mEdtPsw.setText(user.getPassword());
-        mEdtAge.setText(user.getAge() + "");
-        mEdtTel.setText(user.getPhone());
-        mEdtDegree.setText(user.getEducation());
-        mEdtMajor.setText(user.getProfessional());
-        mEdtResearchDirection.setText(user.getResearch());
-        mEdtWorkPlace.setText(user.getWork());
-        mEdtDesc.setText(user.getPersonal());
-        /**
-         * 处理消息
-         */
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case Constant.HTTP_ACCESS_ERROR:
-                        T.show(mContext, "网络访问错误");
-                        break;
-                    case Constant.GETJSON_SUCCEED:
-
-                    case Constant.FAILED:
-                        T.show(mContext, "修改失败");
-                        break;
-                    case Constant.SUCCEED:
-                        T.show(mContext, "修改成功。");
-                        break;
-                }
-            }
-        };
+        // 显示头像
+        displayProfileImage();
     }
 
     @Override
     protected void initListener() {
-        mEdtUsername.setOnClickListener(this);
-        mEdtEmail.setOnClickListener(this);
-        mEdtPsw.setOnClickListener(this);
-        mEdtAge.setOnClickListener(this);
-        mEdtTel.setOnClickListener(this);
-        mEdtDegree.setOnClickListener(this);
-        mEdtMajor.setOnClickListener(this);
-        mEdtResearchDirection.setOnClickListener(this);
-        mEdtWorkPlace.setOnClickListener(this);
-        mEdtDesc.setOnClickListener(this);
+        /**
+         * 上传头像
+         */
+        mProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                T.show(mContext, "上传头像");
+                // 选择图片
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);//选择图片
+            }
+        });
+
+        /**
+         * 修改密码
+         */
+        mLayoutChangePsw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                        .title("修改密码")
+                        .customView(R.layout.dialog_custom_change_psw, true)
+                        .positiveText(R.string.agree)
+                        .negativeText(R.string.disagree)
+                        .cancelable(false)
+                        .show();
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String checkPsw = "^[a-zA-Z0-9]\\w{5,15}$";
+                        boolean flagPsw;
+                        String oldPswStr = ((EditText) dialog.findViewById(R.id.edt_old_password)).getText().toString().trim();
+                        String newPswStr = ((EditText) dialog.findViewById(R.id.edt_new_password)).getText().toString().trim();
+                        String newPswAgainStr = ((EditText) dialog.findViewById(R.id.edt_new_password_again)).getText().toString().trim();
+                        if (TextUtils.isEmpty(oldPswStr) || TextUtils.isEmpty(newPswStr) || TextUtils.isEmpty(newPswAgainStr)) {
+                            T.show(mContext, "输入不能为空");
+                        } else {
+                            if (!(newPswStr.equals(newPswAgainStr))) {
+                                T.show(mContext, "两次输入密码不同，请检查");
+                            } else {
+                                // 验证密码
+                                try {
+                                    Pattern regex = Pattern.compile(checkPsw);
+                                    Matcher matcher = regex.matcher(newPswStr);
+                                    flagPsw = matcher.matches();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    flagPsw = false;
+                                }
+                                if (flagPsw) {
+                                    // 请求服务器
+                                    requestServer(oldPswStr, newPswStr);
+                                    dialog.dismiss();
+                                } else {
+                                    T.show(mContext, "密码格式不对，必须为6-16位，由大小写字母数字组成");
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        /**
+         * 修改个人信息
+         */
+        mLayoutChangeInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ChgPersonInfoActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
+    /**
+     * 显示头像
+     */
+    private void displayProfileImage() {
+        OkHttpUtils
+                .get()
+                .url(Constant.STATIC_URL + "img/" + MyApplication.GLOBAL_USER.getPhoto())
+                .addParams("source", "android")
+                .tag(this)
+                .build()
+                .connTimeOut(20000)
+                .readTimeOut(20000)
+                .writeTimeOut(20000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "加载头像失败！！！使用默认头像。");
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        Log.e(getTagName(), "加载头像成功！！！");
+                        mProfileImage.setImageBitmap(bitmap);
+                    }
+                });
+    }
 
     /**
-     * 将用户修改的信息发送到服务器，保存修改
+     * 向服务器发出修改密码请求
      *
-     * @param tagName
-     * @param chgedText
+     * @param oldPswStr
+     * @param newPswStr
      */
-    private void requestServer(String tagName, String chgedText) {
-        RequestBody ChgedPersonInfoFormBody = new FormEncodingBuilder()
-                .add(tagName, chgedText)
-                .build();
-        Request request = new Request.Builder().url(Constant.SAVE_PERSONINFO_URL).post(ChgedPersonInfoFormBody).build();
-//        OkHttpUtil.enqueue(request, new Callback() {
-//            @Override
-//            public void onFailure(Request request, IOException e) {
-////                mHandler.sendEmptyMessage(Constant.SUCCEED);
-//                mHandler.sendEmptyMessage(Constant.HTTP_ACCESS_ERROR);
-//            }
-//
-//            @Override
-//            public void onResponse(Response response) throws IOException {
-//                mHandler.sendEmptyMessage(Constant.SUCCEED);
-//            }
-//        });
+    private void requestServer(String oldPswStr, String newPswStr) {
+        Log.e(getTagName(), oldPswStr + "," + newPswStr);
+        ProgressDialogUtil.show(mContext);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "updatePassword")
+                .addParams("oldPass", oldPswStr)
+                .addParams("newPass", newPswStr)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            String msg = serverInfo.getString("msg");
+                            T.show(mContext, msg);
+                            if (isSuccess) {
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 上传头像到服务器
+     *
+     * @param file
+     * @param bitmap
+     */
+    private void requestServer(File file, final Bitmap bitmap) {
+        Log.e(getTagName(), "file," + "bitmap");
+        ProgressDialogUtil.show(mContext);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "updatePhoto")
+                .addParams("source", "android")
+                .addFile("fileField", "profileImage.png", file)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            Intent returnIntent = new Intent();
+                            if (isSuccess) {
+                                T.show(mContext, "头像上传成功");
+                                MyApplication.GLOBAL_USER.setPhoto(serverInfo.getString("photo"));
+                                mProfileImage.setImageBitmap(bitmap);
+                            } else {
+                                T.show(mContext, "头像上传失败");
+                            }
+                            // 返回更新信息
+                            returnIntent.putExtra("isUpdatePhoto", isSuccess);
+                            PersonInfoActivity.this.setResult(Activity.RESULT_OK, returnIntent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {//10个字段
-            case R.id.edt_psw:
-                showMyDialog(v.getId(), R.layout.dialog_chg_psw);//以该自定义布局显示对话框
-                break;
-            case R.id.edt_degree:
-                break;
-            default:
-                showMyDialog(v.getId(), R.layout.dialog_chg_personinfo);//以该自定义布局显示对话框
-                break;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {// 选择图片
+                ContentResolver resolver = getContentResolver();
+                File file = null;
+                Bitmap bitmap = null;
+                try {
+                    Uri uri = data.getData();
+                    file = new File(FileHandleUtil.getImageAbsolutePath(mContext, uri));
+                    bitmap = BitmapFactory.decodeStream(resolver.openInputStream(uri));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (file != null && bitmap != null) {
+                    // 上传头像到服务器
+                    requestServer(file, bitmap);
+                }
+            }
         }
     }
 
-    /**
-     * 显示自定义的对话框
-     *
-     * @param viewId
-     * @param layoutId
-     */
-    private void showMyDialog(final int viewId, int layoutId) {
-        String tagName = "";
-        String title = "";
-        switch (viewId) {//10个字段
-            case R.id.edt_email:
-                tagName = "email";
-                title = "邮箱";
-                break;
-            case R.id.edt_username:
-                tagName = "username";
-                title = "姓名";
-                break;
-            case R.id.edt_age:
-                tagName = "age";
-                title = "年龄";
-                break;
-            case R.id.edt_tel:
-                tagName = "tel";
-                title = "电话";
-                break;
-            case R.id.edt_major:
-                tagName = "major";
-                title = "专业";
-                break;
-            case R.id.edt_research_direction:
-                tagName = "researchDirection";
-                title = "研究方向";
-                break;
-            case R.id.edt_work_place:
-                tagName = "workPlace";
-                title = "工作单位";
-                break;
-            case R.id.edt_desc:
-                tagName = "desc";
-                title = "个人简介";
-                break;
-            case R.id.edt_psw:
-                tagName = "password";
-                title = "密码";
-                break;
-            case R.id.edt_degree:
-                tagName = "degree";
-                title = "学历";
-                break;
-        }
-
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        final RelativeLayout layout = (RelativeLayout) inflater.inflate(layoutId, null);
-        final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
-
-        dialog.setTitle(title);
-        dialog.setView(layout);
-        dialog.setCancelable(false);
-        dialog.show();
-        Button btnOk = (Button) layout.findViewById(R.id.btn_ok);
-        Button btnCancel = (Button) layout.findViewById(R.id.btn_cancel);
-        final EditText editText = (EditText) layout.findViewById(R.id.edt_input);
-        final String finalTagName = tagName;
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestServer(finalTagName, editText.getText().toString());
-                T.show(mContext, editText.getText().toString());
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                T.show(mContext, "Cancel");
-            }
-        });
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 更新昵称
+        if (MyApplication.GLOBAL_USER.getName() != null)
+            mTvUsername.setText(MyApplication.GLOBAL_USER.getName());
     }
-
-
 }

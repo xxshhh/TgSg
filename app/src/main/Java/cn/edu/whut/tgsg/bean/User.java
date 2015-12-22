@@ -31,7 +31,7 @@ public class User implements Serializable {
     String name;
     int age;
     String phone;
-    String image;
+    String photo;
     Role role;
     String education;//学历
     String professional;//专业
@@ -43,14 +43,14 @@ public class User implements Serializable {
 
     }
 
-    public User(int id, String email, String password, String name, int age, String phone, String image, Role role, String education, String professional, String research, String work, String personal) {
+    public User(int id, String email, String password, String name, int age, String phone, String photo, Role role, String education, String professional, String research, String work, String personal) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.age = age;
         this.phone = phone;
-        this.image = image;
+        this.photo = photo;
         this.role = role;
         this.education = education;
         this.professional = professional;
@@ -107,12 +107,12 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public String getImage() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public Role getRole() {

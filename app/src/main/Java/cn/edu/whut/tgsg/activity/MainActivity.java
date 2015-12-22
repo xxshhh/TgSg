@@ -1,22 +1,31 @@
 package cn.edu.whut.tgsg.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
 import cn.edu.whut.tgsg.fragment.MessageFragment;
@@ -25,6 +34,7 @@ import cn.edu.whut.tgsg.fragment.author.AuthorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.editor.EditorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.expert.ExpertManuscriptFragment;
 import cn.edu.whut.tgsg.util.T;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 主界面
@@ -70,6 +80,8 @@ public class MainActivity extends BaseActivity {
         setupDrawerContent(mNavigationView);
         // 跳到首页
         switchToHome();
+        // 显示头像
+        displayProfileImage();
     }
 
     @Override
@@ -81,8 +93,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 T.show(mContext, "person");
-                Intent intent = new Intent(mContext, ChgPersonInfoActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(mContext, PersonInfoActivity.class);
+                startActivityForResult(intent, 1);//获取图片更新信息
                 mDrawerLayout.closeDrawers();
             }
         });
@@ -181,10 +193,60 @@ public class MainActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 显示头像
+     */
+    private void displayProfileImage() {
+        OkHttpUtils
+                .get()
+                .url(Constant.STATIC_URL + "img/" + MyApplication.GLOBAL_USER.getPhoto())
+                .addParams("source", "android")
+                .tag(this)
+                .build()
+                .connTimeOut(20000)
+                .readTimeOut(20000)
+                .writeTimeOut(20000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "加载头像失败！！！使用默认头像。");
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        Log.e(getTagName(), "加载头像成功！！！");
+                        ((CircleImageView) mNavigationView.getHeaderView(0).findViewById(R.id.profile_image)).setImageBitmap(bitmap);
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {//获取图片更新信息
+                if (data.getBooleanExtra("isUpdatePhoto", false)) {
+                    // 显示头像
+                    displayProfileImage();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 更新昵称
+        if (MyApplication.GLOBAL_USER.getName() != null)
+            ((TextView) mNavigationView.getHeaderView(0).findViewById(R.id.tv_username)).setText(MyApplication.GLOBAL_USER.getName());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem search = menu.findItem(R.id.action_ok);
+        search.setVisible(false);
         return true;
     }
 

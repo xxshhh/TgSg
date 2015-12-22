@@ -1,19 +1,28 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
-import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -29,8 +38,6 @@ public class ForgetPswActivity extends BaseActivity {
     EditText mEdtEmail;
     @Bind(R.id.btn_send_email)
     Button mBtnSendEmail;
-
-    private Handler mHandler;
 
     @Override
     protected String getTagName() {
@@ -52,35 +59,6 @@ public class ForgetPswActivity extends BaseActivity {
         // 设置toolbar
         mToolbar.setTitle("忘记密码");
         setSupportActionBar(mToolbar);
-        /**
-         * 处理消息
-         */
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                ProgressDialogUtil.dismiss();
-                switch (msg.what) {
-                    case Constant.INPUT_IS_NULL:
-                        T.show(mContext, "亲，请输入");
-                        break;
-                    case Constant.EMAILFORMATERROR:
-                        T.show(mContext, "邮箱格式不对");
-                        break;
-                    case Constant.HTTP_ACCESS_ERROR:
-                        T.show(mContext, "网络访问错误");
-                        break;
-                    case Constant.FAILED:
-                        T.show(mContext, "请求失败");
-                        mEdtEmail.setText("");
-                        break;
-                    case Constant.SUCCEED:
-                        T.show(mContext, "请转到电脑端进行处理");
-                        finish();
-                        break;
-                }
-            }
-        };
     }
 
     @Override
@@ -91,25 +69,25 @@ public class ForgetPswActivity extends BaseActivity {
         mBtnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String checkEmail = "";
-                boolean flag;
+                String checkEmail = "^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+                boolean flagEmail;
                 String emailStr = mEdtEmail.getText().toString().trim();
-                if (emailStr.equals("")) {
-                    mHandler.sendEmptyMessage(Constant.INPUT_IS_NULL);
+                if (TextUtils.isEmpty(emailStr)) {
+                    T.show(mContext, "请输入");
                 } else {
-                    //验证邮箱
+                    // 验证邮箱
                     try {
-              /*  Pattern regex = Pattern.compile(checkEmail);
-                Matcher matcher = regex.matcher(emailStr);
-                flag = matcher.matches();*/
-                        flag = emailStr.equals("123456");
+                        Pattern regex = Pattern.compile(checkEmail);
+                        Matcher matcher = regex.matcher(emailStr);
+                        flagEmail = matcher.matches();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        flag = false;
+                        flagEmail = false;
                     }
-                    if (!flag) {
-                        mHandler.sendEmptyMessage(Constant.EMAILFORMATERROR);
+                    if (!flagEmail) {
+                        T.show(mContext, "邮箱格式不对");
                     } else {
+                        // 请求服务器
                         requestServer(emailStr);
                     }
                 }
@@ -118,12 +96,43 @@ public class ForgetPswActivity extends BaseActivity {
     }
 
     /**
-     * 发送邮件
+     * 请求服务器，发送邮件
      *
      * @param emailStr
      */
     private void requestServer(String emailStr) {
-        //发送邮件
-        mHandler.sendEmptyMessage(Constant.SUCCEED);
+
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "forgetPass")
+                .addParams("email", emailStr)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            String msg = serverInfo.getString("msg");
+                            T.show(mContext, msg);
+                            if (isSuccess) {
+                                T.show(mContext, msg);
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 }
