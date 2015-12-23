@@ -21,6 +21,11 @@ public class EditorManuscriptFragment extends BaseFragment {
     ViewPager mViewPager;
 
     @Override
+    protected String getTagName() {
+        return "EditorManuscriptFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_editor_manuscript;
     }

@@ -10,8 +10,8 @@
         android:background="@drawable/item_manuscript_selector"
         android:orientation="vertical"
         android:paddingBottom="10dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="10dp">
 
         <RelativeLayout
@@ -21,7 +21,7 @@
             <!-- 稿件标题 -->
             <TextView
                 android:id="@+id/tv_manuscript_title"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -79,7 +79,7 @@
                 android:src="@mipmap/icon_done"/>
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
@@ -92,7 +92,7 @@
                 android:src="@mipmap/icon_done"/>
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
@@ -105,7 +105,7 @@
                 android:src="@mipmap/icon_done"/>
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
@@ -118,7 +118,7 @@
                 android:src="@mipmap/icon_done"/>
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/third_text"
@@ -126,6 +126,19 @@
 
             <ImageView
                 android:id="@+id/img_progress_5"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/icon_done"/>
+
+            <TextView
+                android:layout_width="45dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/third_text"
+                android:gravity="center"/>
+
+            <ImageView
+                android:id="@+id/img_progress_6"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@mipmap/icon_done"/>
@@ -150,7 +163,7 @@
                 android:id="@+id/tv_progress_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
+                android:layout_marginLeft="21dp"
                 android:text="编辑初审"
                 android:textColor="@color/third_text"
                 android:textSize="13sp"/>
@@ -159,7 +172,7 @@
                 android:id="@+id/tv_progress_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
+                android:layout_marginLeft="8dp"
                 android:text="专家审核"
                 android:textColor="@color/third_text"
                 android:textSize="13sp"/>
@@ -168,8 +181,8 @@
                 android:id="@+id/tv_progress_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
-                android:text="录用"
+                android:layout_marginLeft="8dp"
+                android:text="编辑复审"
                 android:textColor="@color/third_text"
                 android:textSize="13sp"/>
 
@@ -177,7 +190,16 @@
                 android:id="@+id/tv_progress_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="39dp"
+                android:layout_marginLeft="21dp"
+                android:text="录用"
+                android:textColor="@color/third_text"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/tv_progress_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="34dp"
                 android:text="刊登"
                 android:textColor="@color/third_text"
                 android:textSize="13sp"/>
@@ -191,5 +213,14 @@
         android:layout_height="100dp"
         android:layout_gravity="right|top"
         android:src="@mipmap/icon_finished"
+        android:visibility="visible"/>
+
+    <!-- 未完成标志 -->
+    <ImageView
+        android:id="@+id/img_unfinished_flag"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="right|top"
+        android:src="@mipmap/icon_unfinished"
         android:visibility="visible"/>
 </FrameLayout>

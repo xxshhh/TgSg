@@ -1,10 +1,15 @@
 package cn.edu.whut.tgsg.fragment;
 
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -12,11 +17,8 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.MessageAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Message;
+import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
  * 消息界面
@@ -25,12 +27,15 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
  */
 public class MessageFragment extends BaseFragment {
 
-    @Bind(R.id.list_message)
-    ListView mListMessage;
-    @Bind(R.id.ptr_frame)
-    PtrFrameLayout mPtrFrame;
+    @Bind(R.id.ptr_list_message)
+    PullToRefreshListView mPtrListMessage;
 
     MessageAdapter mAdapter;
+
+    @Override
+    protected String getTagName() {
+        return "MessageFragment";
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -50,7 +55,7 @@ public class MessageFragment extends BaseFragment {
         /**
          * 消息点击
          */
-        mListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPtrListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 T.show(mContext, "消息" + position);
@@ -58,26 +63,46 @@ public class MessageFragment extends BaseFragment {
         });
 
         /**
-         * 下拉刷新
+         * 下拉刷新 && 上拉加载
          */
-        mPtrFrame.setPtrHandler(new PtrHandler() {
+        mPtrListMessage.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                // 设置上一次刷新的提示标签
+                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后更新时间:" + DateHandleUtil.convertToStandard(new Date()));
+                // 加载数据操作
+                new GetDataTask().execute();
+
             }
 
             @Override
-            public void onRefreshBegin(final PtrFrameLayout frame) {
-                frame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.getDataList().add(0, new Message("测试", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
-                        frame.refreshComplete();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }, 2000);
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                mAdapter.getDataList().add(new Message("测试", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
+                mAdapter.notifyDataSetChanged();
+                mPtrListMessage.onRefreshComplete();
             }
         });
+    }
+
+    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            // Simulates a background job.
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            mAdapter.getDataList().add(0, new Message("测试", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
+            mAdapter.notifyDataSetChanged();
+            mPtrListMessage.onRefreshComplete();
+            super.onPostExecute(result);
+        }
     }
 
     /**
@@ -92,18 +117,22 @@ public class MessageFragment extends BaseFragment {
         list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“编辑初审”", "11/29", true));
         list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“投稿”", "12/27", true));
         mAdapter = new MessageAdapter(getContext(), list);
-        mListMessage.setAdapter(mAdapter);
+        mPtrListMessage.setAdapter(mAdapter);
     }
 
     /**
      * 初始化下拉刷新控件
      */
     private void initPtrFrame() {
-        final StoreHouseHeader header = new StoreHouseHeader(mContext);
-        header.setPadding(0, 15, 0, 0);
-        header.initWithString("loading...");
-        header.setTextColor(getResources().getColor(R.color.primary));
-        mPtrFrame.setHeaderView(header);
-        mPtrFrame.addPtrUIHandler(header);
+        // 模式
+        mPtrListMessage.setMode(PullToRefreshBase.Mode.BOTH);
+        // 下拉刷新
+        mPtrListMessage.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
+        mPtrListMessage.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
+        mPtrListMessage.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
+        // 上拉加载
+        mPtrListMessage.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
+        mPtrListMessage.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        mPtrListMessage.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
     }
 }

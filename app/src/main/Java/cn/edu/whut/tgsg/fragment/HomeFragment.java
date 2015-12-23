@@ -39,6 +39,11 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
     NoticeAdapter mAdapter;
 
     @Override
+    protected String getTagName() {
+        return "HomeFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_home;
     }

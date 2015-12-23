@@ -15,7 +15,7 @@ public class Manuscript implements Serializable {
      * 投稿人 : 当前用户
      * 投稿时间 : 2015-12-11 10:35:10
      * 状态 : 1-6
-     * 最新版本 : ManuscriptVersion
+     * // 最新版本 : ManuscriptVersion
      */
 
     int id;
@@ -23,18 +23,17 @@ public class Manuscript implements Serializable {
     User contributor;
     String contributeTime;
     int state;
-    ManuscriptVersion manuscriptVersion;
+    //ManuscriptVersion manuscriptVersion;
 
     public Manuscript() {
     }
 
-    public Manuscript(int id, String type, User contributor, String contributeTime, int state, ManuscriptVersion manuscriptVersion) {
+    public Manuscript(int id, String type, User contributor, String contributeTime, int state) {
         this.id = id;
         this.type = type;
         this.contributor = contributor;
         this.contributeTime = contributeTime;
         this.state = state;
-        this.manuscriptVersion = manuscriptVersion;
     }
 
     public int getId() {
@@ -75,13 +74,5 @@ public class Manuscript implements Serializable {
 
     public void setState(int state) {
         this.state = state;
-    }
-
-    public ManuscriptVersion getManuscriptVersion() {
-        return manuscriptVersion;
-    }
-
-    public void setManuscriptVersion(ManuscriptVersion manuscriptVersion) {
-        this.manuscriptVersion = manuscriptVersion;
     }
 }

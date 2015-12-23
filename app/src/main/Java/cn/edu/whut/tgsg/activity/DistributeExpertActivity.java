@@ -161,8 +161,8 @@ public class DistributeExpertActivity extends BaseActivity {
      * @param expert
      */
     private void distributeExpert(User expert) {
-        DistributeExpert distributeExpert = new DistributeExpert(1, mManuscript.getManuscriptVersion(), MyApplication.GLOBAL_USER, expert, DateHandleUtil.convertToStandard(new Date()));
-        T.show(mContext, distributeExpert.toString());
+//        DistributeExpert distributeExpert = new DistributeExpert(1, mManuscript.getManuscriptVersion(), MyApplication.GLOBAL_USER, expert, DateHandleUtil.convertToStandard(new Date()));
+//        T.show(mContext, distributeExpert.toString());
     }
 
     /**

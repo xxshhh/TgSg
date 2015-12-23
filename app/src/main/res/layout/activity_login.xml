@@ -27,8 +27,7 @@
                 android:layout_margin="5dp"
                 android:hint="邮箱"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                android:text="1943309689@qq.com"/>
+                android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -43,8 +42,7 @@
                 android:layout_margin="5dp"
                 android:hint="密码"
                 android:password="true"
-                android:singleLine="true"
-                android:text="123456"/>
+                android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- 登录 -->

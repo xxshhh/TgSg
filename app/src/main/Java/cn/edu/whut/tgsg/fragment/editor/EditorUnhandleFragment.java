@@ -43,6 +43,11 @@ public class EditorUnhandleFragment extends BaseFragment {
     UnhandleManuscriptAdapter mAdapter;
 
     @Override
+    protected String getTagName() {
+        return "EditorUnhandleFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_editor_unhandle;
     }
@@ -81,8 +86,8 @@ public class EditorUnhandleFragment extends BaseFragment {
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "测试", "测试", "测试1,测试2", "", "2015-12-11 10:45:21");
-                        mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
+//                        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "测试", "测试", "测试1,测试2", "", "2015-12-11 10:45:21");
+//                        mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
                         frame.refreshComplete();
                         mAdapter.notifyDataSetChanged();
                     }
@@ -96,12 +101,12 @@ public class EditorUnhandleFragment extends BaseFragment {
      */
     private void initUnhandleManuscriptList() {
         List<Manuscript> list = new ArrayList<>();
-        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "乖，摸摸头", "真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。", "大冰,旅行,治愈,散文随笔", "", "2015-12-11 10:45:21");
-        list.add(new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, "2015-12-11 10:35:10", 6, manuscriptVersion));
-        manuscriptVersion = new ManuscriptVersion(1, "红楼梦", "《红楼梦》是一部百科全书式的长篇小说。以宝黛爱情悲剧为主线，以四大家族的荣辱兴衰为背景，描绘出18世纪中国封建社会的方方面面，以及封建专制下新兴资本主义民主思想的萌动。", "古典文学,曹雪芹,经典,小说,中国,名著", "", "2015-12-11 10:45:21");
-        list.add(new Manuscript(2, "名著", MyApplication.GLOBAL_USER, "2015-12-10 11:35:10", 4, manuscriptVersion));
-        manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", "芈月传,中国文学,女性,蔣胜男,小说,古代", "", "2015-12-11 10:45:21");
-        list.add(new Manuscript(3, "文学", MyApplication.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
+//        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "乖，摸摸头", "真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。", "大冰,旅行,治愈,散文随笔", "", "2015-12-11 10:45:21");
+//        list.add(new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, "2015-12-11 10:35:10", 6, manuscriptVersion));
+//        manuscriptVersion = new ManuscriptVersion(1, "红楼梦", "《红楼梦》是一部百科全书式的长篇小说。以宝黛爱情悲剧为主线，以四大家族的荣辱兴衰为背景，描绘出18世纪中国封建社会的方方面面，以及封建专制下新兴资本主义民主思想的萌动。", "古典文学,曹雪芹,经典,小说,中国,名著", "", "2015-12-11 10:45:21");
+//        list.add(new Manuscript(2, "名著", MyApplication.GLOBAL_USER, "2015-12-10 11:35:10", 4, manuscriptVersion));
+//        manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", "芈月传,中国文学,女性,蔣胜男,小说,古代", "", "2015-12-11 10:45:21");
+//        list.add(new Manuscript(3, "文学", MyApplication.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
         mAdapter = new UnhandleManuscriptAdapter(mContext, list);
         mListUnhandleManuscript.setAdapter(mAdapter);
     }
@@ -124,7 +129,7 @@ public class EditorUnhandleFragment extends BaseFragment {
      * @param manuscript
      */
     private void handleManuscript(Manuscript manuscript) {
-        T.show(mContext, "受理稿件:" + manuscript.getManuscriptVersion().getTitle());
+//        T.show(mContext, "受理稿件:" + manuscript.getManuscriptVersion().getTitle());
         mAdapter.getDataList().remove(manuscript);
         mAdapter.notifyDataSetChanged();
     }
@@ -155,10 +160,10 @@ public class EditorUnhandleFragment extends BaseFragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final Manuscript manuscript = mDataList.get(position);
-            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
-            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
-            viewHolder.mTvManuscriptDate.setText(manuscript.getContributeTime());
+//            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
+//            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+//            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
+//            viewHolder.mTvManuscriptDate.setText(manuscript.getContributeTime());
             viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

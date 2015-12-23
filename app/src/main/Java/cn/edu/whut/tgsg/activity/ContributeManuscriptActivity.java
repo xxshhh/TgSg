@@ -1,8 +1,13 @@
 package cn.edu.whut.tgsg.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,14 +19,23 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
+import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.next.tagview.TagCloudView;
@@ -55,6 +69,10 @@ public class ContributeManuscriptActivity extends BaseActivity {
     Button mBtnContribute;
 
     List<String> mKeywords;
+
+    File mFile;
+
+    String mFileName;
 
     @Override
     protected String getTagName() {
@@ -138,6 +156,7 @@ public class ContributeManuscriptActivity extends BaseActivity {
                         }
                         mKeywords.add(dialog.getInputEditText().getText().toString().trim());
                         mTcvManuscriptKeywords.setTags(mKeywords);
+                        dialog.dismiss();
                     }
                 });
             }
@@ -171,10 +190,13 @@ public class ContributeManuscriptActivity extends BaseActivity {
         mBtnAddFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 文件上传
+                // 选择文件
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"), 1);// 选择文件
             }
         });
-
 
         /**
          * 投稿
@@ -182,9 +204,82 @@ public class ContributeManuscriptActivity extends BaseActivity {
         mBtnContribute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String titleStr = mEdtManuscriptTitle.getText().toString().trim();
+                if (TextUtils.isEmpty(titleStr)) {
+                    T.show(mContext, "稿件标题不能为空");
+                    return;
+                }
+                if (mSpinnerState.getSelectedItemPosition() == 0) {
+                    T.show(mContext, "请选择稿件类别");
+                    return;
+                }
+                int sortInt = mSpinnerState.getSelectedItemPosition();
+                if (mKeywords == null || mKeywords.size() == 0) {
+                    T.show(mContext, "请选择添加稿件关键词");
+                    return;
+                }
+                String keyword = "";
+                for (int i = 0; i < mKeywords.size(); i++) {
+                    if (i == 0) {
+                        keyword += mKeywords.get(i);
+                    } else {
+                        keyword += "," + mKeywords.get(i);
+                    }
+                }
+                if (mFile == null) {
+                    T.show(mContext, "请添加稿件");
+                    return;
+                }
+                String summaryStr = mEdtSummary.getText().toString().trim();
+                if (TextUtils.isEmpty(summaryStr)) {
+                    T.show(mContext, "稿件摘要不能为空");
+                    return;
+                }
+                // 向服务器发出请求投稿
+                requestServer(titleStr, sortInt, keyword, summaryStr);
             }
         });
+    }
+
+    /**
+     * 向服务器发出请求投稿
+     */
+    private void requestServer(String title, int type, String keyword, String summary) {
+        ProgressDialogUtil.show(mContext);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "contributeA")
+                .addParams("title", title)
+                .addParams("type", String.valueOf(type))
+                .addParams("keyword", keyword)
+                .addParams("summary", summary)
+                .addFile("articleFile", mFileName, mFile)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            if (isSuccess) {
+                                T.show(mContext, "投稿成功！！！");
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**
@@ -195,6 +290,31 @@ public class ContributeManuscriptActivity extends BaseActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerState.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {// 选择文件
+                File file = null;
+                try {
+                    Uri uri = data.getData();
+                    String url = uri.getPath();
+                    Log.e(getTagName(), url);
+                    file = new File(url);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (file != null) {
+                    // 选择文件成功
+                    mFile = file;
+                    mFileName = mFile.getAbsolutePath().substring(mFile.getAbsolutePath().lastIndexOf("/") + 1);
+                    mTvFileName.setText(mFileName);
+                    T.show(mContext, "选择文件成功");
+                }
+            }
+        }
     }
 
     private long exitTime = 0;

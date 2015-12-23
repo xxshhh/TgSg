@@ -11,7 +11,7 @@ public class ManuscriptVersion implements Serializable {
 
     /**
      * 编号 : 1
-     * // 稿件编号 : Manuscript
+     * 稿件编号 : Manuscript
      * 标题 : 乖，摸摸头
      * 摘要 : 真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。
      * 关键字 : 大冰 旅行 治愈 散文随笔
@@ -20,6 +20,7 @@ public class ManuscriptVersion implements Serializable {
      */
 
     int id;
+    Manuscript article;
     String title;
     String summary;
     String keyword;
@@ -29,8 +30,9 @@ public class ManuscriptVersion implements Serializable {
     public ManuscriptVersion() {
     }
 
-    public ManuscriptVersion(int id, String title, String summary, String keyword, String path, String versionTime) {
+    public ManuscriptVersion(int id, Manuscript article, String title, String summary, String keyword, String path, String versionTime) {
         this.id = id;
+        this.article = article;
         this.title = title;
         this.summary = summary;
         this.keyword = keyword;
@@ -44,6 +46,14 @@ public class ManuscriptVersion implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Manuscript getArticle() {
+        return article;
+    }
+
+    public void setArticle(Manuscript article) {
+        this.article = article;
     }
 
     public String getTitle() {

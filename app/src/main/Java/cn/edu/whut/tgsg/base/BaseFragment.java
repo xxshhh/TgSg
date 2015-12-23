@@ -19,6 +19,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;
 
+    protected abstract String getTagName();
+
     protected abstract int getContentLayoutId();
 
     protected abstract void initData();

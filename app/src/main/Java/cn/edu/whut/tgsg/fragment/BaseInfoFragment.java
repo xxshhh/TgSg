@@ -1,12 +1,19 @@
 package cn.edu.whut.tgsg.fragment;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.MyApplication;
@@ -16,6 +23,8 @@ import cn.edu.whut.tgsg.activity.PdfActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
+import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -34,20 +43,25 @@ public class BaseInfoFragment extends BaseFragment {
     ManuscriptVersion mManuscriptVersion;
 
     @Override
+    protected String getTagName() {
+        return "BaseInfoFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_baseinfo;
     }
 
     @Override
     protected void initData() {
-        // 获取Activity的稿件对象
-        mManuscript = ((ManuscriptDetailActivity) getActivity()).getManuscript();
+        // 获取Activity的稿件版本对象
+        mManuscriptVersion = ((ManuscriptDetailActivity) getActivity()).getManuscriptVersion();
+        mManuscript = mManuscriptVersion.getArticle();
         // 初始化页面数据
-        mManuscriptVersion = mManuscript.getManuscriptVersion();
         String info = "标题：" + mManuscriptVersion.getTitle() + "\n"
                 + "投稿时间：" + mManuscript.getContributeTime() + "\n"
                 + "类别：" + mManuscript.getType() + "\n"
-                + "关键词：" + mManuscriptVersion.getKeyword().toString() + "\n"
+                + "关键词：" + mManuscriptVersion.getKeyword() + "\n"
                 + "摘要：" + mManuscriptVersion.getSummary() + "\n";
         mTvInfo.setText(info);
         // 设置底部按钮
@@ -82,8 +96,9 @@ public class BaseInfoFragment extends BaseFragment {
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                                            T.show(mContext, "已经取消投稿！！！");
                                             materialDialog.dismiss();
+                                            // 向服务器请求取消投稿
+                                            requestServer();
                                         }
                                     }).show();
                         }
@@ -109,5 +124,41 @@ public class BaseInfoFragment extends BaseFragment {
                 });
             default:
         }
+    }
+
+    /**
+     * 向服务器请求取消投稿
+     */
+    private void requestServer() {
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "cancelContribute")
+                .addParams("articleId", String.valueOf(mManuscript.getId()))
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            if (isSuccess) {
+                                T.show(mContext, "取消投稿成功！！！");
+                                getActivity().finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 }

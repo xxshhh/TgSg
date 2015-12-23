@@ -21,6 +21,11 @@ public class ExpertManuscriptFragment extends BaseFragment {
     ViewPager mViewPager;
 
     @Override
+    protected String getTagName() {
+        return "ExpertManuscriptFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_expert_manuscript;
     }

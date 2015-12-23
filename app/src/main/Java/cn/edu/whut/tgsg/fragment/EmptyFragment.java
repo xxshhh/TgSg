@@ -9,6 +9,11 @@ import cn.edu.whut.tgsg.base.BaseFragment;
 public class EmptyFragment extends BaseFragment {
 
     @Override
+    protected String getTagName() {
+        return "EmptyFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_empty;
     }

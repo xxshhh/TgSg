@@ -13,7 +13,7 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.Manuscript;
-import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.ExamineOpinionFragment;
@@ -33,15 +33,15 @@ public class ManuscriptDetailActivity extends BaseActivity {
     @Bind(R.id.viewPager)
     ViewPager mViewPager;
 
-    Manuscript mManuscript;
+    ManuscriptVersion mManuscriptVersion;
 
     /**
-     * 获取当前稿件
+     * 获取当前稿件版本
      *
      * @return
      */
-    public Manuscript getManuscript() {
-        return mManuscript;
+    public ManuscriptVersion getManuscriptVersion() {
+        return mManuscriptVersion;
     }
 
     @Override
@@ -61,10 +61,10 @@ public class ManuscriptDetailActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        // 获取传来的Manuscript对象并设置toolbar
+        // 获取传来的ManuscriptVersion对象并设置toolbar
         Bundle bundle = getIntent().getExtras();
-        mManuscript = (Manuscript) bundle.getSerializable("manuscript");
-        mToolbar.setTitle(mManuscript.getManuscriptVersion().getTitle());
+        mManuscriptVersion = (ManuscriptVersion) bundle.getSerializable("manuscriptversion");
+        mToolbar.setTitle(mManuscriptVersion.getTitle());
         setSupportActionBar(mToolbar);
         // 设置返回键<-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -2,6 +2,7 @@ package cn.edu.whut.tgsg.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.activity.PdfActivity;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
@@ -43,7 +45,7 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        ManuscriptVersion manuscriptVersion = mDataList.get(position);
+        final ManuscriptVersion manuscriptVersion = mDataList.get(position);
         viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
         viewHolder.mTvManuscriptIndex.setText(String.valueOf(mDataList.size() - position));
         viewHolder.mTvManuscriptDate.setText(manuscriptVersion.getVersionTime());
@@ -51,6 +53,9 @@ public class HistoryVersionAdapter extends CommonAdapter<ManuscriptVersion> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, PdfActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manuscriptversion", manuscriptVersion);
+                intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
         });

@@ -47,6 +47,11 @@ public class EditorHandleFragment extends BaseFragment {
     HandleManuscriptAdapter mAdapter;
 
     @Override
+    protected String getTagName() {
+        return "EditorHandleFragment";
+    }
+
+    @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_editor_handle;
     }
@@ -123,41 +128,41 @@ public class EditorHandleFragment extends BaseFragment {
     private void queryForListByState(int position) {
         ManuscriptVersion manuscriptVersion;
         mAdapter.getDataList().clear();
-        switch (position) {
-            case -1:
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 0:
-                manuscriptVersion = new ManuscriptVersion(1, "编辑初审", "这是编辑初审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 2, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 1:
-                manuscriptVersion = new ManuscriptVersion(1, "待专家审核", "这是待专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 3, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 2:
-                manuscriptVersion = new ManuscriptVersion(1, "专家审核", "这是专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 4, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 3:
-                manuscriptVersion = new ManuscriptVersion(1, "编辑复审", "这是编辑复审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 5, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 4:
-                manuscriptVersion = new ManuscriptVersion(1, "通过", "这是通过状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-            case 5:
-                manuscriptVersion = new ManuscriptVersion(1, "录用", "这是录用状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
-                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 7, manuscriptVersion));
-                mAdapter.notifyDataSetChanged();
-                break;
-        }
+//        switch (position) {
+//            case -1:
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 0:
+//                manuscriptVersion = new ManuscriptVersion(1, "编辑初审", "这是编辑初审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 2, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 1:
+//                manuscriptVersion = new ManuscriptVersion(1, "待专家审核", "这是待专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 3, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 2:
+//                manuscriptVersion = new ManuscriptVersion(1, "专家审核", "这是专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 4, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 3:
+//                manuscriptVersion = new ManuscriptVersion(1, "编辑复审", "这是编辑复审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 5, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 4:
+//                manuscriptVersion = new ManuscriptVersion(1, "通过", "这是通过状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//            case 5:
+//                manuscriptVersion = new ManuscriptVersion(1, "录用", "这是录用状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
+//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 7, manuscriptVersion));
+//                mAdapter.notifyDataSetChanged();
+//                break;
+//        }
     }
 
     /**
@@ -166,7 +171,7 @@ public class EditorHandleFragment extends BaseFragment {
      * @param manuscript
      */
     private void handleManuscript(Manuscript manuscript) {
-        T.show(mContext, "操作稿件" + manuscript.getManuscriptVersion().getTitle());
+//        T.show(mContext, "操作稿件" + manuscript.getManuscriptVersion().getTitle());
         Intent intent;
         Bundle bundle;
         switch (manuscript.getState()) {
@@ -232,10 +237,10 @@ public class EditorHandleFragment extends BaseFragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final Manuscript manuscript = mDataList.get(position);
-            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
-            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
-            viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
+//            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
+//            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+//            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
+//            viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
             switch (manuscript.getState()) {
                 case 2:
                     viewHolder.mBtnHandle.setVisibility(View.VISIBLE);

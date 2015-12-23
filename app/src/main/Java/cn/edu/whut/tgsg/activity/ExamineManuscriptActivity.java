@@ -84,7 +84,7 @@ public class ExamineManuscriptActivity extends BaseActivity {
         initSpinnerState();
         // 标题获得焦点,防止自动弹出软键盘
         mTvManuscriptTitle.requestFocus();
-        mTvManuscriptTitle.setText(mManuscript.getManuscriptVersion().getTitle());
+        //mTvManuscriptTitle.setText(mManuscript.getManuscriptVersion().getTitle());
     }
 
     @Override
@@ -130,8 +130,8 @@ public class ExamineManuscriptActivity extends BaseActivity {
                 }
                 String opinion = mEdtSuggestion.getText().toString();
                 int result = mSpinnerState.getSelectedItemPosition() == 0 ? 1 : 0;
-                ExamineManuscript examineManuscript = new ExamineManuscript(1, MyApplication.GLOBAL_USER, mManuscript.getManuscriptVersion(), opinion, result, DateHandleUtil.convertToStandard(new Date()));
-                T.show(mContext, examineManuscript.toString());
+//                ExamineManuscript examineManuscript = new ExamineManuscript(1, MyApplication.GLOBAL_USER, mManuscript.getManuscriptVersion(), opinion, result, DateHandleUtil.convertToStandard(new Date()));
+//                T.show(mContext, examineManuscript.toString());
                 finish();
             }
         });
