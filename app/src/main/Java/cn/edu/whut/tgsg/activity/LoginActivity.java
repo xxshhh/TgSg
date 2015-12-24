@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity {
                                         SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putString("user_email", MyApplication.GLOBAL_USER.getEmail());
-                                        editor.putString("user_password", MyApplication.GLOBAL_USER.getPassword());
+                                        editor.putString("user_password", mEdtPassword.getText().toString().trim());
                                         editor.commit();
                                         // 跳转主界面
                                         Intent intent = new Intent(mContext, MainActivity.class);

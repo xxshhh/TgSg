@@ -2,7 +2,9 @@ package cn.edu.whut.tgsg.fragment.editor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,22 +13,36 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.DistributeExpertActivity;
 import cn.edu.whut.tgsg.activity.ExamineManuscriptActivity;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
+import cn.edu.whut.tgsg.bean.ExamineManuscript;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.common.StateTable;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
@@ -41,10 +57,21 @@ public class EditorHandleFragment extends BaseFragment {
 
     @Bind(R.id.spinner_state)
     MaterialSpinner mSpinnerState;
-    @Bind(R.id.list_handle_manuscript)
-    ListView mListhandleManuscript;
+    @Bind(R.id.ptr_list_handle_manuscript)
+    PullToRefreshListView mPtrListHandleManuscript;
 
     HandleManuscriptAdapter mAdapter;
+
+    int mPageSize = 5;
+
+    int mCurrentPage = 1;
+    int mTotalPage = 1;
+
+    // 稿件状态
+    int mState = -1;
+
+    private static final int REQUEST_CODE_EXAMINE_MANUSCRIPT = 1;//获取审稿信息
+    private static final int REQUEST_CODE_DISTRIBUTE_EXPERT = 2;//获取分配专家信息
 
     @Override
     protected String getTagName() {
@@ -58,6 +85,8 @@ public class EditorHandleFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        // 初始化下拉刷新控件
+        initPtrFrame();
         // 初始化状态下拉框
         initSpinnerState();
         // 初始化已处理稿件列表
@@ -67,15 +96,63 @@ public class EditorHandleFragment extends BaseFragment {
     @Override
     protected void initListener() {
         /**
+         * 稿件点击
+         */
+        mPtrListHandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                position--;
+                Intent intent = new Intent(mContext, ManuscriptDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manuscriptversion", mAdapter.getItem(position).getArticleVersion());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        /**
          * 状态下拉框
          */
         mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // 查询不同稿件状态下对应的稿件列表
-                queryForListByState(position);
-                if (position != -1) {
-                    T.show(mContext, "你点击的是:" + position);
+                switch (position) {
+                    case 0:
+                        // 编辑初审中
+                        mState = 2;
+                        break;
+                    case 1:
+                        // 待分配专家
+                        mState = 3;
+                        break;
+                    case 2:
+                        // 专家审核中
+                        mState = 4;
+                        break;
+                    case 3:
+                        // 编辑复审中
+                        mState = 5;
+                        break;
+                    case 4:
+                        // 已通过
+                        mState = 6;
+                        break;
+                    case 5:
+                        // 已录用
+                        mState = 8;
+                        break;
+                    default:
+                        mState = -1;
+                }
+                if (mState == -1) {
+                    if (mAdapter != null) {
+                        mAdapter.getDataList().clear();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    mCurrentPage = 1;
+                    // 向服务器发出第一次请求编辑所受理稿件（根据状态）
+                    requestServer();
                 }
             }
 
@@ -86,17 +163,30 @@ public class EditorHandleFragment extends BaseFragment {
         });
 
         /**
-         * 稿件点击
+         * 下拉刷新 && 上拉加载
          */
-        mListhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPtrListHandleManuscript.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "已受理稿件" + position);
-                Intent intent = new Intent(mContext, ManuscriptDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("manuscript", mAdapter.getItem(position));
-                intent.putExtras(bundle);
-                startActivity(intent);
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                // 设置上一次刷新的提示标签
+                refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel("最后更新时间：" + DateHandleUtil.convertToStandard(new Date()));
+                if (mState != -1) {
+                    mCurrentPage = 1;
+                    // 向服务器发出第一次请求编辑所受理稿件（根据状态）
+                    requestServer();
+                }
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (mCurrentPage == mTotalPage) {
+                    // 没有更多数据
+                    new NoMoreDataTask().execute();
+                } else {
+                    // 向服务器发出请求下一页编辑未受理稿件
+                    mCurrentPage++;
+                    requestServer();
+                }
             }
         });
     }
@@ -115,97 +205,173 @@ public class EditorHandleFragment extends BaseFragment {
      * 初始化已处理稿件列表
      */
     private void initHandleManuscriptList() {
-        List<Manuscript> list = new ArrayList<>();
+        List<ExamineManuscript> list = new ArrayList<>();
         mAdapter = new HandleManuscriptAdapter(mContext, list);
-        mListhandleManuscript.setAdapter(mAdapter);
+        mPtrListHandleManuscript.setAdapter(mAdapter);
     }
 
     /**
-     * 查询不同稿件状态下对应的稿件列表
-     *
-     * @param position
+     * 向服务器发出请求编辑所受理稿件（根据状态）
      */
-    private void queryForListByState(int position) {
-        ManuscriptVersion manuscriptVersion;
-        mAdapter.getDataList().clear();
-//        switch (position) {
-//            case -1:
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 0:
-//                manuscriptVersion = new ManuscriptVersion(1, "编辑初审", "这是编辑初审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 2, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 1:
-//                manuscriptVersion = new ManuscriptVersion(1, "待专家审核", "这是待专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 3, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 2:
-//                manuscriptVersion = new ManuscriptVersion(1, "专家审核", "这是专家审核状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 4, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 3:
-//                manuscriptVersion = new ManuscriptVersion(1, "编辑复审", "这是编辑复审状态的稿件", "测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 5, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 4:
-//                manuscriptVersion = new ManuscriptVersion(1, "通过", "这是通过状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//            case 5:
-//                manuscriptVersion = new ManuscriptVersion(1, "录用", "这是录用状态的稿件","测试1,测试2", "", "2015-12-11 10:45:21");
-//                mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 7, manuscriptVersion));
-//                mAdapter.notifyDataSetChanged();
-//                break;
-//        }
+    private void requestServer() {
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "queryAllArticleByEditor")
+                .addParams("state", String.valueOf(mState))
+                .addParams("currentPage", String.valueOf(mCurrentPage))
+                .addParams("pageSize", String.valueOf(mPageSize))
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            JSONObject data = serverInfo.getJSONObject("data");
+                            mTotalPage = data.getInt("totalPage");
+                            JSONArray array = data.getJSONArray("pageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<ExamineManuscript>
+                            List<ExamineManuscript> list = new Gson().fromJson(array.toString(), new TypeToken<List<ExamineManuscript>>() {
+                            }.getType());
+                            if (mCurrentPage == 1) {// 第一次请求（或下拉刷新）
+                                mAdapter = new HandleManuscriptAdapter(mContext, list);
+                                mPtrListHandleManuscript.setAdapter(mAdapter);
+                            } else {// 上拉加载
+                                mAdapter.getDataList().addAll(list);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            // 完成数据加载
+                            mPtrListHandleManuscript.onRefreshComplete();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            T.show(mContext, "没有更多数据");
+                            // 完成数据加载
+                            mPtrListHandleManuscript.onRefreshComplete();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 初始化下拉刷新控件
+     */
+    private void initPtrFrame() {
+        // 模式
+        mPtrListHandleManuscript.setMode(PullToRefreshBase.Mode.BOTH);
+        // 下拉刷新
+        mPtrListHandleManuscript.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
+        mPtrListHandleManuscript.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
+        mPtrListHandleManuscript.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
+        // 上拉加载
+        mPtrListHandleManuscript.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
+        mPtrListHandleManuscript.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        mPtrListHandleManuscript.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
+    }
+
+    /**
+     * 没有更多数据
+     */
+    private class NoMoreDataTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return "没有更多数据";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            T.show(mContext, s);
+            mPtrListHandleManuscript.onRefreshComplete();
+            super.onPostExecute(s);
+        }
     }
 
     /**
      * 编辑操作稿件
      *
-     * @param manuscript
+     * @param examineManuscript
      */
-    private void handleManuscript(Manuscript manuscript) {
-//        T.show(mContext, "操作稿件" + manuscript.getManuscriptVersion().getTitle());
+    private void handleManuscript(final ExamineManuscript examineManuscript) {
         Intent intent;
         Bundle bundle;
-        switch (manuscript.getState()) {
+        final ManuscriptVersion manuscriptVersion = examineManuscript.getArticleVersion();
+        switch (manuscriptVersion.getArticle().getState()) {
             case 2:
-            case 5:
-                // 审稿
+                // 初审中
                 intent = new Intent(mContext, ExamineManuscriptActivity.class);
                 bundle = new Bundle();
-                bundle.putSerializable("manuscript", manuscript);
+                bundle.putSerializable("manuscriptversion", manuscriptVersion);
+                bundle.putBoolean("isFirst", true);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            case 3:
+                // 待分配专家
+                intent = new Intent(mContext, DistributeExpertActivity.class);
+                bundle = new Bundle();
+                bundle.putSerializable("manuscriptversion", manuscriptVersion);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case 3:
-                // 分配专家
-                intent = new Intent(mContext, DistributeExpertActivity.class);
+            case 5:
+                // 复审中
+                intent = new Intent(mContext, ExamineManuscriptActivity.class);
                 bundle = new Bundle();
-                bundle.putSerializable("manuscript", manuscript);
+                bundle.putSerializable("manuscriptversion", manuscriptVersion);
+                bundle.putBoolean("isFirst", false);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case 6:
-                // 录用
-//                new MaterialDialog.Builder(mContext)
-//                        .title("请选择稿件状态")
-//                        .items(StateTable.getEditorStateSpinner())
-//                        .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-//                            @Override
-//                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-//                                T.show(mContext, which + ": " + text);
-//                                return true;
-//                            }
-//                        })
-//                        .positiveText(R.string.choose)
-//                        .show();
+                // 录用通过的稿件
+                new MaterialDialog.Builder(mContext)
+                        .title("录用稿件")
+                        .content("真的要录用稿件吗？")
+                        .positiveText(R.string.agree)
+                        .negativeText(R.string.disagree)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                                materialDialog.dismiss();
+                                // 向服务器请求录用稿件
+                                OkHttpUtils
+                                        .post()
+                                        .url(Constant.URL + "employeeArticle")
+                                        .addParams("articleId", String.valueOf(manuscriptVersion.getArticle().getId()))
+                                        .addParams("source", "android")
+                                        .build()
+                                        .execute(new StringCallback() {
+                                            @Override
+                                            public void onError(Request request, Exception e) {
+                                                Log.e(getTagName(), "onError:" + e.getMessage());
+                                                T.show(mContext, "网络访问错误");
+                                            }
+
+                                            @Override
+                                            public void onResponse(String response) {
+                                                Log.e(getTagName(), "onResponse:" + response);
+                                                try {
+                                                    JSONObject serverInfo = new JSONObject(response);
+                                                    boolean isSuccess = serverInfo.getBoolean("message");
+                                                    if (isSuccess) {
+                                                        T.show(mContext, "稿件已录用");
+                                                        mAdapter.getDataList().remove(examineManuscript);
+                                                        mAdapter.notifyDataSetChanged();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                            }
+                        }).show();
                 break;
             default:
         }
@@ -214,7 +380,7 @@ public class EditorHandleFragment extends BaseFragment {
     /**
      * 已受理稿件adapter
      */
-    public class HandleManuscriptAdapter extends CommonAdapter<Manuscript> {
+    public class HandleManuscriptAdapter extends CommonAdapter<ExamineManuscript> {
 
         /**
          * 构造方法：对成员变量进行初始化
@@ -222,7 +388,7 @@ public class EditorHandleFragment extends BaseFragment {
          * @param context
          * @param dataList
          */
-        public HandleManuscriptAdapter(Context context, List<Manuscript> dataList) {
+        public HandleManuscriptAdapter(Context context, List<ExamineManuscript> dataList) {
             super(context, dataList);
         }
 
@@ -236,11 +402,12 @@ public class EditorHandleFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            final Manuscript manuscript = mDataList.get(position);
-//            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
-//            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-//            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
-//            viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
+            final ExamineManuscript examineManuscript = mDataList.get(position);
+            ManuscriptVersion manuscriptVersion = examineManuscript.getArticleVersion();
+            Manuscript manuscript = manuscriptVersion.getArticle();
+            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
+            viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
             switch (manuscript.getState()) {
                 case 2:
                     viewHolder.mBtnHandle.setVisibility(View.VISIBLE);
@@ -248,7 +415,7 @@ public class EditorHandleFragment extends BaseFragment {
                     viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            handleManuscript(manuscript);
+                            handleManuscript(examineManuscript);
                         }
                     });
                     break;
@@ -258,7 +425,7 @@ public class EditorHandleFragment extends BaseFragment {
                     viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            handleManuscript(manuscript);
+                            handleManuscript(examineManuscript);
                         }
                     });
                     break;
@@ -271,7 +438,7 @@ public class EditorHandleFragment extends BaseFragment {
                     viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            handleManuscript(manuscript);
+                            handleManuscript(examineManuscript);
                         }
                     });
                     break;
@@ -281,11 +448,11 @@ public class EditorHandleFragment extends BaseFragment {
                     viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            handleManuscript(manuscript);
+                            handleManuscript(examineManuscript);
                         }
                     });
                     break;
-                case 7:
+                case 8:
                     viewHolder.mBtnHandle.setVisibility(View.GONE);
                     break;
                 default:

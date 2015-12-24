@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +73,8 @@ public class ContributeManuscriptActivity extends BaseActivity {
 
     String mFileName;
 
+    private static final int REQUEST_CODE_PICK_FILE = 1;//选择文件
+
     @Override
     protected String getTagName() {
         return "ContributeManuscriptActivity";
@@ -91,8 +92,13 @@ public class ContributeManuscriptActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        // 设置toolbar
-        mToolbar.setTitle("我要投稿");
+        // 获得传来的Intent
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            mToolbar.setTitle("上传新版本");
+        } else {
+            mToolbar.setTitle("我要投稿");
+        }
         setSupportActionBar(mToolbar);
         // 设置返回键<-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,21 +116,6 @@ public class ContributeManuscriptActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        /**
-         * 状态下拉框
-         */
-        mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "你点击的是:" + position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         /**
          * 添加关键词
          */
@@ -194,7 +185,7 @@ public class ContributeManuscriptActivity extends BaseActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"), 1);// 选择文件
+                startActivityForResult(Intent.createChooser(intent, "请选择一个要上传的文件"), REQUEST_CODE_PICK_FILE);
             }
         });
 
@@ -235,8 +226,15 @@ public class ContributeManuscriptActivity extends BaseActivity {
                     T.show(mContext, "稿件摘要不能为空");
                     return;
                 }
-                // 向服务器发出请求投稿
-                requestServer(titleStr, sortInt, keyword, summaryStr);
+                // 获得传来的Intent
+                Intent intent = getIntent();
+                if (intent.getExtras() != null) {
+                    // 向服务器发出请求上传新版本
+                    requestServer(titleStr, sortInt, keyword, summaryStr, getIntent().getExtras().getInt("articleId"));
+                } else {
+                    // 向服务器发出请求投稿
+                    requestServer(titleStr, sortInt, keyword, summaryStr);
+                }
             }
         });
     }
@@ -273,6 +271,56 @@ public class ContributeManuscriptActivity extends BaseActivity {
                             boolean isSuccess = serverInfo.getBoolean("isSuccess");
                             if (isSuccess) {
                                 T.show(mContext, "投稿成功！！！");
+                                // 返回投稿信息
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("isContributeManuscript", isSuccess);
+                                ContributeManuscriptActivity.this.setResult(Activity.RESULT_OK, returnIntent);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 向服务器发出上传新版本
+     */
+    private void requestServer(String title, int type, String keyword, String summary, int id) {
+        ProgressDialogUtil.show(mContext);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "recontribute")
+                .addParams("articleId", String.valueOf(id))
+                .addParams("title", title)
+                .addParams("type", String.valueOf(type))
+                .addParams("keyword", keyword)
+                .addParams("summary", summary)
+                .addFile("articleFile", mFileName, mFile)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            if (isSuccess) {
+                                T.show(mContext, "上传新版本成功！！！");
+                                // 返回上传新版本信息
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("isContributeNewManuscript", isSuccess);
+                                ContributeManuscriptActivity.this.setResult(Activity.RESULT_OK, returnIntent);
                                 finish();
                             }
                         } catch (JSONException e) {
@@ -296,7 +344,7 @@ public class ContributeManuscriptActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {// 选择文件
+            if (requestCode == REQUEST_CODE_PICK_FILE) {
                 File file = null;
                 try {
                     Uri uri = data.getData();

@@ -1,32 +1,39 @@
 package cn.edu.whut.tgsg.fragment.editor;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
 import cn.edu.whut.tgsg.util.T;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
 /**
  * 编辑未受理稿件界面
@@ -35,12 +42,15 @@ import in.srain.cube.views.ptr.header.StoreHouseHeader;
  */
 public class EditorUnhandleFragment extends BaseFragment {
 
-    @Bind(R.id.list_unhandle_manuscript)
-    ListView mListUnhandleManuscript;
-    @Bind(R.id.ptr_frame)
-    PtrFrameLayout mPtrFrame;
+    @Bind(R.id.ptr_list_unhandle_manuscript)
+    PullToRefreshListView mPtrListUnhandleManuscript;
 
     UnhandleManuscriptAdapter mAdapter;
+
+    int mPageSize = 5;
+
+    int mCurrentPage = 1;
+    int mTotalPage = 1;
 
     @Override
     protected String getTagName() {
@@ -54,44 +64,37 @@ public class EditorUnhandleFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        // 初始化未处理稿件列表
-        initUnhandleManuscriptList();
         // 初始化下拉刷新控件
         initPtrFrame();
+        // 初始化未受理稿件列表
+        initUnhandleManuscriptList();
     }
 
     @Override
     protected void initListener() {
         /**
-         * 稿件点击
+         * 下拉刷新 && 上拉加载
          */
-        mListUnhandleManuscript.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPtrListUnhandleManuscript.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "未受理稿件" + position);
-            }
-        });
-
-        /**
-         * 下拉刷新
-         */
-        mPtrFrame.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                // 设置上一次刷新的提示标签
+                refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel("最后更新时间：" + DateHandleUtil.convertToStandard(new Date()));
+                mCurrentPage = 1;
+                // 向服务器发出第一次请求编辑未受理稿件
+                requestServer();
             }
 
             @Override
-            public void onRefreshBegin(final PtrFrameLayout frame) {
-                frame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-//                        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "测试", "测试", "测试1,测试2", "", "2015-12-11 10:45:21");
-//                        mAdapter.getDataList().add(0, new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, DateHandleUtil.convertToStandard(new Date()), 6, manuscriptVersion));
-                        frame.refreshComplete();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }, 2000);
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (mCurrentPage == mTotalPage) {
+                    // 没有更多数据
+                    new NoMoreDataTask().execute();
+                } else {
+                    // 向服务器发出请求下一页编辑未受理稿件
+                    mCurrentPage++;
+                    requestServer();
+                }
             }
         });
     }
@@ -100,44 +103,135 @@ public class EditorUnhandleFragment extends BaseFragment {
      * 初始化未受理稿件列表
      */
     private void initUnhandleManuscriptList() {
-        List<Manuscript> list = new ArrayList<>();
-//        ManuscriptVersion manuscriptVersion = new ManuscriptVersion(1, "乖，摸摸头", "真实的故事自有万钧之力，本书讲述了12个真实的故事。或许会让你看到那些你永远无法去体会的生活，见识那些可能你永远都无法结交的人。", "大冰,旅行,治愈,散文随笔", "", "2015-12-11 10:45:21");
-//        list.add(new Manuscript(1, "随笔", MyApplication.GLOBAL_USER, "2015-12-11 10:35:10", 6, manuscriptVersion));
-//        manuscriptVersion = new ManuscriptVersion(1, "红楼梦", "《红楼梦》是一部百科全书式的长篇小说。以宝黛爱情悲剧为主线，以四大家族的荣辱兴衰为背景，描绘出18世纪中国封建社会的方方面面，以及封建专制下新兴资本主义民主思想的萌动。", "古典文学,曹雪芹,经典,小说,中国,名著", "", "2015-12-11 10:45:21");
-//        list.add(new Manuscript(2, "名著", MyApplication.GLOBAL_USER, "2015-12-10 11:35:10", 4, manuscriptVersion));
-//        manuscriptVersion = new ManuscriptVersion(1, "芈月传(1-6)", "她是历史上真实存在的传奇女性。“太后”一词由她而来。太后专权，也自她始。她是千古一帝秦始皇的高祖母。她沿着商鞅变法之路，奠定了日后秦国一统天下的基础。 到现在都还有学者坚信，兵马俑的主人其实是她。", "芈月传,中国文学,女性,蔣胜男,小说,古代", "", "2015-12-11 10:45:21");
-//        list.add(new Manuscript(3, "文学", MyApplication.GLOBAL_USER, "2015-12-08 14:47:23", 1, manuscriptVersion));
-        mAdapter = new UnhandleManuscriptAdapter(mContext, list);
-        mListUnhandleManuscript.setAdapter(mAdapter);
+        mCurrentPage = 1;
+        // 向服务器发出第一次请求编辑未受理稿件
+        requestServer();
+    }
+
+    /**
+     * 向服务器发出请求编辑未受理稿件
+     */
+    private void requestServer() {
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "queryNotAcceptArticle")
+                .addParams("currentPage", String.valueOf(mCurrentPage))
+                .addParams("pageSize", String.valueOf(mPageSize))
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            JSONObject data = serverInfo.getJSONObject("data");
+                            mTotalPage = data.getInt("totalPage");
+                            JSONArray array = data.getJSONArray("pageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<ManuscriptVersion>
+                            List<ManuscriptVersion> list = new Gson().fromJson(array.toString(), new TypeToken<List<ManuscriptVersion>>() {
+                            }.getType());
+                            if (mCurrentPage == 1) {// 第一次请求（或下拉刷新）
+                                mAdapter = new UnhandleManuscriptAdapter(mContext, list);
+                                mPtrListUnhandleManuscript.setAdapter(mAdapter);
+                            } else {// 上拉加载
+                                mAdapter.getDataList().addAll(list);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            // 完成数据加载
+                            mPtrListUnhandleManuscript.onRefreshComplete();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            T.show(mContext, "没有更多数据");
+                            // 完成数据加载
+                            mPtrListUnhandleManuscript.onRefreshComplete();
+                        }
+                    }
+                });
     }
 
     /**
      * 初始化下拉刷新控件
      */
     private void initPtrFrame() {
-        final StoreHouseHeader header = new StoreHouseHeader(mContext);
-        header.setPadding(0, 15, 0, 0);
-        header.initWithString("loading...");
-        header.setTextColor(getResources().getColor(R.color.primary));
-        mPtrFrame.setHeaderView(header);
-        mPtrFrame.addPtrUIHandler(header);
+        // 模式
+        mPtrListUnhandleManuscript.setMode(PullToRefreshBase.Mode.BOTH);
+        // 下拉刷新
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
+        // 上拉加载
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
+    }
+
+    /**
+     * 没有更多数据
+     */
+    private class NoMoreDataTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return "没有更多数据";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            T.show(mContext, s);
+            mPtrListUnhandleManuscript.onRefreshComplete();
+            super.onPostExecute(s);
+        }
     }
 
     /**
      * 编辑受理稿件操作
      *
-     * @param manuscript
+     * @param manuscriptVersion
      */
-    private void handleManuscript(Manuscript manuscript) {
-//        T.show(mContext, "受理稿件:" + manuscript.getManuscriptVersion().getTitle());
-        mAdapter.getDataList().remove(manuscript);
-        mAdapter.notifyDataSetChanged();
+    private void handleManuscript(final ManuscriptVersion manuscriptVersion) {
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "acceptArticle")
+                .addParams("articleId", String.valueOf(manuscriptVersion.getArticle().getId()))
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("message");
+                            if (isSuccess) {
+                                T.show(mContext, "受理稿件");
+                                mAdapter.getDataList().remove(manuscriptVersion);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**
      * 未受理稿件adapter
      */
-    public class UnhandleManuscriptAdapter extends CommonAdapter<Manuscript> {
+    public class UnhandleManuscriptAdapter extends CommonAdapter<ManuscriptVersion> {
 
         /**
          * 构造方法：对成员变量进行初始化
@@ -145,7 +239,7 @@ public class EditorUnhandleFragment extends BaseFragment {
          * @param context
          * @param dataList
          */
-        public UnhandleManuscriptAdapter(Context context, List<Manuscript> dataList) {
+        public UnhandleManuscriptAdapter(Context context, List<ManuscriptVersion> dataList) {
             super(context, dataList);
         }
 
@@ -159,16 +253,16 @@ public class EditorUnhandleFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            final Manuscript manuscript = mDataList.get(position);
-//            ManuscriptVersion manuscriptVersion = manuscript.getManuscriptVersion();
-//            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-//            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
-//            viewHolder.mTvManuscriptDate.setText(manuscript.getContributeTime());
+            final ManuscriptVersion manuscriptVersion = mDataList.get(position);
+            Manuscript manuscript = manuscriptVersion.getArticle();
+            viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
+            viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
+            viewHolder.mTvManuscriptDate.setText(manuscript.getContributeTime());
             viewHolder.mBtnHandle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 调用编辑受理稿件操作
-                    handleManuscript(manuscript);
+                    handleManuscript(manuscriptVersion);
                 }
             });
             return convertView;

@@ -1,6 +1,8 @@
 package cn.edu.whut.tgsg.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -119,6 +121,9 @@ public class BaseInfoFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, PdfActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("manuscriptversion", mManuscriptVersion);
+                        intent.putExtras(bundle);
                         startActivity(intent);
                     }
                 });
@@ -153,6 +158,10 @@ public class BaseInfoFragment extends BaseFragment {
                             boolean isSuccess = serverInfo.getBoolean("isSuccess");
                             if (isSuccess) {
                                 T.show(mContext, "取消投稿成功！！！");
+                                // 返回取消投稿信息
+                                Intent intent = ((ManuscriptDetailActivity) getActivity()).getReturnIntent();
+                                intent.putExtra("isCancelManuscript", isSuccess);
+                                getActivity().setResult(Activity.RESULT_OK, intent);
                                 getActivity().finish();
                             }
                         } catch (JSONException e) {

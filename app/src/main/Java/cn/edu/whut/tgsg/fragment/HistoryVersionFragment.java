@@ -1,6 +1,9 @@
 package cn.edu.whut.tgsg.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,7 @@ import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +27,7 @@ import java.util.List;
 import butterknife.Bind;
 import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ContributeManuscriptActivity;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.HistoryVersionAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
@@ -53,6 +58,8 @@ public class HistoryVersionFragment extends BaseFragment {
 
     int mCurrentPage = 1;
     int mTotalPage = 1;
+
+    private static final int REQUEST_CODE_CONTRIBUTE_NEW_MANUSCRIPT = 1;//获取上传新版本信息
 
     @Override
     protected String getTagName() {
@@ -88,7 +95,7 @@ public class HistoryVersionFragment extends BaseFragment {
                 // 设置上一次刷新的提示标签
                 refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel("最后更新时间：" + DateHandleUtil.convertToStandard(new Date()));
                 mCurrentPage = 1;
-                // 向服务器发出请求稿件版本
+                // 向服务器发出第一次请求稿件版本
                 requestServer();
             }
 
@@ -98,7 +105,7 @@ public class HistoryVersionFragment extends BaseFragment {
                     // 没有更多数据
                     new NoMoreDataTask().execute();
                 } else {
-                    // 向服务器发出请求稿件版本
+                    // 向服务器发出请求下一页稿件版本
                     mCurrentPage++;
                     requestServer();
                 }
@@ -111,7 +118,7 @@ public class HistoryVersionFragment extends BaseFragment {
      */
     private void initHistoryVersionList() {
         mCurrentPage = 1;
-        // 向服务器发出请求稿件版本
+        // 向服务器发出第一次请求稿件版本
         requestServer();
     }
 
@@ -141,8 +148,10 @@ public class HistoryVersionFragment extends BaseFragment {
                             JSONObject serverInfo = new JSONObject(response);
                             JSONObject data = serverInfo.getJSONObject("data");
                             mTotalPage = data.getInt("totalPage");
-                            Log.e(getTagName(), data.getJSONArray("pageList").toString());
-                            List<ManuscriptVersion> list = new Gson().fromJson(data.getJSONArray("pageList").toString(), new TypeToken<List<ManuscriptVersion>>() {
+                            JSONArray array = data.getJSONArray("pageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<ManuscriptVersion>
+                            List<ManuscriptVersion> list = new Gson().fromJson(array.toString(), new TypeToken<List<ManuscriptVersion>>() {
                             }.getType());
                             if (mCurrentPage == 1) {// 第一次请求（或下拉刷新）
                                 mAdapter = new HistoryVersionAdapter(mContext, list);
@@ -155,11 +164,13 @@ public class HistoryVersionFragment extends BaseFragment {
                             mPtrListHistoryVersion.onRefreshComplete();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            T.show(mContext, "没有更多数据");
+                            // 完成数据加载
+                            mPtrListHistoryVersion.onRefreshComplete();
                         }
                     }
                 });
     }
-
 
     /**
      * 设置底部按钮
@@ -177,6 +188,11 @@ public class HistoryVersionFragment extends BaseFragment {
                         @Override
                         public void onClick(View v) {
                             T.show(mContext, "可以上传新版本！！！");
+                            Intent intent = new Intent(mContext, ContributeManuscriptActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("articleId", mManuscript.getId());
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, REQUEST_CODE_CONTRIBUTE_NEW_MANUSCRIPT);
                         }
                     });
                 } else {
@@ -224,6 +240,25 @@ public class HistoryVersionFragment extends BaseFragment {
             T.show(mContext, s);
             mPtrListHistoryVersion.onRefreshComplete();
             super.onPostExecute(s);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_CONTRIBUTE_NEW_MANUSCRIPT) {
+                if (data.getExtras().getBoolean("isContributeNewManuscript")) {
+                    // 更新历史版本列表
+                    mCurrentPage = 1;
+                    // 向服务器发出请求稿件版本
+                    requestServer();
+                    // 返回上传新版本信息
+                    Intent intent = ((ManuscriptDetailActivity) getActivity()).getReturnIntent();
+                    intent.putExtra("isContributeNewManuscript", true);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                }
+            }
         }
     }
 }

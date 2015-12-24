@@ -13,10 +13,9 @@ public class StateTable {
      * @return
      */
     public static String[] getEditorStateSpinner() {
-        String[] array = new String[]{"编辑初审", "待专家审核", "专家审核", "编辑复审", "通过", "录用"};
+        String[] array = new String[]{"编辑初审中", "待分配专家", "专家审核中", "编辑复审中", "已通过", "已录用"};
         return array;
     }
-
 
     /**
      * 获取个人信息界面学历单选按钮内容
@@ -24,7 +23,7 @@ public class StateTable {
      * @return
      */
     public static String[] getPersonDegreeRadio() {
-        String[] array = new String[]{"小学","初中","高中","中专","大学","研究生"};
+        String[] array = new String[]{"小学", "初中", "高中", "中专", "大学", "研究生"};
         return array;
     }
 
@@ -38,7 +37,6 @@ public class StateTable {
         return array;
     }
 
-
     /**
      * 获取个人信息界面研究方向单选按钮内容
      *
@@ -48,8 +46,6 @@ public class StateTable {
         String[] array = new String[]{"计算机", "经济学", "法学", "电子信息", "材料化学", "农学", "医学"};
         return array;
     }
-
-
 
     /**
      * 获取专家审稿结果下拉框内容
@@ -82,6 +78,46 @@ public class StateTable {
     }
 
     /**
+     * 获取稿件类别下拉框内容
+     *
+     * @return
+     */
+    public static String getResultString(int result) {
+        String text;
+        switch (result) {
+            case 0:
+                text = "受理";
+            case 1:
+                text = "编辑一审未通过";
+                break;
+            case 2:
+                text = "编辑一审通过";
+                break;
+            case 3:
+                text = "编辑复审未通过";
+                break;
+            case 4:
+                text = "编辑复审通过";
+                break;
+            case 5:
+                text = "需专家复审";
+                break;
+            case 6:
+                text = "专家审核通过";
+                break;
+            case 7:
+                text = "专家审核未通过";
+                break;
+            case 8:
+                text = "录用";
+                break;
+            default:
+                text = "错误状态";
+        }
+        return text;
+    }
+
+    /**
      * 获取状态字符串
      *
      * @param state
@@ -109,13 +145,13 @@ public class StateTable {
                 text = "通过";
                 break;
             case 7:
-                text = "录用";
+                text = "未通过";
                 break;
             case 8:
-                text = "取消投稿";
+                text = "录用";
                 break;
             case 9:
-                text = "未通过";
+                text = "取消投稿";
                 break;
             default:
                 text = "错误状态";

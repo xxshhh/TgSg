@@ -50,7 +50,9 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
-    private ActionBarDrawerToggle mDrawerToggle;
+    ActionBarDrawerToggle mDrawerToggle;
+
+    private static final int REQUEST_CODE_UPDATE_IMAGE = 1;//获取图片更新信息
 
     @Override
     protected String getTagName() {
@@ -94,7 +96,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 T.show(mContext, "person");
                 Intent intent = new Intent(mContext, PersonInfoActivity.class);
-                startActivityForResult(intent, 1);//获取图片更新信息
+                startActivityForResult(intent, REQUEST_CODE_UPDATE_IMAGE);
                 mDrawerLayout.closeDrawers();
             }
         });
@@ -224,8 +226,8 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {//获取图片更新信息
-                if (data.getBooleanExtra("isUpdatePhoto", false)) {
+            if (requestCode == REQUEST_CODE_UPDATE_IMAGE) {
+                if (data.getExtras().getBoolean("isUpdatePhoto")) {
                     // 显示头像
                     displayProfileImage();
                 }

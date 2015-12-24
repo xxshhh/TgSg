@@ -19,7 +19,7 @@ public class Manuscript implements Serializable {
      */
 
     int id;
-    String type;
+    int type;
     User contributor;
     String contributeTime;
     int state;
@@ -28,7 +28,7 @@ public class Manuscript implements Serializable {
     public Manuscript() {
     }
 
-    public Manuscript(int id, String type, User contributor, String contributeTime, int state) {
+    public Manuscript(int id, int type, User contributor, String contributeTime, int state) {
         this.id = id;
         this.type = type;
         this.contributor = contributor;
@@ -44,11 +44,11 @@ public class Manuscript implements Serializable {
         this.id = id;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

@@ -54,6 +54,8 @@ public class PersonInfoActivity extends BaseActivity {
     @Bind(R.id.layout_change_info)
     LinearLayout mLayoutChangeInfo;
 
+    private static final int REQUEST_CODE_PICK_IMAGE = 1;//选择图片
+
     @Override
     protected String getTagName() {
         return "PersonInfoActivity";
@@ -88,7 +90,7 @@ public class PersonInfoActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);//选择图片
+                startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
             }
         });
 
@@ -256,7 +258,6 @@ public class PersonInfoActivity extends BaseActivity {
                         try {
                             JSONObject serverInfo = new JSONObject(response);
                             boolean isSuccess = serverInfo.getBoolean("isSuccess");
-                            Intent returnIntent = new Intent();
                             if (isSuccess) {
                                 T.show(mContext, "头像上传成功");
                                 MyApplication.GLOBAL_USER.setPhoto(serverInfo.getString("photo"));
@@ -264,7 +265,8 @@ public class PersonInfoActivity extends BaseActivity {
                             } else {
                                 T.show(mContext, "头像上传失败");
                             }
-                            // 返回更新信息
+                            // 返回图片更新信息
+                            Intent returnIntent = new Intent();
                             returnIntent.putExtra("isUpdatePhoto", isSuccess);
                             PersonInfoActivity.this.setResult(Activity.RESULT_OK, returnIntent);
                         } catch (JSONException e) {
@@ -278,7 +280,7 @@ public class PersonInfoActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {// 选择图片
+            if (requestCode == REQUEST_CODE_PICK_IMAGE) {
                 ContentResolver resolver = getContentResolver();
                 File file = null;
                 Bitmap bitmap = null;

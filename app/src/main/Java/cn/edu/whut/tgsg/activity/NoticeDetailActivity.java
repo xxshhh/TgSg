@@ -3,14 +3,21 @@ package cn.edu.whut.tgsg.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.bean.Notice;
+import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.util.T;
 
 /**
  * 公告详情界面
@@ -56,8 +63,8 @@ public class NoticeDetailActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        // 渲染公告展示界面
-        initWeb();
+        // 请求服务器，并渲染公告展示界面
+        requestServer();
     }
 
     @Override
@@ -74,5 +81,33 @@ public class NoticeDetailActivity extends BaseActivity {
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+    }
+
+    /**
+     * 请求服务器
+     */
+    private void requestServer() {
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "findNoticeDetail")
+                .addParams("source", "android")
+                .addParams("id", String.valueOf(mNotice.getId()))
+                .addParams("title", mNotice.getTitle())
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        mNotice.setContent(response.substring(1,response.length()-3));
+                        // 渲染公告展示界面
+                        initWeb();
+                    }
+                });
     }
 }

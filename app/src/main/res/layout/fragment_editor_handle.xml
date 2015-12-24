@@ -28,15 +28,17 @@
         app:ms_thickness="1dp"/>
 
     <!-- 稿件列表 -->
-    <ListView
-        android:id="@+id/list_handle_manuscript"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/ptr_list_handle_manuscript"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/spinner_state"
         android:layout_marginTop="10dp"
-        android:choiceMode="singleChoice"
         android:divider="@null"
-        android:dividerHeight="3dp"
-        android:scrollbarStyle="outsideOverlay">
-    </ListView>
+        android:dividerHeight="5dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"/>
 </RelativeLayout>

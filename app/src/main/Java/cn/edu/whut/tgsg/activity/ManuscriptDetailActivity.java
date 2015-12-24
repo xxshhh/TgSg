@@ -1,6 +1,7 @@
 package cn.edu.whut.tgsg.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -12,7 +13,6 @@ import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.adapter.ViewpagerAdapter;
 import cn.edu.whut.tgsg.base.BaseActivity;
-import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
@@ -35,8 +35,19 @@ public class ManuscriptDetailActivity extends BaseActivity {
 
     ManuscriptVersion mManuscriptVersion;
 
+    Intent mReturnIntent = new Intent();
+
     /**
-     * 获取当前稿件版本
+     * 获取当前返回的Intent
+     *
+     * @return
+     */
+    public Intent getReturnIntent() {
+        return mReturnIntent;
+    }
+
+    /**
+     * 获取当前稿件版本对象
      *
      * @return
      */

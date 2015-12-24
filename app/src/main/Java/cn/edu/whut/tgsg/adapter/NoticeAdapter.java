@@ -42,7 +42,8 @@ public class NoticeAdapter extends CommonAdapter<Notice> {
         }
         Notice notice = mDataList.get(position);
         viewHolder.mTvNoticeTitle.setText(notice.getTitle());
-        viewHolder.mTvNoticeDate.setText(notice.getNoticeTime());
+        int end = notice.getNoticeTime().trim().indexOf(" ");
+        viewHolder.mTvNoticeDate.setText(notice.getNoticeTime().substring(0, end));
         return convertView;
     }
 

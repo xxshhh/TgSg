@@ -3,14 +3,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <!-- 审稿意见 -->
-    <ListView
-        android:id="@+id/list_examineopinion"
+    <!-- 审稿意见列表 -->
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/ptr_list_examineOpinion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="match_parent"
         android:divider="@android:color/white"
         android:dividerHeight="3dp"
-        android:scrollbars="none">
-    </ListView>
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"/>
 </RelativeLayout>
