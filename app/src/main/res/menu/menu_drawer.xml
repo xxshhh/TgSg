@@ -11,9 +11,9 @@
             android:icon="@mipmap/menu_manuscript"
             android:title="稿件管理"/>
         <item
-            android:id="@+id/navigation_message"
-            android:icon="@mipmap/menu_message"
-            android:title="消息"/>
+            android:id="@+id/navigation_inform"
+            android:icon="@mipmap/menu_inform"
+            android:title="通知"/>
     </group>
 
     <item android:title="扩展功能">

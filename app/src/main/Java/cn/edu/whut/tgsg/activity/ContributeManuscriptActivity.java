@@ -334,7 +334,7 @@ public class ContributeManuscriptActivity extends BaseActivity {
      * 初始化状态下拉框
      */
     private void initSpinnerState() {
-        String[] array = StateTable.getManuscriptSortSpinner();
+        String[] array = StateTable.getTypeSpinner();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerState.setAdapter(adapter);

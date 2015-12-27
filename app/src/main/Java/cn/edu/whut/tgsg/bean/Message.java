@@ -3,63 +3,86 @@ package cn.edu.whut.tgsg.bean;
 import java.io.Serializable;
 
 /**
- * 消息
+ * 留言消息
  * <p/>
- * Created by xwh on 2015/12/1.
+ * Created by xwh on 2015/12/27.
  */
 public class Message implements Serializable {
 
-    /**
-     * title : 系统消息
-     * content : "您的稿件“乖，摸摸头”状态已变更为“刊登”"
-     * contributeTime : "17:55"
-     * check : false
-     */
-
-    private String title;
-    private String content;
-    private String date;
-    private boolean check;
+    int id;
+    User sender;
+    User receiver;
+    String message;
+    int status;
+    Manuscript article;
+    String messageTime;
 
     public Message() {
     }
 
-    public Message(String title, String content, String date, boolean check) {
-        this.title = title;
-        this.content = content;
-        this.date = date;
-        this.check = check;
+    public Message(int id, User sender, User receiver, String message, int status, Manuscript article, String messageTime) {
+        this.id = id;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.message = message;
+        this.status = status;
+        this.article = article;
+        this.messageTime = messageTime;
     }
 
-    public String getTitle() {
-        return title;
+    public int getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public User getSender() {
+        return sender;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public String getDate() {
-        return date;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
-    public boolean isCheck() {
-        return check;
+    public String getMessage() {
+        return message;
     }
 
-    public void setCheck(boolean check) {
-        this.check = check;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Manuscript getArticle() {
+        return article;
+    }
+
+    public void setArticle(Manuscript article) {
+        this.article = article;
+    }
+
+    public String getMessageTime() {
+        return messageTime;
+    }
+
+    public void setMessageTime(String messageTime) {
+        this.messageTime = messageTime;
     }
 }

@@ -28,7 +28,7 @@ import cn.edu.whut.tgsg.base.BaseActivity;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.HomeFragment;
-import cn.edu.whut.tgsg.fragment.MessageFragment;
+import cn.edu.whut.tgsg.fragment.InformFragment;
 import cn.edu.whut.tgsg.fragment.SettingsFragment;
 import cn.edu.whut.tgsg.fragment.author.AuthorManuscriptFragment;
 import cn.edu.whut.tgsg.fragment.editor.EditorManuscriptFragment;
@@ -141,13 +141,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void switchToMessage() {
-        mFragment = new MessageFragment();
+        mFragment = new InformFragment();
         if (settingFragment != null) {
             getFragmentManager().beginTransaction().remove(settingFragment).commit();
             settingFragment = null;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, mFragment).commit();
-        mToolbar.setTitle("消息");
+        mToolbar.setTitle("通知");
     }
 
     private void switchToSetting() {
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity {
                                 T.show(mContext, "manuscript");
                                 switchToManuscript();
                                 break;
-                            case R.id.navigation_message:
+                            case R.id.navigation_inform:
                                 T.show(mContext, "message");
                                 switchToMessage();
                                 break;
@@ -247,7 +247,9 @@ public class MainActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem search = menu.findItem(R.id.action_ok);
+        MenuItem ok = menu.findItem(R.id.action_ok);
+        ok.setVisible(false);
+        MenuItem search = menu.findItem(R.id.action_search);
         search.setVisible(false);
         return true;
     }

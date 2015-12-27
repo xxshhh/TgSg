@@ -10,13 +10,14 @@
               android:paddingRight="16dp"
               android:paddingTop="4dp">
 
-    <!-- 消息图标 -->
+    <!-- 通知图标 -->
     <ImageView
+        android:id="@+id/img_inform"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginRight="10dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/icon_message"/>
+        android:src="@mipmap/icon_inform_uncheck"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -24,29 +25,28 @@
         android:layout_margin="4dp"
         android:orientation="vertical">
 
-        <!-- 消息头 -->
+        <!-- 通知标题 -->
         <TextView
-            android:id="@+id/tv_message_title"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_inform_title"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="系统消息"
+            android:text="通知标题"
             android:textColor="@color/primary_text"
             android:textSize="18sp"/>
 
-        <!-- 消息内容 -->
+        <!-- 点击查看详情 -->
         <TextView
-            android:id="@+id/tv_message_content"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_message_title"
+            android:layout_below="@id/tv_inform_title"
             android:layout_marginTop="4dp"
-            android:text="您的稿件“乖，摸摸头”状态已变更为“刊登”"
+            android:text="点击查看详情"
             android:textColor="@color/secondary_text"
             android:textSize="14sp"/>
 
-        <!-- 消息日期 -->
+        <!-- 通知时间 -->
         <TextView
-            android:id="@+id/tv_message_date"
+            android:id="@+id/tv_inform_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -54,13 +54,13 @@
             android:text="17:55"
             android:textColor="@color/third_text"/>
 
-        <!-- 消息查看情况 -->
+        <!-- 通知查看情况 -->
         <ImageView
             android:id="@+id/img_check"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/tv_message_date"
+            android:layout_below="@id/tv_inform_time"
             android:scaleType="centerInside"
             android:src="@mipmap/icon_point"/>
     </RelativeLayout>

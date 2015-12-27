@@ -51,6 +51,8 @@ public class PersonInfoActivity extends BaseActivity {
     TextView mTvUsername;
     @Bind(R.id.layout_change_psw)
     LinearLayout mLayoutChangePsw;
+    @Bind(R.id.layout_change_email)
+    LinearLayout mLayoutChangeEmail;
     @Bind(R.id.layout_change_info)
     LinearLayout mLayoutChangeInfo;
 
@@ -145,6 +147,57 @@ public class PersonInfoActivity extends BaseActivity {
         });
 
         /**
+         * 更换邮箱
+         */
+        mLayoutChangeEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                        .title("更换邮箱")
+                        .customView(R.layout.dialog_custom_change_email, true)
+                        .positiveText(R.string.agree)
+                        .negativeText(R.string.disagree)
+                        .cancelable(false)
+                        .show();
+                dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String checkEmail = "^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+                        boolean flagEmail;
+                        String oldEmailStr = ((EditText) dialog.findViewById(R.id.edt_old_email)).getText().toString().trim();
+                        String newEmailStr = ((EditText) dialog.findViewById(R.id.edt_new_email)).getText().toString().trim();
+                        String newEmailAgainStr = ((EditText) dialog.findViewById(R.id.edt_new_email_again)).getText().toString().trim();
+                        if (TextUtils.isEmpty(oldEmailStr) || TextUtils.isEmpty(newEmailStr) || TextUtils.isEmpty(newEmailAgainStr)) {
+                            T.show(mContext, "输入不能为空");
+                        } else {
+                            if (!(newEmailStr.equals(newEmailAgainStr))) {
+                                T.show(mContext, "两次输入邮箱不同，请检查");
+                            } else {
+                                // 验证密码
+                                try {
+                                    Pattern regex = Pattern.compile(checkEmail);
+                                    Matcher matcher = regex.matcher(newEmailStr);
+                                    flagEmail = matcher.matches();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    flagEmail = false;
+                                }
+                                if (flagEmail) {
+                                    // 请求服务器
+                                    requestServer(newEmailStr);
+                                    dialog.dismiss();
+                                } else {
+                                    T.show(mContext, "邮箱格式不对,请检查");
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        /**
          * 修改个人信息
          */
         mLayoutChangeInfo.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +243,6 @@ public class PersonInfoActivity extends BaseActivity {
      * @param newPswStr
      */
     private void requestServer(String oldPswStr, String newPswStr) {
-        Log.e(getTagName(), oldPswStr + "," + newPswStr);
         ProgressDialogUtil.show(mContext);
         OkHttpUtils
                 .post()
@@ -227,6 +279,46 @@ public class PersonInfoActivity extends BaseActivity {
                     }
                 });
     }
+
+    /**
+     * 向服务器发出修改邮箱请求
+     *
+     * @param newEmailStr
+     */
+    private void requestServer(String newEmailStr) {
+        ProgressDialogUtil.show(mContext);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "updateEmail")
+                .addParams("nEmail", newEmailStr)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        ProgressDialogUtil.dismiss();
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("isSuccess");
+                            String msg = serverInfo.getString("msg");
+                            T.show(mContext, msg);
+                            if (isSuccess) {
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 上传头像到服务器

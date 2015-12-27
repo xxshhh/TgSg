@@ -1,36 +1,55 @@
 package cn.edu.whut.tgsg.fragment;
 
-import android.os.AsyncTask;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.Request;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.util.ArrayList;
-import java.util.Date;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.Bind;
+import cn.edu.whut.tgsg.MyApplication;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.adapter.MessageAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
+import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.bean.Message;
-import cn.edu.whut.tgsg.util.DateHandleUtil;
+import cn.edu.whut.tgsg.bean.User;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.T;
 
 /**
- * 消息界面
+ * 留言消息
  * <p/>
- * Created by xwh on 2015/12/15.
+ * Created by xwh on 2015/12/27.
  */
 public class MessageFragment extends BaseFragment {
 
-    @Bind(R.id.ptr_list_message)
-    PullToRefreshListView mPtrListMessage;
+    @Bind(R.id.btn_send_msg)
+    Button mBtnSendMsg;
+    @Bind(R.id.edt_input_msg)
+    EditText mEdtInputMsg;
+    @Bind(R.id.list_message)
+    ListView mListMessage;
 
     MessageAdapter mAdapter;
+
+    ManuscriptVersion mManuscriptVersion;
+
+    User mReceiver;
 
     @Override
     protected String getTagName() {
@@ -44,95 +63,114 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        // 初始化消息列表
+        // 获取Activity的稿件版本对象
+        mManuscriptVersion = ((ManuscriptDetailActivity) getActivity()).getManuscriptVersion();
+        // 初始化留言消息列表
         initMessageList();
-        // 初始化下拉刷新控件
-        initPtrFrame();
     }
 
     @Override
     protected void initListener() {
         /**
-         * 消息点击
+         * 发送留言
          */
-        mPtrListMessage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mBtnSendMsg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                T.show(mContext, "消息" + position);
+            public void onClick(View v) {
+                if (mReceiver == null || mManuscriptVersion.getArticle().getState() == 0) {
+                    T.show(mContext, "不能发送留言。");
+                    mEdtInputMsg.setText("");
+                    return;
+                }
+                String inputStr = mEdtInputMsg.getText().toString().trim();
+                if (TextUtils.isEmpty(inputStr)) {
+                    T.show(mContext, "输入不能为空");
+                    return;
+                }
+                // 发送消息
+                requestServer(inputStr);
             }
         });
-
-        /**
-         * 下拉刷新 && 上拉加载
-         */
-        mPtrListMessage.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                // 设置上一次刷新的提示标签
-                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel("最后更新时间:" + DateHandleUtil.convertToStandard(new Date()));
-                // 加载数据操作
-                new GetDataTask().execute();
-
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mAdapter.getDataList().add(new Message("测试", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
-                mAdapter.notifyDataSetChanged();
-                mPtrListMessage.onRefreshComplete();
-            }
-        });
-    }
-
-    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            // Simulates a background job.
-            try {
-                Thread.sleep(4000);
-            } catch (InterruptedException e) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            mAdapter.getDataList().add(0, new Message("测试", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
-            mAdapter.notifyDataSetChanged();
-            mPtrListMessage.onRefreshComplete();
-            super.onPostExecute(result);
-        }
     }
 
     /**
-     * 初始化消息列表
+     * 初始化留言消息列表
      */
     private void initMessageList() {
-        List<Message> list = new ArrayList<>();
-        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“刊登”", "17:55", false));
-        list.add(new Message("系统消息", "您的稿件“乖，摸摸头”状态已变更为“录用”", "12/03", false));
-        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "12/01", false));
-        list.add(new Message("系统消息", "您的稿件“三体”状态已变更为“专家审核”", "11/30", false));
-        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“编辑初审”", "11/29", true));
-        list.add(new Message("系统消息", "您的稿件“小王子”状态已变更为“投稿”", "12/27", true));
-        mAdapter = new MessageAdapter(getContext(), list);
-        mPtrListMessage.setAdapter(mAdapter);
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "findArticleDes")
+                .addParams("articleId", String.valueOf(mManuscriptVersion.getArticle().getId()))
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            JSONArray array = serverInfo.getJSONArray("messageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<Message>
+                            List<Message> list = new Gson().fromJson(array.toString(), new TypeToken<List<Message>>() {
+                            }.getType());
+                            mReceiver = list.get(0).getSender().getId() == MyApplication.GLOBAL_USER.getId() ?
+                                    list.get(0).getReceiver() : list.get(0).getSender();
+                            mAdapter = new MessageAdapter(mContext, list);
+                            mListMessage.setAdapter(mAdapter);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**
-     * 初始化下拉刷新控件
+     * 发送消息
      */
-    private void initPtrFrame() {
-        // 模式
-        mPtrListMessage.setMode(PullToRefreshBase.Mode.BOTH);
-        // 下拉刷新
-        mPtrListMessage.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
-        mPtrListMessage.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
-        mPtrListMessage.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
-        // 上拉加载
-        mPtrListMessage.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
-        mPtrListMessage.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        mPtrListMessage.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
+    private void requestServer(final String content) {
+        String requestStr = "insertMessageToEditor";
+        if (MyApplication.GLOBAL_USER.getRole().getId() == 2) {
+            requestStr = "insertMessageToAuthor";
+        }
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + requestStr)
+                .addParams("articleId", String.valueOf(mManuscriptVersion.getArticle().getId()))
+                .addParams("receiverId", String.valueOf(mReceiver.getId()))
+                .addParams("content", content)
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            boolean isSuccess = serverInfo.getBoolean("result");
+                            if (isSuccess) {
+                                mEdtInputMsg.setText("");
+                                // 初始化留言消息列表
+                                initMessageList();
+                                mListMessage.setSelection(mListMessage.getBottom());
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 }

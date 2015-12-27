@@ -1,5 +1,6 @@
 package cn.edu.whut.tgsg.fragment.editor;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -302,32 +303,32 @@ public class EditorHandleFragment extends BaseFragment {
     private void handleManuscript(final ExamineManuscript examineManuscript) {
         Intent intent;
         Bundle bundle;
-        final ManuscriptVersion manuscriptVersion = examineManuscript.getArticleVersion();
-        switch (manuscriptVersion.getArticle().getState()) {
+        switch (examineManuscript.getArticleVersion().getArticle().getState()) {
             case 2:
                 // 初审中
                 intent = new Intent(mContext, ExamineManuscriptActivity.class);
                 bundle = new Bundle();
-                bundle.putSerializable("manuscriptversion", manuscriptVersion);
-                bundle.putBoolean("isFirst", true);
+                bundle.putSerializable("examinemanuscript", examineManuscript);
+                bundle.putInt("isFlag", 1);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                getParentFragment().startActivityForResult(intent, REQUEST_CODE_EXAMINE_MANUSCRIPT);
+                break;
             case 3:
                 // 待分配专家
                 intent = new Intent(mContext, DistributeExpertActivity.class);
                 bundle = new Bundle();
-                bundle.putSerializable("manuscriptversion", manuscriptVersion);
+                bundle.putSerializable("examinemanuscript", examineManuscript);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                getParentFragment().startActivityForResult(intent, REQUEST_CODE_DISTRIBUTE_EXPERT);
                 break;
             case 5:
                 // 复审中
                 intent = new Intent(mContext, ExamineManuscriptActivity.class);
                 bundle = new Bundle();
-                bundle.putSerializable("manuscriptversion", manuscriptVersion);
-                bundle.putBoolean("isFirst", false);
+                bundle.putSerializable("examinemanuscript", examineManuscript);
+                bundle.putInt("isFlag", 2);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                getParentFragment().startActivityForResult(intent, REQUEST_CODE_EXAMINE_MANUSCRIPT);
                 break;
             case 6:
                 // 录用通过的稿件
@@ -344,7 +345,7 @@ public class EditorHandleFragment extends BaseFragment {
                                 OkHttpUtils
                                         .post()
                                         .url(Constant.URL + "employeeArticle")
-                                        .addParams("articleId", String.valueOf(manuscriptVersion.getArticle().getId()))
+                                        .addParams("articleId", String.valueOf(examineManuscript.getArticleVersion().getArticle().getId()))
                                         .addParams("source", "android")
                                         .build()
                                         .execute(new StringCallback() {
@@ -407,7 +408,7 @@ public class EditorHandleFragment extends BaseFragment {
             Manuscript manuscript = manuscriptVersion.getArticle();
             viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
             viewHolder.mTvManuscriptUser.setText(manuscript.getContributor().getName());
-            viewHolder.mTvManuscriptState.setText(StateTable.getString(manuscript.getState()));
+            viewHolder.mTvManuscriptState.setText(StateTable.getStateString(manuscript.getState()));
             switch (manuscript.getState()) {
                 case 2:
                     viewHolder.mBtnHandle.setVisibility(View.VISIBLE);
@@ -479,6 +480,23 @@ public class EditorHandleFragment extends BaseFragment {
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_EXAMINE_MANUSCRIPT) {
+                if (data.getExtras().getBoolean("isExamineManuscript")) {
+                    mCurrentPage = 1;
+                    requestServer();
+                }
+            } else if (requestCode == REQUEST_CODE_DISTRIBUTE_EXPERT) {
+                if (data.getExtras().getBoolean("isDistributeExpert")) {
+                    mCurrentPage = 1;
+                    requestServer();
+                }
             }
         }
     }

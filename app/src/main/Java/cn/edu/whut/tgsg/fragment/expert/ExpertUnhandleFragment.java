@@ -1,5 +1,6 @@
 package cn.edu.whut.tgsg.fragment.expert;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,12 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.squareup.okhttp.Request;
@@ -23,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +56,8 @@ public class ExpertUnhandleFragment extends BaseFragment {
     int mCurrentPage = 1;
     int mTotalPage = 1;
 
+    private static final int REQUEST_CODE_EXAMINE_MANUSCRIPT = 1;//获取审稿信息
+
     @Override
     protected String getTagName() {
         return "ExpertUnhandleFragment";
@@ -71,7 +73,7 @@ public class ExpertUnhandleFragment extends BaseFragment {
     protected void initData() {
         // 初始化下拉刷新控件
         initPtrFrame();
-        // 初始化专家已审稿稿件列表
+        // 初始化未处理稿件列表
         initManuscriptList();
     }
 
@@ -86,7 +88,7 @@ public class ExpertUnhandleFragment extends BaseFragment {
                 // 设置上一次刷新的提示标签
                 refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel("最后更新时间：" + DateHandleUtil.convertToStandard(new Date()));
                 mCurrentPage = 1;
-                // 向服务器发出请求作者稿件
+                // 向服务器第一次请求专家未处理列表
                 requestServer();
             }
 
@@ -96,7 +98,7 @@ public class ExpertUnhandleFragment extends BaseFragment {
                     // 没有更多数据
                     new NoMoreDataTask().execute();
                 } else {
-                    // 向服务器发出请求作者稿件
+                    // 向服务器请求下一页专家已处理列表
                     mCurrentPage++;
                     requestServer();
                 }
@@ -105,63 +107,16 @@ public class ExpertUnhandleFragment extends BaseFragment {
     }
 
     /**
-     * 初始化下拉刷新控件
-     */
-    private void initPtrFrame() {
-        // 模式
-        mPtrListUnhandleManuscript.setMode(PullToRefreshBase.Mode.BOTH);
-        // 下拉刷新
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
-        // 上拉加载
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
-    }
-
-    /**
-     * 初始化专家已审稿稿件列表
+     * 初始化未处理稿件列表
      */
     private void initManuscriptList() {
         mCurrentPage = 1;
-        // 向服务器发出请求作者稿件
+        // 向服务器第一次请求专家未处理稿件
         requestServer();
     }
 
     /**
-     * 专家审稿操作
-     *
-     * @param distributeExpert
-     */
-    public void handleManuscript(DistributeExpert distributeExpert) {
-        Intent intent = new Intent(mContext, ExamineManuscriptActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("manuscript", distributeExpert);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    /**
-     * 没有更多数据
-     */
-    private class NoMoreDataTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            return "没有更多数据";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            T.show(mContext, s);
-            mPtrListUnhandleManuscript.onRefreshComplete();
-            super.onPostExecute(s);
-        }
-    }
-
-    /**
-     * 向服务器请求专家已处理稿件
+     * 向服务器请求专家未处理稿件
      */
     private void requestServer() {
         OkHttpUtils
@@ -184,29 +139,12 @@ public class ExpertUnhandleFragment extends BaseFragment {
                         try {
                             JSONObject serverInfo = new JSONObject(response);
                             JSONObject data = serverInfo.getJSONObject("data");
-                            //data
                             mTotalPage = data.getInt("totalPage");
-                            mCurrentPage = data.getInt("currentPage");
-                            JSONArray pageList = data.getJSONArray("pageList");
-
-                            List<DistributeExpert> list = new ArrayList<DistributeExpert>();
-
-                            for (int i = 0; i < pageList.length(); i++) {
-                                JSONObject object = (JSONObject) pageList.get(i);
-
-                                JSONObject articleVersion = object.getJSONObject("articleVersion");
-                                String distributeTime = object.getString("distributeTime");
-
-                                Gson gson = new Gson();
-                                ManuscriptVersion manuscriptVersion=gson.fromJson(articleVersion.toString(), ManuscriptVersion.class);
-
-                                //建立DistributeExpert对象
-                                DistributeExpert distributeExpert = new DistributeExpert();
-                                distributeExpert.setDistributeTime(distributeTime);
-                                distributeExpert.setArticleVersion(manuscriptVersion);
-
-                                list.add(distributeExpert);
-                            }
+                            JSONArray array = data.getJSONArray("pageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<DistributeExpert>
+                            List<DistributeExpert> list = new Gson().fromJson(array.toString(), new TypeToken<List<DistributeExpert>>() {
+                            }.getType());
                             if (mCurrentPage == 1) {// 第一次请求（或下拉刷新）
                                 mAdapter = new UnhandleManuscriptAdapter(mContext, list);
                                 mPtrListUnhandleManuscript.setAdapter(mAdapter);
@@ -227,7 +165,55 @@ public class ExpertUnhandleFragment extends BaseFragment {
     }
 
     /**
-     * 未审核稿件adapter
+     * 初始化下拉刷新控件
+     */
+    private void initPtrFrame() {
+        // 模式
+        mPtrListUnhandleManuscript.setMode(PullToRefreshBase.Mode.BOTH);
+        // 下拉刷新
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(true, false).setReleaseLabel("松开加载更多...");
+        // 上拉加载
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        mPtrListUnhandleManuscript.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载更多...");
+    }
+
+    /**
+     * 没有更多数据
+     */
+    private class NoMoreDataTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return "没有更多数据";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            T.show(mContext, s);
+            mPtrListUnhandleManuscript.onRefreshComplete();
+            super.onPostExecute(s);
+        }
+    }
+
+    /**
+     * 专家审稿操作
+     *
+     * @param distributeExpert
+     */
+    public void handleManuscript(DistributeExpert distributeExpert) {
+        Intent intent = new Intent(mContext, ExamineManuscriptActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("distributeexpert", distributeExpert);
+        bundle.putInt("isFlag", 3);
+        intent.putExtras(bundle);
+        getParentFragment().startActivityForResult(intent, REQUEST_CODE_EXAMINE_MANUSCRIPT);
+    }
+
+    /**
+     * 未审核稿件adapter（审稿表）
      */
     public class UnhandleManuscriptAdapter extends CommonAdapter<DistributeExpert> {
 
@@ -281,6 +267,18 @@ public class ExpertUnhandleFragment extends BaseFragment {
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_EXAMINE_MANUSCRIPT) {
+                if (data.getExtras().getBoolean("isExamineManuscript")) {
+                    mCurrentPage = 1;
+                    requestServer();
+                }
             }
         }
     }

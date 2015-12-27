@@ -18,6 +18,7 @@ import cn.edu.whut.tgsg.fragment.BaseInfoFragment;
 import cn.edu.whut.tgsg.fragment.EmptyFragment;
 import cn.edu.whut.tgsg.fragment.ExamineOpinionFragment;
 import cn.edu.whut.tgsg.fragment.HistoryVersionFragment;
+import cn.edu.whut.tgsg.fragment.MessageFragment;
 
 /**
  * 稿件详情界面（包括作者、编辑、）
@@ -104,12 +105,12 @@ public class ManuscriptDetailActivity extends BaseActivity {
                 adapter.addFragment(new BaseInfoFragment(), "基本信息");
                 adapter.addFragment(new HistoryVersionFragment(), "历史版本");
                 adapter.addFragment(new ExamineOpinionFragment(), "审稿意见");
-                adapter.addFragment(new EmptyFragment(), "留言信息");
+                adapter.addFragment(new MessageFragment(), "留言信息");
                 break;
             case 3:
                 adapter.addFragment(new BaseInfoFragment(), "基本信息");
                 adapter.addFragment(new HistoryVersionFragment(), "历史版本");
-                adapter.addFragment(new EmptyFragment(), "留言信息");
+                adapter.addFragment(new MessageFragment(), "留言信息");
                 break;
             case 4:
                 adapter.addFragment(new BaseInfoFragment(), "基本信息");

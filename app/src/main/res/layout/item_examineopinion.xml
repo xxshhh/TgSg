@@ -15,12 +15,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp">
 
-        <!-- 审稿状态 -->
+        <!-- 标题 -->
         <TextView
-            android:id="@+id/tv_manuscript_state"
+            android:id="@+id/tv_manuscript_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="编辑初审"
+            android:text="乖，摸摸头"
             android:textColor="@color/primary_text"
             android:textSize="20sp"
             android:textStyle="italic"/>
@@ -30,7 +30,7 @@
             android:id="@+id/layout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_manuscript_state"
+            android:layout_below="@id/tv_manuscript_title"
             android:layout_marginTop="10dp">
 
             <TextView

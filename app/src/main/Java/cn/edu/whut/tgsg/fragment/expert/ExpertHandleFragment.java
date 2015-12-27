@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.squareup.okhttp.Request;
@@ -22,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +32,7 @@ import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.ManuscriptDetailActivity;
 import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.base.CommonAdapter;
-import cn.edu.whut.tgsg.bean.ExamineManuscript;
+import cn.edu.whut.tgsg.bean.DistributeExpert;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.DateHandleUtil;
@@ -69,7 +69,7 @@ public class ExpertHandleFragment extends BaseFragment {
     protected void initData() {
         // 初始化下拉刷新控件
         initPtrFrame();
-        // 初始化稿件列表
+        // 初始化未受理稿件列表
         initManuscriptList();
     }
 
@@ -99,7 +99,7 @@ public class ExpertHandleFragment extends BaseFragment {
                 // 设置上一次刷新的提示标签
                 refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel("最后更新时间：" + DateHandleUtil.convertToStandard(new Date()));
                 mCurrentPage = 1;
-                // 向服务器发出请求作者稿件
+                // 向服务器第一次请求专家已处理列表
                 requestServer();
             }
 
@@ -109,7 +109,7 @@ public class ExpertHandleFragment extends BaseFragment {
                     // 没有更多数据
                     new NoMoreDataTask().execute();
                 } else {
-                    // 向服务器发出请求作者稿件
+                    // 向服务器请求下一页专家已处理列表
                     mCurrentPage++;
                     requestServer();
                 }
@@ -118,11 +118,11 @@ public class ExpertHandleFragment extends BaseFragment {
     }
 
     /**
-     * 初始化稿件列表
+     * 初始化已处理稿件列表
      */
     private void initManuscriptList() {
         mCurrentPage = 1;
-        // 向服务器发出请求作者稿件
+        // 向服务器第一次请求专家已处理稿件
         requestServer();
     }
 
@@ -151,24 +151,11 @@ public class ExpertHandleFragment extends BaseFragment {
                             JSONObject serverInfo = new JSONObject(response);
                             JSONObject data = serverInfo.getJSONObject("data");
                             mTotalPage = data.getInt("totalPage");
-                            mCurrentPage = data.getInt("currentPage");
-                            JSONArray pageList = data.getJSONArray("pageList");
-
-                            List<ExamineManuscript> list = new ArrayList<ExamineManuscript>();
-
-                            for (int i = 0; i < pageList.length(); i++) {
-                                JSONObject object = (JSONObject) pageList.get(i);
-                                JSONObject articleVersion = object.getJSONObject("articleVersion");
-                                String distributeTime = object.getString("distributeTime");
-
-                                Gson gson = new Gson();
-                                ManuscriptVersion manuscriptVersion = gson.fromJson(articleVersion.toString(), ManuscriptVersion.class);
-
-                                ExamineManuscript examineManuscript = new ExamineManuscript();
-                                examineManuscript.setAuditingTime(distributeTime);
-                                examineManuscript.setArticleVersion(manuscriptVersion);
-                                list.add(examineManuscript);
-                            }
+                            JSONArray array = data.getJSONArray("pageList");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<s>
+                            List<DistributeExpert> list = new Gson().fromJson(array.toString(), new TypeToken<List<DistributeExpert>>() {
+                            }.getType());
                             if (mCurrentPage == 1) {// 第一次请求（或下拉刷新）
                                 mAdapter = new HandleManuscriptAdapter(mContext, list);
                                 mPtrListHandleManuscript.setAdapter(mAdapter);
@@ -226,7 +213,7 @@ public class ExpertHandleFragment extends BaseFragment {
     /**
      * 已审核稿件adapter（审稿表）
      */
-    public class HandleManuscriptAdapter extends CommonAdapter<ExamineManuscript> {
+    public class HandleManuscriptAdapter extends CommonAdapter<DistributeExpert> {
 
         /**
          * 构造方法：对成员变量进行初始化
@@ -234,7 +221,7 @@ public class ExpertHandleFragment extends BaseFragment {
          * @param context
          * @param dataList
          */
-        public HandleManuscriptAdapter(Context context, List<ExamineManuscript> dataList) {
+        public HandleManuscriptAdapter(Context context, List<DistributeExpert> dataList) {
             super(context, dataList);
         }
 
@@ -248,12 +235,10 @@ public class ExpertHandleFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            ExamineManuscript examineManuscript = mDataList.get(position);
-            ManuscriptVersion manuscriptVersion = examineManuscript.getArticleVersion();
-            // 稿件的标题
+            DistributeExpert distributeExpert = mDataList.get(position);
+            ManuscriptVersion manuscriptVersion = distributeExpert.getArticleVersion();
             viewHolder.mTvManuscriptTitle.setText(manuscriptVersion.getTitle());
-            // 审稿表中的专家审稿完成时间
-            viewHolder.mTvManuscriptDate.setText(examineManuscript.getAuditingTime());
+            viewHolder.mTvManuscriptDate.setText(distributeExpert.getDistributeTime());
             return convertView;
         }
 

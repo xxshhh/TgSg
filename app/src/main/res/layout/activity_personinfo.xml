@@ -45,7 +45,7 @@
                 android:id="@+id/layout_change_psw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -63,12 +63,36 @@
                     android:textSize="14sp"/>
             </LinearLayout>
 
+            <!-- 更换邮箱 -->
+            <LinearLayout
+                android:id="@+id/layout_change_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_chg_email"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="更换邮箱"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
             <!-- 修改个人信息 -->
             <LinearLayout
                 android:id="@+id/layout_change_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:gravity="center"
                 android:orientation="vertical">
 

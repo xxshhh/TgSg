@@ -8,16 +8,6 @@ package cn.edu.whut.tgsg.common;
 public class StateTable {
 
     /**
-     * 获取编辑稿件状态下拉框内容
-     *
-     * @return
-     */
-    public static String[] getEditorStateSpinner() {
-        String[] array = new String[]{"编辑初审中", "待分配专家", "专家审核中", "编辑复审中", "已通过", "已录用"};
-        return array;
-    }
-
-    /**
      * 获取个人信息界面学历单选按钮内容
      *
      * @return
@@ -48,17 +38,47 @@ public class StateTable {
     }
 
     /**
-     * 获取专家审稿结果下拉框内容
+     * 获取编辑稿件状态spinner内容
      *
      * @return
      */
-    public static String[] getExpertExamineResultSpinner() {
+    public static String[] getEditorStateSpinner() {
+        String[] array = new String[]{"编辑初审中", "待分配专家", "专家审核中", "编辑复审中", "已通过", "已录用"};
+        return array;
+    }
+
+    /**
+     * 获取编辑初审结果spinner内容
+     *
+     * @return
+     */
+    public static String[] getEditorExamineSpinner() {
         String[] array = new String[]{"通过", "不通过"};
         return array;
     }
 
     /**
-     * 获取分配专家下拉框内容
+     * 获取编辑复审结果spinner内容
+     *
+     * @return
+     */
+    public static String[] getEditorReExamineSpinner() {
+        String[] array = new String[]{"通过", "更换专家复审", "不通过"};
+        return array;
+    }
+
+    /**
+     * 获取专家审稿结果spinner内容
+     *
+     * @return
+     */
+    public static String[] getExpertExamineSpinner() {
+        String[] array = new String[]{"通过", "不通过"};
+        return array;
+    }
+
+    /**
+     * 获取分配专家的spinner内容
      *
      * @return
      */
@@ -68,18 +88,29 @@ public class StateTable {
     }
 
     /**
-     * 获取稿件类别下拉框内容
+     * 获取分配专家的spinner内容(English)
      *
      * @return
      */
-    public static String[] getManuscriptSortSpinner() {
-        String[] array = new String[]{"随笔", "专业研究", "前言技术", "奇思妙想"};
+    public static String[] getDistributeExpertEngSpinner() {
+        String[] array = new String[]{"all", "research", "professional", "name"};
         return array;
     }
 
     /**
-     * 获取稿件类别下拉框内容
+     * 获取类别的spinner内容
      *
+     * @return
+     */
+    public static String[] getTypeSpinner() {
+        String[] array = new String[]{"软件工程", "网络", "数据库", "程序设计", "计算机系统", "计算机编程"};
+        return array;
+    }
+
+    /**
+     * 获取审稿表result内容
+     *
+     * @param result
      * @return
      */
     public static String getResultString(int result) {
@@ -87,6 +118,7 @@ public class StateTable {
         switch (result) {
             case 0:
                 text = "受理";
+                break;
             case 1:
                 text = "编辑一审未通过";
                 break;
@@ -118,12 +150,12 @@ public class StateTable {
     }
 
     /**
-     * 获取状态字符串
+     * 获取状态state字符串
      *
      * @param state
      * @return
      */
-    public static String getString(int state) {
+    public static String getStateString(int state) {
         String text;
         switch (state) {
             case 1:

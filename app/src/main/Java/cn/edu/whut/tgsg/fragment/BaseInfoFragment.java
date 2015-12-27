@@ -26,6 +26,7 @@ import cn.edu.whut.tgsg.base.BaseFragment;
 import cn.edu.whut.tgsg.bean.Manuscript;
 import cn.edu.whut.tgsg.bean.ManuscriptVersion;
 import cn.edu.whut.tgsg.common.Constant;
+import cn.edu.whut.tgsg.common.StateTable;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
 
@@ -62,7 +63,7 @@ public class BaseInfoFragment extends BaseFragment {
         // 初始化页面数据
         String info = "标题：" + mManuscriptVersion.getTitle() + "\n"
                 + "投稿时间：" + mManuscript.getContributeTime() + "\n"
-                + "类别：" + mManuscript.getType() + "\n"
+                + "类别：" + StateTable.getTypeSpinner()[mManuscript.getType() - 1] + "\n"
                 + "关键词：" + mManuscriptVersion.getKeyword() + "\n"
                 + "摘要：" + mManuscriptVersion.getSummary() + "\n";
         mTvInfo.setText(info);

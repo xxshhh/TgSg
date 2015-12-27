@@ -36,11 +36,9 @@ import cn.edu.whut.tgsg.util.T;
  */
 public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickListener {
 
-    // 9个字段
+    // 8个字段
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.tv_email)
-    TextView mTvEmail;
     @Bind(R.id.tv_age)
     TextView mTvAge;
     @Bind(R.id.tv_tel)
@@ -58,9 +56,7 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.tv_username)
     TextView mTvUsername;
 
-    // 9个字段
-    @Bind(R.id.layout_email)
-    RelativeLayout mLayoutEmail;
+    // 8个字段
     @Bind(R.id.layout_username)
     RelativeLayout mLayoutUsername;
     @Bind(R.id.layout_age)
@@ -115,7 +111,6 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
     private void initPersonInfo() {//9个字段
         User user = MyApplication.GLOBAL_USER;
 
-        mTvEmail.setText(user.getEmail());
         mTvUsername.setText(user.getName());
         mTvAge.setText(String.valueOf(user.getAge()));
 
@@ -130,7 +125,6 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected void initListener() {
-        mLayoutEmail.setOnClickListener(this);
         mLayoutUsername.setOnClickListener(this);
         mLayoutAge.setOnClickListener(this);
         mLayoutTel.setOnClickListener(this);
@@ -152,10 +146,7 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
      */
     private void showMyDialog(final int viewId) {
         String title = getTile(viewId);
-        switch (viewId) {// 9个字段
-            case R.id.layout_email://不能修改邮箱
-                T.show(mContext, "邮箱不能修改");
-                break;
+        switch (viewId) {// 8个字段
             case R.id.layout_degree://学历
                 showMaterialDialog(getTile(viewId), StateTable.getPersonDegreeRadio(), viewId);
                 break;
@@ -244,10 +235,7 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
      */
     private String getTile(int viewId) {
         String title = "";
-        switch (viewId) {//9个字段
-            case R.id.layout_email:
-                title = "邮箱";
-                break;
+        switch (viewId) {//8个字段
             case R.id.layout_username:
                 title = "姓名";
                 break;
@@ -306,7 +294,6 @@ public class ChgPersonInfoActivity extends BaseActivity implements View.OnClickL
                     .url(Constant.URL + "update")
                     .addParams("source", "android")
 
-                    .addParams("email", mTvEmail.getText().toString().trim())
                     .addParams("name", mTvUsername.getText().toString().trim())
                     .addParams("age", mTvAge.getText().toString().trim())
 

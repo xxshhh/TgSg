@@ -29,6 +29,7 @@
         app:ms_enableErrorLabel="false"
         app:ms_enableFloatingLabel="true"
         app:ms_errorColor="@color/red"
+
         app:ms_floatingLabelColor="@color/accent"
         app:ms_floatingLabelText="专家查询条件"
         app:ms_highlightColor="@color/primary"
@@ -78,14 +79,16 @@
     </RelativeLayout>
 
     <!-- 分配专家列表 -->
-    <ListView
-        android:id="@+id/list_distribute_expert"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/ptr_list_distribute_expert"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:choiceMode="singleChoice"
         android:divider="@null"
-        android:dividerHeight="3dp"
-        android:scrollbarStyle="outsideOverlay">
-    </ListView>
+        android:dividerHeight="5dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true"/>
 </LinearLayout>

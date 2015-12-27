@@ -1,6 +1,7 @@
 package cn.edu.whut.tgsg.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -45,9 +46,9 @@ public class ExamineOpinionAdapter extends CommonAdapter<ExamineManuscript> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         final ExamineManuscript examineManuscript = mDataList.get(position);
-        viewHolder.mTvManuscriptState.setText(StateTable.getResultString(examineManuscript.getResult()));
+        viewHolder.mTvManuscriptTitle.setText(examineManuscript.getArticleVersion().getTitle());
         viewHolder.mTvExamineUser.setText(examineManuscript.getUserInfo().getName());
-        viewHolder.mTvExamineResult.setText(examineManuscript.getResult() == 1 ? "通过" : "不通过");
+        viewHolder.mTvExamineResult.setText(StateTable.getResultString(examineManuscript.getResult()));
         viewHolder.mTvExamineDate.setText(examineManuscript.getAuditingTime());
         viewHolder.mBtnCheckOpinion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +70,8 @@ public class ExamineOpinionAdapter extends CommonAdapter<ExamineManuscript> {
      * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
      */
     static class ViewHolder {
-        @Bind(R.id.tv_manuscript_state)
-        TextView mTvManuscriptState;
+        @Bind(R.id.tv_manuscript_title)
+        TextView mTvManuscriptTitle;
         @Bind(R.id.tv_examine_user)
         TextView mTvExamineUser;
         @Bind(R.id.tv_examine_result)

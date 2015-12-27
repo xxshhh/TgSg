@@ -71,7 +71,7 @@ public class PdfActivity extends BaseActivity implements OnPageChangeListener {
 
     @Override
     public void onPageChanged(int page, int pageCount) {
-        mToolbar.setTitle(String.format("%s %s / %s", mManuscriptVersion.getPath(), page, pageCount));
+        mToolbar.setTitle(String.format("%s %s / %s", mManuscriptVersion.getTitle(), page, pageCount));
     }
 
     /**
