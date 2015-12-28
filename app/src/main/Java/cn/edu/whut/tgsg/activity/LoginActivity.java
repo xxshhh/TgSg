@@ -3,6 +3,8 @@ package cn.edu.whut.tgsg.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
@@ -26,6 +29,7 @@ import cn.edu.whut.tgsg.bean.User;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.ProgressDialogUtil;
 import cn.edu.whut.tgsg.util.T;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 登录界面
@@ -44,6 +48,8 @@ public class LoginActivity extends BaseActivity {
     TextView mTvForget;
     @Bind(R.id.tv_register)
     TextView mTvRegister;
+    @Bind(R.id.profile_image)
+    CircleImageView mProfileImage;
 
     @Override
     protected String getTagName() {
@@ -63,53 +69,44 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initData() {
         // 取SharedPreferences数据
-        String user_email = null;
-        String user_password = null;
+        String user_email;
+        String user_password;
+        String user_photo;
         SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         user_email = sharedPreferences.getString("user_email", "");
         user_password = sharedPreferences.getString("user_password", "");
+        user_photo = sharedPreferences.getString("user_photo", "");
         // 自动登录
         if (!user_email.equals("") && !user_password.equals("")) {
             Log.e(getTagName(), user_email + "," + user_password);
+            mEdtEmail.setText(user_email);
+            mEdtPassword.setText(user_password);
+            mBtnLogin.performClick();
+            // 显示头像
             OkHttpUtils
-                    .post()
-                    .url(Constant.URL + "login")
-                    .addParams("email", user_email)
-                    .addParams("password", user_password)
-                    .addParams("remember", "true")
+                    .get()
+                    .url(Constant.STATIC_URL + "img/" + user_photo)
                     .addParams("source", "android")
+                    .tag(this)
                     .build()
-                    .execute(new StringCallback() {
+                    .connTimeOut(20000)
+                    .readTimeOut(20000)
+                    .writeTimeOut(20000)
+                    .execute(new BitmapCallback() {
                         @Override
                         public void onError(Request request, Exception e) {
-                            Log.e(getTagName(), "onError:" + e.getMessage());
+                            Log.e(getTagName(), "加载头像失败！！！使用默认头像。");
                         }
 
                         @Override
-                        public void onResponse(String response) {
-                            Log.e(getTagName(), "onResponse:" + response);
-                            try {
-                                JSONObject serverInfo = new JSONObject(response);
-                                boolean isSuccess = serverInfo.getBoolean("isSuccess");
-                                if (isSuccess) {
-                                    Intent intent = new Intent(mContext, MainActivity.class);
-                                    MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
-                                    Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // 存数据到SharedPreferences
-                                    SharedPreferences preferences = getSharedPreferences("user", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("user_email", "");
-                                    editor.putString("user_password", "");
-                                    editor.commit();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                        public void onResponse(Bitmap bitmap) {
+                            Log.e(getTagName(), "加载头像成功！！！");
+                            mProfileImage.setImageBitmap(bitmap);
                         }
                     });
+            ProgressDialogUtil.show(mContext);
+            // 延时自动登录
+            new DelayLoginTask().execute();
         }
     }
 
@@ -161,6 +158,7 @@ public class LoginActivity extends BaseActivity {
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putString("user_email", MyApplication.GLOBAL_USER.getEmail());
                                         editor.putString("user_password", mEdtPassword.getText().toString().trim());
+                                        editor.putString("user_photo", MyApplication.GLOBAL_USER.getPhoto());
                                         editor.commit();
                                         // 跳转主界面
                                         Intent intent = new Intent(mContext, MainActivity.class);
@@ -199,5 +197,29 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 延时自动登录
+     */
+    private class DelayLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean) {
+                // 模拟点击登录
+                mBtnLogin.performClick();
+            }
+            super.onPostExecute(aBoolean);
+        }
     }
 }

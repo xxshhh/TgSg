@@ -5,9 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     android:background="@drawable/item_common_selector"
     android:gravity="center_vertical"
+    android:layout_margin="5dp"
     android:minHeight="?android:listPreferredItemHeight"
     android:orientation="horizontal"
     android:padding="16dp">
@@ -25,7 +25,8 @@
             android:fadingEdge="horizontal"
             android:singleLine="true"
             android:text="title"
-            android:textColor="@color/primary_text"
+            android:textStyle="italic|bold"
+            android:textColor="@android:color/holo_red_dark"
             android:textSize="16sp"/>
 
         <TextView
@@ -33,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
-            android:layout_marginTop="3dp"
             android:text="summary"
             android:textColor="#AAAAAA"
             android:textSize="14sp"/>

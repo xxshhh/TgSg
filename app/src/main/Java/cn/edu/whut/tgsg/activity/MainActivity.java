@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        mToolbar.setTitle("首页");
         // toolbar替换actionbar
         setSupportActionBar(mToolbar);
         // 设置抽屉开关

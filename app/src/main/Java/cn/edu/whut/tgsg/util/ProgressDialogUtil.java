@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
  * Created by xwh on 2015/11/4.
  */
 public class ProgressDialogUtil {
-    private static MaterialDialog progress;
+    private static MaterialDialog sProgress;
 
     /**
      * 显示ProgressDialog
@@ -18,14 +18,14 @@ public class ProgressDialogUtil {
      * @param context
      */
     public static void show(final Context context) {
-        if (progress == null) {
-            progress = new MaterialDialog.Builder(context)
+        if (sProgress == null) {
+            sProgress = new MaterialDialog.Builder(context)
                     .content("loading...")
                     .progress(true, 0)
                     .progressIndeterminateStyle(false)
                     .show();
         } else {
-            progress.show();
+            sProgress.show();
         }
     }
 
@@ -33,9 +33,9 @@ public class ProgressDialogUtil {
      * 关闭ProgressDialog
      */
     public static void dismiss() {
-        if (progress != null) {
-            progress.dismiss();
-            progress = null;
+        if (sProgress != null) {
+            sProgress.dismiss();
+            sProgress = null;
         }
     }
 }

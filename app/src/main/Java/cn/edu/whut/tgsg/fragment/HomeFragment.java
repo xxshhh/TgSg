@@ -30,9 +30,11 @@ import java.util.List;
 
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
+import cn.edu.whut.tgsg.activity.DisplaywallDetailActivity;
 import cn.edu.whut.tgsg.activity.NoticeDetailActivity;
 import cn.edu.whut.tgsg.adapter.NoticeAdapter;
 import cn.edu.whut.tgsg.base.BaseFragment;
+import cn.edu.whut.tgsg.bean.Displaywall;
 import cn.edu.whut.tgsg.bean.Notice;
 import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.T;
@@ -135,44 +137,71 @@ public class HomeFragment extends BaseFragment implements BaseSliderView.OnSlide
      * 初始化图片滑动展示栏
      */
     private void initImageSlider() {
-        HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
-        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        final HashMap<String, String> url_maps = new HashMap<>();
+//        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+//        url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
+//        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+//        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
+        // 展示墙
+        OkHttpUtils
+                .post()
+                .url(Constant.URL + "findDisplaywallAll")
+                .addParams("source", "android")
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "onError:" + e.getMessage());
+                        T.show(mContext, "网络访问错误");
+                    }
 
-//        HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
-//        file_maps.put("Hannibal", R.drawable.hannibal);
-//        file_maps.put("Big Bang Theory", R.drawable.bigbang);
-//        file_maps.put("House of Cards", R.drawable.house);
-//        file_maps.put("Game of Thrones", R.drawable.game_of_thrones);
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(getTagName(), "onResponse:" + response);
+                        try {
+                            JSONObject serverInfo = new JSONObject(response);
+                            JSONArray array = serverInfo.getJSONArray("data");
+                            Log.e(getTagName(), array.toString());
+                            // 将返回的json数组解析成List<Displaywall>
+                            List<Displaywall> list = new Gson().fromJson(array.toString(), new TypeToken<List<Displaywall>>() {
+                            }.getType());
+                            for (Displaywall displaywall : list) {
+                                TextSliderView textSliderView = new TextSliderView(getContext());
+                                // initialize a SliderLayout
+                                textSliderView
+                                        .description(displaywall.getTitle())
+                                        .image(Constant.STATIC_URL + "img/" + displaywall.getImgpath())
+                                        .setScaleType(BaseSliderView.ScaleType.Fit)
+                                        .setOnSliderClickListener(HomeFragment.this);
 
-        for (String name : url_maps.keySet()) {
-            TextSliderView textSliderView = new TextSliderView(getContext());
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
+                                //add1 your extra information
+                                textSliderView.bundle(new Bundle());
+                                textSliderView.getBundle()
+                                        .putSerializable("displaywall", displaywall);
 
-            //add1 your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
-
-            mSlider.addSlider(textSliderView);
-        }
-        mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mSlider.setCustomAnimation(new DescriptionAnimation());
-        mSlider.setDuration(6000);
-        mSlider.addOnPageChangeListener(this);
+                                mSlider.addSlider(textSliderView);
+                            }
+                            mSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+                            mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                            mSlider.setCustomAnimation(new DescriptionAnimation());
+                            mSlider.setDuration(6000);
+                            mSlider.addOnPageChangeListener(HomeFragment.this);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        T.show(mContext, slider.getBundle().get("extra") + "");
+        Displaywall displaywall = (Displaywall) slider.getBundle().getSerializable("displaywall");
+        T.show(mContext, displaywall.getTitle());
+        Intent intent = new Intent(mContext, DisplaywallDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("displaywall", displaywall);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

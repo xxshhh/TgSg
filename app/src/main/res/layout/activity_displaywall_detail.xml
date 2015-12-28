@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/include_toolbar"/>
+
+    <!-- 展示墙展示 -->
+    <WebView
+        android:id="@+id/web_dispalywall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbar"
+        android:padding="5dp"
+        android:scrollbars="vertical"/>
+</RelativeLayout>

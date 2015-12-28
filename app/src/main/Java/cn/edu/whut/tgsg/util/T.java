@@ -10,6 +10,8 @@ import android.widget.Toast;
  */
 public class T {
 
+    private static Toast sToast;
+
     /**
      * 显示Toast(短时间)
      *
@@ -17,6 +19,11 @@ public class T {
      * @param message
      */
     public static void show(Context context, CharSequence message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        if (sToast == null) {
+            sToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        } else {
+            sToast.setText(message);
+        }
+        sToast.show();
     }
 }

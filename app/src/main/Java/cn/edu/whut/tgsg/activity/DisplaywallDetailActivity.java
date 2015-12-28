@@ -10,22 +10,22 @@ import android.webkit.WebView;
 import butterknife.Bind;
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.base.BaseActivity;
-import cn.edu.whut.tgsg.bean.Notice;
+import cn.edu.whut.tgsg.bean.Displaywall;
 import cn.edu.whut.tgsg.common.Constant;
 
 /**
- * 公告详情界面
+ * 展示墙详情界面
  * <p/>
  * Created by xwh on 2015/12/16.
  */
-public class NoticeDetailActivity extends BaseActivity {
+public class DisplaywallDetailActivity extends BaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.web_notice)
-    WebView mWebNotice;
+    @Bind(R.id.web_dispalywall)
+    WebView mWebDisplaywall;
 
-    Notice mNotice;
+    Displaywall mDisplaywall;
 
     @Override
     protected String getTagName() {
@@ -34,20 +34,20 @@ public class NoticeDetailActivity extends BaseActivity {
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.activity_notice_detail;
+        return R.layout.activity_displaywall_detail;
     }
 
     @Override
     protected Context getContext() {
-        return NoticeDetailActivity.this;
+        return DisplaywallDetailActivity.this;
     }
 
     @Override
     protected void initData() {
-        // 获取传来的Notice对象并设置toolbar
+        // 获取传来的Displaywall对象并设置toolbar
         Bundle bundle = getIntent().getExtras();
-        mNotice = (Notice) bundle.getSerializable("notice");
-        mToolbar.setTitle(mNotice.getTitle());
+        mDisplaywall = (Displaywall) bundle.getSerializable("displaywall");
+        mToolbar.setTitle(mDisplaywall.getTitle());
         setSupportActionBar(mToolbar);
         // 设置返回键<-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,7 +57,7 @@ public class NoticeDetailActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        // 渲染公告展示界面
+        // 渲染展示墙展示界面
         initWeb();
     }
 
@@ -70,10 +70,10 @@ public class NoticeDetailActivity extends BaseActivity {
      * 渲染公告展示界面
      */
     private void initWeb() {
-        String url = Constant.URL + "noticeInfo?id=" + mNotice.getId() + "&title=" + mNotice.getTitle();
-        mWebNotice.loadUrl(url);
+        String url = Constant.URL + "displayInfo?id=" + mDisplaywall.getId();
+        mWebDisplaywall.loadUrl(url);
 
-        WebSettings settings = mWebNotice.getSettings();
+        WebSettings settings = mWebDisplaywall.getSettings();
         settings.setJavaScriptEnabled(true);
     }
 }

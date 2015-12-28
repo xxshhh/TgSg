@@ -3,6 +3,7 @@ package cn.edu.whut.tgsg.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -12,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import cn.edu.whut.tgsg.R;
 import cn.edu.whut.tgsg.activity.LoginActivity;
+import cn.edu.whut.tgsg.common.Constant;
 import cn.edu.whut.tgsg.util.T;
 
 /**
@@ -25,6 +27,32 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        /**
+         * 网页版
+         */
+        findPreference("web").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Uri uri = Uri.parse(Constant.URL);
+                Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(it);
+                return true;
+            }
+        });
+
+        /**
+         * 博客
+         */
+        findPreference("blog").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Uri uri = Uri.parse("http://xuwenhui.net");
+                Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(it);
+                return true;
+            }
+        });
 
         /**
          * 注销

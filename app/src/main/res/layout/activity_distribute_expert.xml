@@ -20,7 +20,7 @@
     <fr.ganfra.materialspinner.MaterialSpinner
         android:id="@+id/spinner_state"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         app:ms_alignLabels="true"
         app:ms_arrowColor="@color/accent"

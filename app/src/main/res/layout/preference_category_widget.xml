@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:text="indroduce"
+        android:text="introduce"
         android:textColor="@color/accent"
         android:textSize="14sp"/>
 </LinearLayout>
