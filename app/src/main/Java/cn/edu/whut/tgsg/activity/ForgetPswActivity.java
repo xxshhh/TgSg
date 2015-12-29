@@ -69,7 +69,7 @@ public class ForgetPswActivity extends BaseActivity {
         mBtnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String checkEmail = "^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+                String checkEmail = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                 boolean flagEmail;
                 String emailStr = mEdtEmail.getText().toString().trim();
                 if (TextUtils.isEmpty(emailStr)) {
@@ -121,12 +121,8 @@ public class ForgetPswActivity extends BaseActivity {
                         try {
                             JSONObject serverInfo = new JSONObject(response);
                             boolean isSuccess = serverInfo.getBoolean("isSuccess");
-                            String msg = serverInfo.getString("msg");
-                            T.show(mContext, msg);
                             if (isSuccess) {
-                                T.show(mContext, msg);
-                                Intent intent = new Intent(mContext, LoginActivity.class);
-                                startActivity(intent);
+                                T.show(mContext, "初始密码已发至邮箱，请注意查看。");
                                 finish();
                             }
                         } catch (JSONException e) {

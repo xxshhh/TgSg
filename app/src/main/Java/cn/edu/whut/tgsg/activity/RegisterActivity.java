@@ -75,7 +75,7 @@ public class RegisterActivity extends BaseActivity {
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String checkEmail = "^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+                String checkEmail = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                 String checkPsw = "^[a-zA-Z0-9]\\w{5,15}$";
                 boolean flagEmail;
                 boolean flagPsw;

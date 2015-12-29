@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     // 圆圈图片
     compile 'de.hdodenhof:circleimageview:1.3.0'
-    // 图片滑动展示
+    // 图片展示墙
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.nineoldandroids:library:2.4.0'

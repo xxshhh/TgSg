@@ -81,29 +81,8 @@ public class LoginActivity extends BaseActivity {
             Log.e(getTagName(), user_email + "," + user_password);
             mEdtEmail.setText(user_email);
             mEdtPassword.setText(user_password);
-            mBtnLogin.performClick();
             // 显示头像
-            OkHttpUtils
-                    .get()
-                    .url(Constant.STATIC_URL + "img/" + user_photo)
-                    .addParams("source", "android")
-                    .tag(this)
-                    .build()
-                    .connTimeOut(20000)
-                    .readTimeOut(20000)
-                    .writeTimeOut(20000)
-                    .execute(new BitmapCallback() {
-                        @Override
-                        public void onError(Request request, Exception e) {
-                            Log.e(getTagName(), "加载头像失败！！！使用默认头像。");
-                        }
-
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            Log.e(getTagName(), "加载头像成功！！！");
-                            mProfileImage.setImageBitmap(bitmap);
-                        }
-                    });
+            displayProfileImage(user_photo);
             ProgressDialogUtil.show(mContext);
             // 延时自动登录
             new DelayLoginTask().execute();
@@ -153,6 +132,8 @@ public class LoginActivity extends BaseActivity {
                                     if (isSuccess) {
                                         MyApplication.GLOBAL_USER = new Gson().fromJson(serverInfo.getString("user"), User.class);
                                         Log.e(getTagName(), "User:" + new Gson().toJson(MyApplication.GLOBAL_USER));
+                                        // 显示头像
+                                        displayProfileImage(MyApplication.GLOBAL_USER.getPhoto());
                                         // 存数据到SharedPreferences
                                         SharedPreferences preferences = getSharedPreferences("user", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = preferences.edit();
@@ -197,6 +178,33 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * 显示头像
+     */
+    private void displayProfileImage(String photoUrl) {
+        OkHttpUtils
+                .get()
+                .url(Constant.STATIC_URL + "img/" + photoUrl)
+                .addParams("source", "android")
+                .tag(this)
+                .build()
+                .connTimeOut(20000)
+                .readTimeOut(20000)
+                .writeTimeOut(20000)
+                .execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Request request, Exception e) {
+                        Log.e(getTagName(), "加载头像失败！！！使用默认头像。");
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        Log.e(getTagName(), "加载头像成功！！！");
+                        mProfileImage.setImageBitmap(bitmap);
+                    }
+                });
     }
 
     /**

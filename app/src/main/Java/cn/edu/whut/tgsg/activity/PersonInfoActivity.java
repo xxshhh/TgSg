@@ -163,7 +163,7 @@ public class PersonInfoActivity extends BaseActivity {
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String checkEmail = "^\\s*\\w+(?:\\.?[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$";
+                        String checkEmail = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                         boolean flagEmail;
                         String oldEmailStr = ((EditText) dialog.findViewById(R.id.edt_old_email)).getText().toString().trim();
                         String newEmailStr = ((EditText) dialog.findViewById(R.id.edt_new_email)).getText().toString().trim();
@@ -269,9 +269,7 @@ public class PersonInfoActivity extends BaseActivity {
                             String msg = serverInfo.getString("msg");
                             T.show(mContext, msg);
                             if (isSuccess) {
-                                Intent intent = new Intent(mContext, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

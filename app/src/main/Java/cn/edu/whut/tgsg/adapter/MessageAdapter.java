@@ -26,6 +26,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class MessageAdapter extends CommonAdapter<Message> {
 
+    Bitmap mMeBitmap = null;
+    Bitmap mOtherBitmap = null;
+
     /**
      * 构造方法：对成员变量进行初始化
      *
@@ -44,56 +47,7 @@ public class MessageAdapter extends CommonAdapter<Message> {
         if (message.getSender().getId() == MyApplication.GLOBAL_USER.getId()) {
             flag = true;//自己发送
         }
-        // 第一次获取图片资源
-        if (MessageImage.mMe == null) {
-            // 请求sender
-            final boolean finalFlag = flag;
-            OkHttpUtils
-                    .get()
-                    .url(Constant.STATIC_URL + "img/" + message.getSender().getPhoto())
-                    .addParams("source", "android")
-                    .tag(this)
-                    .build()
-                    .connTimeOut(20000)
-                    .readTimeOut(20000)
-                    .writeTimeOut(20000)
-                    .execute(new BitmapCallback() {
-                        @Override
-                        public void onError(Request request, Exception e) {
-                        }
 
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            if (finalFlag)
-                                MessageImage.mMe = bitmap;
-                            else
-                                MessageImage.mOther = bitmap;
-                        }
-                    });
-            // 请求receiver
-            OkHttpUtils
-                    .get()
-                    .url(Constant.STATIC_URL + "img/" + message.getReceiver().getPhoto())
-                    .addParams("source", "android")
-                    .tag(this)
-                    .build()
-                    .connTimeOut(20000)
-                    .readTimeOut(20000)
-                    .writeTimeOut(20000)
-                    .execute(new BitmapCallback() {
-                        @Override
-                        public void onError(Request request, Exception e) {
-                        }
-
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            if (!finalFlag)
-                                MessageImage.mMe = bitmap;
-                            else
-                                MessageImage.mOther = bitmap;
-                        }
-                    });
-        }
         ViewHolder viewHolder = null;
         if (flag) {//自己发送
             convertView = mInflater.inflate(R.layout.item_to_msg, parent, false);
@@ -102,6 +56,32 @@ public class MessageAdapter extends CommonAdapter<Message> {
             viewHolder.mName = (TextView) convertView.findViewById(R.id.tv_username);
             viewHolder.mDate = (TextView) convertView.findViewById(R.id.tv_to_msg_date);
             viewHolder.mMsg = (TextView) convertView.findViewById(R.id.tv_to_msg_info);
+            if (mMeBitmap == null) {
+                // 请求sender
+                final ViewHolder finalViewHolder = viewHolder;
+                OkHttpUtils
+                        .get()
+                        .url(Constant.STATIC_URL + "img/" + message.getSender().getPhoto())
+                        .addParams("source", "android")
+                        .tag(this)
+                        .build()
+                        .connTimeOut(20000)
+                        .readTimeOut(20000)
+                        .writeTimeOut(20000)
+                        .execute(new BitmapCallback() {
+                            @Override
+                            public void onError(Request request, Exception e) {
+                            }
+
+                            @Override
+                            public void onResponse(Bitmap bitmap) {
+                                mMeBitmap = bitmap;
+                                finalViewHolder.mImage.setImageBitmap(mMeBitmap);
+                            }
+                        });
+            } else {
+                viewHolder.mImage.setImageBitmap(mMeBitmap);
+            }
         } else {//别人发送
             convertView = mInflater.inflate(R.layout.item_from_msg, parent, false);
             viewHolder = new ViewHolder();
@@ -109,18 +89,40 @@ public class MessageAdapter extends CommonAdapter<Message> {
             viewHolder.mName = (TextView) convertView.findViewById(R.id.tv_username);
             viewHolder.mDate = (TextView) convertView.findViewById(R.id.tv_from_msg_date);
             viewHolder.mMsg = (TextView) convertView.findViewById(R.id.tv_from_msg_info);
+            if (mOtherBitmap == null) {
+                // 请求sender
+                final ViewHolder finalViewHolder = viewHolder;
+                OkHttpUtils
+                        .get()
+                        .url(Constant.STATIC_URL + "img/" + message.getSender().getPhoto())
+                        .addParams("source", "android")
+                        .tag(this)
+                        .build()
+                        .connTimeOut(20000)
+                        .readTimeOut(20000)
+                        .writeTimeOut(20000)
+                        .execute(new BitmapCallback() {
+                            @Override
+                            public void onError(Request request, Exception e) {
+                            }
+
+                            @Override
+                            public void onResponse(Bitmap bitmap) {
+                                mOtherBitmap = bitmap;
+                                finalViewHolder.mImage.setImageBitmap(mOtherBitmap);
+                            }
+                        });
+            } else {
+                viewHolder.mImage.setImageBitmap(mOtherBitmap);
+            }
         }
         convertView.setTag(viewHolder);
-        viewHolder = (ViewHolder) convertView.getTag();
 
         // 填充数据
         viewHolder.mDate.setText(message.getMessageTime());
         viewHolder.mMsg.setText(message.getMessage());
         viewHolder.mName.setText(message.getSender().getName());
-        if (flag)
-            viewHolder.mImage.setImageBitmap(MessageImage.mMe);
-        else
-            viewHolder.mImage.setImageBitmap(MessageImage.mOther);
+
         return convertView;
     }
 
@@ -129,10 +131,5 @@ public class MessageAdapter extends CommonAdapter<Message> {
         TextView mName;
         TextView mDate;
         TextView mMsg;
-    }
-
-    static class MessageImage {
-        static Bitmap mMe = null;
-        static Bitmap mOther = null;
     }
 }
